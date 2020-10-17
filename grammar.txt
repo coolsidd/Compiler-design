@@ -8,31 +8,29 @@
 <declaration_type> -> <primitive_type> | <array_type>
 
 <array_type> -> <jagged_array> | <rect_array>
-<rect_array> -> ARRAY  <range_list> OF <primitive_type> 
+<rect_array> -> ARRAY  <range_list> OF <primitive_type>
 
 <jagged_array> -> JAGGED ARRAY <jagged_list> OF <primitive_type>
 <jagged_list> -> <jagged2list> | <jagged3list>
 <jagged2list> -> <range_list> SQBO SQBC SEMICOLON <jagged2init>
 <j2list> -> CONST | ID | CONST ; <j2list> | ID <j2list>
-<jagged2init> -> R1 SQBO <index_type> SQBC COLON SIZE  <index_type> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
+<jagged2init> -> R1 SQBO <var> SQBC COLON SIZE  <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
 <jagged3list> -> <range_list> SQBO SQBC SQBO SQBC SEMICOLON <jagged3init>
-<jagged3init> -> R1 SQBO <index_type> SQBC COLON SIZE <index_type> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON
+<jagged3init> -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON
 <j3list> -> <value_list> SEMICOLON <j3list>
 <value_list> -> CONST <value_list> | ID <value_list>
-<range_list> -> <range_list> OF <primitive_type>  
-<primitive_type> -> INTEGER | REAL | BOOLEAN 
-<range_list> -> SQBO <index_type> ELIPSIS <index_type> SQBC <range_list>
-<index_type> -> CONST_INT // can integer type vars come?
+<range_list> -> <range_list> OF <primitive_type>
+<primitive_type> -> INTEGER | REAL | BOOLEAN
+<range_list> -> SQBO <var> ELIPSIS <var> SQBC <range_list>
 
-<index_list> -> <index_type> <index_list> | <index_type>
+<index_list> -> <var> <index_list> | <var>
 <var> -> ID | ID SQBO <index_list> SQBC
 <assignment_stmt> -> <var> EQUALS <expr>
 <expr> -> <arithmeticexpr> | <boolexpr>
 <arithmeticexpr> -> <expr> PLUS <term> | <arithmeticexpr> MINUS <term> | <term>
 <term> -> <term> MULT <fact> | <term> DIV <fact> | <fact>
-<fact> -> <var> | CONST | LPAREN <arithmeticexpr> RPAREN | MINUS <fact> 
+<fact> -> <var> | CONST | LPAREN <arithmeticexpr> RPAREN | MINUS <fact>
 
 <boolexpr> -> <logterm> OR <logterm> | <logterm>
 <logterm> -> <logfactor> AND <logfactor> | <logfactor>
-<logfactor> -> <var> | LPAREN <boolexpr> RPAREN | TRUE | FALSE | 
-
+<logfactor> -> <var> | LPAREN <boolexpr> RPAREN | TRUE | FALSE |
