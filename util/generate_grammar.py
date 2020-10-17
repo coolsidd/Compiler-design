@@ -56,9 +56,9 @@ def parse_file(input_file_location, output_file_location, delim=" "):
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
     terminals = terminals.difference(non_terminals)
     print("Terminals :")
-    print(terminals)
+    print(sorted(terminals))
     print("Non_Terminals :")
-    print(non_terminals)
+    print(sorted(non_terminals))
 
 
 if __name__ == "__main__":

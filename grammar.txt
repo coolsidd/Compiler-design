@@ -1,5 +1,5 @@
 <program> -> <main_program>
-<main_program> -> <code_stmt> SEMI_COLON <main_program>
+<main_program> -> <code_stmt> SEMICOLON <main_program>
 <code_stmt> -><declaration_stmt> | <assignment_stmt>
 
 <id_list> -> ID <id_list>
@@ -12,10 +12,10 @@
 
 <jagged_array> -> JAGGED ARRAY <jagged_list> OF <primitive_type>
 <jagged_list> -> <jagged2list> | <jagged3list>
-<jagged2list> -> <range_list> SQBO SQBC SEMICOL <jagged2init>
-<j2list> -> CONST | ID | <const> ; <j2list> | ID <j2list>
+<jagged2list> -> <range_list> SQBO SQBC SEMICOLON <jagged2init>
+<j2list> -> CONST | ID | CONST ; <j2list> | ID <j2list>
 <jagged2init> -> R1 SQBO <index_type> SQBC COLON SIZE  <index_type> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
-<jagged3list> -> <range_list> SQBO SQBC SQBO SQBC SEMI_COLON <jagged3init>
+<jagged3list> -> <range_list> SQBO SQBC SQBO SQBC SEMICOLON <jagged3init>
 <jagged3init> -> R1 SQBO <index_type> SQBC COLON SIZE <index_type> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON
 <j3list> -> <value_list> SEMICOLON <j3list>
 <value_list> -> CONST <value_list> | ID <value_list>
