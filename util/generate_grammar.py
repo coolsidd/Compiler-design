@@ -55,6 +55,7 @@ def parse_file(input_file_location, output_file_location, delim=" "):
             rhs_tok.strip()
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
     terminals = terminals.difference(non_terminals)
+    terminals.remove("|")
     print("Terminals :")
     print(sorted(terminals))
     print("Non_Terminals :")
