@@ -41,11 +41,10 @@ typedef struct rule { // LHS -> linked list of symbols (RHS)
     RuleNode *rhs; // linked list of rules
 } Rule;
 
-typedef struct grammar { // Final data structure for 
+typedef struct grammar { // Final data structure for
     int num_rules;
-    int max_rules;
     NonTerminal start_symb;
-    RuleList* rules; // array of size max_rules consisting of a linked list of rules 
+    Rule* rules; // array of size max_rules consisting of a linked list of rules
 } Grammar;
 
 #endif
