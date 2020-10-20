@@ -73,11 +73,10 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
     print(sorted(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location+".h", "w")
-        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n\ntypedef enum{{ // list all the non terminals\n{}\n\}}NonTerminal;\ntypedef enum {{ // list all the terminals\n{}}}Terminal;\n#endif""".format(",\n".join([x for x in sorted(non_terminals)]), ",\n".join([x for x in sorted(terminals)])))
+        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include "other_structs.h"\n\ntypedef enum{{ // list all the non terminals or terminals\n{}\n}}BaseSymbol;\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
         output_file_structs.close()
-        # with open(c_structs_location+".c", "w") as output_file_structs:
-        #     output_file_structs.write("""
-        #     """)
+        with open(c_structs_location+".c", "w") as output_file_structs:
+            output_file_structs.write(""" """);
 
 
 if __name__ == "__main__":
