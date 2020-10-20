@@ -5,11 +5,11 @@
 
 typedef enum {false, true} bool;
 
-typedef enum{ // list all the non terminals or terminals
+typedef enum { // list all the non terminals or terminals
     arithmeticexpr,
-    array_type,
     assignment_stmt,
     boolexpr,
+    code_block,
     code_stmt,
     declaration_stmt,
     declaration_type,
@@ -24,7 +24,7 @@ typedef enum{ // list all the non terminals or terminals
     jagged3init,
     jagged3list,
     jagged_array,
-    jagged_list,
+    jagged_array_declaration,
     list_of_identifiers,
     logfactor,
     logterm,
@@ -68,6 +68,7 @@ typedef enum{ // list all the non terminals or terminals
     TRUE,
     VALUES,
     VARIABLES,
+    NONE, // Special symbol to signify that nothing matches
 } BaseSymbol;
 
 typedef struct symb { // symbol with info if it is terminal or not

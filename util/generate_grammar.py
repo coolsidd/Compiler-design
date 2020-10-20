@@ -77,9 +77,9 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
         output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\nSymbol toSymbol(char *enustr);\nvoid printSymbol(Symbol symb);\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
         output_file_structs.close()
         with open(c_structs_location+".c", "w") as output_file_structs:
-            template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans.is_terminal = {1};\n        ans.s = {0};\n        return ans;\n    }}\n"""
+            template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans->is_terminal = {1};\n        ans->s = {0};\n        return *ans;\n    }}\n"""
             template_filled_toSymbol = [template_str_toSymbol.format(x, "true") for x in terminals]+[template_str_toSymbol.format(x, "false") for x in non_terminals]
-            template_str_print = """    case ({0}):\n        printf("{0}\\n");\n        break;"""
+            template_str_print = """    case ({0}):\n        return "{0}";"""
             template_filled_print = [template_str_print.format(x) for x in list(sorted(terminals))+list(sorted(non_terminals))]
             output_file_structs.write("""#include "./output_file_structs.h"
 #include "./other_structs.h"
@@ -87,16 +87,16 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
 #include <string.h>
 
 Symbol toSymbol(char *enustr) {{
-    Symbol ans;
+    Symbol* ans = (Symbol*)malloc(sizeof(Symbol));
 {}
-    return ans;
+    return *ans;
 }}
-void printSymbol(Symbol symb) {{
-    printf("Symbol variable : ");
+char* getSymbol(Symbol symb) {{
+    //printf("Symbol variable : ");
     switch (symb.s) {{
 {}
     }}
-    printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");
+    //printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");
 }}\n""".format("\n".join(template_filled_toSymbol),"\n".join(template_filled_print)));
 
 
