@@ -17,6 +17,15 @@ parser.add_argument(
     help="input file written in BNF format",
 )
 parser.add_argument(
+    "--grammar-struct-out",
+    metavar="Grammar output file",
+        dest="output_grammar_structs",
+    type=str,
+    help="outputs grammar structures locations",
+    default="./output_file_structs"
+)
+
+parser.add_argument(
     "-o",
     dest="output_file",
     metavar="output file",
@@ -34,7 +43,7 @@ parser.add_argument(
 )
 
 
-def parse_file(input_file_location, output_file_location, delim=" "):
+def parse_file(input_file_location, output_file_location, delim=" ", generate_c_structs=True, c_structs_location=None):
     non_term_regex = re.compile("<(.*?)>")
     input_file = open(input_file_location)
     output_file = open(output_file_location, "w")
@@ -54,14 +63,23 @@ def parse_file(input_file_location, output_file_location, delim=" "):
         for rhs_tok in rhs.split("|"):
             rhs_tok.strip()
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
+    input_file.close()
+    output_file.close()
     terminals = terminals.difference(non_terminals)
     terminals.remove("|")
     print("Terminals :")
     print(sorted(terminals))
     print("Non_Terminals :")
     print(sorted(non_terminals))
+    if generate_c_structs:
+        output_file_structs = open(c_structs_location+".h", "w")
+        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n\ntypedef enum{{ // list all the non terminals\n{}\n\}}NonTerminal;\ntypedef enum {{ // list all the terminals\n{}}}Terminal;\n#endif""".format(",\n".join([x for x in sorted(non_terminals)]), ",\n".join([x for x in sorted(terminals)])))
+        output_file_structs.close()
+        # with open(c_structs_location+".c", "w") as output_file_structs:
+        #     output_file_structs.write("""
+        #     """)
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    parse_file(args.input_file, args.output_file)
+    parse_file(args.input_file, args.output_file, c_structs_location=args.output_grammar_structs)
