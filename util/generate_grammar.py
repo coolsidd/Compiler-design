@@ -51,9 +51,10 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
     terminals = set()
     for line in input_file:
         line = line.strip()
-        if (len(line)) <= 0:
+        line_wo_comment = line.split("//")[0].strip()
+        if (len(line_wo_comment)) <= 0:
             continue
-        line_wo_comment = line.split("//")[0]
+
         line_wo_comment = non_term_regex.sub("\\1", line_wo_comment)
         line_split = line_wo_comment.split("->")
         non_term = line_split[0].strip()
@@ -73,10 +74,30 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
     print(sorted(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location+".h", "w")
-        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include "other_structs.h"\n\ntypedef enum{{ // list all the non terminals or terminals\n{}\n}}BaseSymbol;\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
+        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
         output_file_structs.close()
         with open(c_structs_location+".c", "w") as output_file_structs:
-            output_file_structs.write(""" """);
+            template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans.is_terminal = {1};\n        ans.s = {0};\n        return ans;\n    }}\n"""
+            template_filled_toSymbol = [template_str_toSymbol.format(x, "true") for x in terminals]+[template_str_toSymbol.format(x, "false") for x in non_terminals]
+            template_str_print = """    case ({0}):\n        printf("{0}\\n");\n        break;"""
+            template_filled_print = [template_str_print.format(x) for x in list(sorted(terminals))+list(sorted(non_terminals))]
+            output_file_structs.write("""#include "./output_file_structs.h"
+#include "./other_structs.h"
+#include <stdio.h>
+#include <string.h>
+
+Symbol toSymbol(char *enustr) {{
+    Symbol ans;
+{}
+    return ans;
+}}
+void printSymbol(Symbol symb) {{
+    printf("Symbol variable \\n");
+    switch (symb.s) {{
+{}
+    }}
+    printf("\\tis_terminal : %b\\n", symb.is_terminal);
+}}\n""".format("\n".join(template_filled_toSymbol),"\n".join(template_filled_print)));
 
 
 if __name__ == "__main__":
