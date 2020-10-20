@@ -74,7 +74,7 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
     print(sorted(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location+".h", "w")
-        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
+        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\nSymbol toSymbol(char *enustr);\nvoid printSymbol(Symbol symb);\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
         output_file_structs.close()
         with open(c_structs_location+".c", "w") as output_file_structs:
             template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans.is_terminal = {1};\n        ans.s = {0};\n        return ans;\n    }}\n"""
@@ -92,11 +92,11 @@ Symbol toSymbol(char *enustr) {{
     return ans;
 }}
 void printSymbol(Symbol symb) {{
-    printf("Symbol variable \\n");
+    printf("Symbol variable : ");
     switch (symb.s) {{
 {}
     }}
-    printf("\\tis_terminal : %b\\n", symb.is_terminal);
+    printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");
 }}\n""".format("\n".join(template_filled_toSymbol),"\n".join(template_filled_print)));
 
 
