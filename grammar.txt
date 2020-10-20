@@ -13,7 +13,7 @@
 <jagged_array> -> JAGGED ARRAY <jagged_list> OF <primitive_type>
 <jagged_list> -> <jagged2list> | <jagged3list>
 <jagged2list> -> <range_list> SQBO SQBC SEMICOLON <jagged2init>
-<j2list> -> CONST | ID | CONST ; <j2list> | ID <j2list>
+<j2list> -> CONST | ID | CONST SEMICOLON <j2list> | ID <j2list>
 <jagged2init> -> R1 SQBO <var> SQBC COLON SIZE  <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
 <jagged3list> -> <range_list> SQBO SQBC SQBO SQBC SEMICOLON <jagged3init>
 <jagged3init> -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON
