@@ -74,30 +74,14 @@ def parse_file(input_file_location, output_file_location, delim=" ", generate_c_
     print(sorted(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location+".h", "w")
-        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\nSymbol toSymbol(char *enustr);\nvoid printSymbol(Symbol symb);\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
+        output_file_structs.write("""/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n\nSymbol toSymbol(char *enustr);\nvoid printSymbol(Symbol symb);\n\n#endif\n""".format("\n".join(["    "+x+"," for x in sorted(non_terminals)]+["    "+x+"," for x in sorted(terminals)])))
         output_file_structs.close()
         with open(c_structs_location+".c", "w") as output_file_structs:
-            template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans->is_terminal = {1};\n        ans->s = {0};\n        return *ans;\n    }}\n"""
+            template_str_toSymbol = """    if (strcmp(enustr, "{0}") == 0) {{\n        ans.is_terminal = {1};\n        ans.s = {0};\n        return ans;\n    }}\n"""
             template_filled_toSymbol = [template_str_toSymbol.format(x, "true") for x in terminals]+[template_str_toSymbol.format(x, "false") for x in non_terminals]
-            template_str_print = """    case ({0}):\n        return "{0}";"""
+            template_str_print = """    case ({0}):\n        printf("{0}\\n");\n        break;"""
             template_filled_print = [template_str_print.format(x) for x in list(sorted(terminals))+list(sorted(non_terminals))]
-            output_file_structs.write("""#include "./output_file_structs.h"
-#include "./other_structs.h"
-#include <stdio.h>
-#include <string.h>
-
-Symbol toSymbol(char *enustr) {{
-    Symbol* ans = (Symbol*)malloc(sizeof(Symbol));
-{}
-    return *ans;
-}}
-char* getSymbol(Symbol symb) {{
-    //printf("Symbol variable : ");
-    switch (symb.s) {{
-{}
-    }}
-    //printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");
-}}\n""".format("\n".join(template_filled_toSymbol),"\n".join(template_filled_print)));
+            output_file_structs.write("""#include "./output_file_structs.h"\n#include "./other_structs.h"\n#include <stdio.h>\n#include <string.h>\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n{}\n    return ans;\n}}\nvoid printSymbol(Symbol symb) {{\n    printf("Symbol variable : ");\n    switch (symb.s) {{\n{}\n    }}\n    printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");\n}}\n""".format("\n".join(template_filled_toSymbol),"\n".join(template_filled_print)));
 
 
 if __name__ == "__main__":
