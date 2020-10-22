@@ -9,4 +9,10 @@ int main(){
     printSymbol(sym);
     sym = toSymbol("}");
     printSymbol(sym);
+    sym = toSymbol("size");
+    printSymbol(sym);
+    sym = toSymbol("values");
+    printSymbol(sym);
+    sym = toSymbol("(");
+    printSymbol(sym);
 }

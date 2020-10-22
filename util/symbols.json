@@ -23,13 +23,13 @@
     "PLUS": "+",
     "R1": "R1",
     "REAL": "real",
-    "RPAREN": "(",
+    "RPAREN": ")",
     "SEMICOLON": ";",
     "SIZE": "size",
     "SQBC": "]",
     "SQBO": "[",
     "TRUE": "true",
     "UNKNOWN": "UNKNOWN",
-    "VALUES": "VALUES",
-    "VARIABLES": "VARIABLES"
+    "VALUES": "values",
+    "VARIABLES": "variables"
 }
