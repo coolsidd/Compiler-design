@@ -1,5 +1,5 @@
-#include "./tokenizer_structs.h"
-#include "./output_file_structs.h"
+#include "tokenizer_structs.h"
+#include "util/output_file_structs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,19 +32,17 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
         tmp_line = replace_char(tmp_line, '\n', '\0');
         tmp_line = replace_char(tmp_line, '\r', '\0');
 
-        printf("%d: ", line_num);
+        //printf("%d: ", line_num);
         char *tok = strtok(tmp_line, sep); // read first token from the line
         while (tok) {
-            printf("%s|", tok);
+            // /printf("%s|", tok);
             insertIntoStream(s, line_num, tok);
             tok = strtok(NULL, sep); // read next token
-        }
-        printf("\n");
+        } //printf("\n");
     }
 }
 
 int main() {
-    // tokenStream *s = (tokenStream*)malloc(sizeof(tokenStream));
     TokenStream *s = newTokenStream();
     tokenizeSourceCode("sample_code_1.txt", s);
     for(Token *temp = s->head; temp; temp=temp->next){

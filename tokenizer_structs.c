@@ -10,6 +10,7 @@ TokenStream *insertIntoStream(TokenStream *s, int line_num, char *token_str) {
     newToken->next = NULL;
     if (s->tail) {
         s->tail->next = newToken;
+        s->tail = s->tail->next;
         s->length++;
         return s;
     }

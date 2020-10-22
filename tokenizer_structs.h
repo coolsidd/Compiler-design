@@ -1,7 +1,7 @@
 #ifndef __TOKENIZER_STRUCT_H_
 #define __TOKENIZER_STRUCT_H_
 
-#include "./output_file_structs.h"
+#include "util/output_file_structs.h"
 
 typedef struct token{
     int line_no;
