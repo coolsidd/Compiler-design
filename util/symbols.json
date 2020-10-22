@@ -29,6 +29,7 @@
     "SQBC": "]",
     "SQBO": "[",
     "TRUE": "true",
+    "UNKNOWN": "UNKNOWN",
     "VALUES": "VALUES",
     "VARIABLES": "VARIABLES"
 }
