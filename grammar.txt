@@ -1,36 +1,43 @@
-<program> -> <main_program>
-<main_program> -> <code_stmt> SEMICOLON <main_program>
-<code_stmt> -><declaration_stmt> | <assignment_stmt>
+// TODO Check if unary minus is removed correctly
+<program>             -> PROGRAM LPAREN RPAREN CURLYOPEN <stmts> CURLYCLOSE
 
-<id_list> -> ID <id_list>
-<declaration_stmt> -> DECLARE <list_of_identifiers> COLON <declaration_type>
+<stmts>               -> <decl_stmts> <assign_stmts>
+<decl_stmts>          -> <decl_stmt> <decl_stmts> | <decl_stmt> // don’t want to derive epsilon explicitly as it is difficult to parse
+<assign_stmts>        -> <assign_stmt> <assign_stmts> | <assign_stmt>
+
+<decl_stmt>           -> <decl_non_jagged> | <decl_jagged> // separate declarations as non jagged have semicolon at the end while jagged arrays don’t
+<decl_non_jagged>     -> DECLARE <list_of_identifiers> COLON <declaration_type> SEMICOLON
+<decl_jagged>         -> DECLARE <list_of_identifiers> COLON <jagged_array>
 <list_of_identifiers> -> LIST OF VARIABLES <id_list> | ID
-<declaration_type> -> <primitive_type> | <array_type>
+<id_list>             -> ID <id_list> | ID ID
 
-<array_type> -> <jagged_array> | <rect_array>
-<rect_array> -> ARRAY  <range_list> OF <primitive_type>
+<declaration_type>    -> <primitive_type> SEMICOLON  | <rect_array>
+<primitive_type>      -> INTEGER | REAL | BOOLEAN
 
-<jagged_array> -> JAGGED ARRAY <jagged_list> OF <primitive_type>
-<jagged_list> -> <jagged2list> | <jagged3list>
-<jagged2list> -> <range_list> SQBO SQBC SEMICOLON <jagged2init>
+<rect_array>          -> ARRAY <range_list> OF <primitive_type>
+<range_list>          -> SQBO <var> ELIPSIS <var> SQBC <range_list>
+
+<jagged_array>        -> JAGGED ARRAY <jagged2list> OF <primitive_type> SEMICOLON <jagged2init> |  JAGGED ARRAY <jagged3list> OF <primitive_type> SEMICOLON <jagged3init>
+<jagged2list>         -> <range_list> SQBO SQBC
+<jagged3list>         -> <range_list> SQBO SQBC SQBO SQBC
+
+<jagged2init> -> R1 SQBO <var> SQBC COLON SIZE  <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE SEMICOLON <jagged2init>
 <j2list> -> CONST | ID | CONST SEMICOLON <j2list> | ID <j2list>
-<jagged2init> -> R1 SQBO <var> SQBC COLON SIZE  <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
-<jagged3list> -> <range_list> SQBO SQBC SQBO SQBC SEMICOLON <jagged3init>
-<jagged3init> -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON
+
+<jagged3init> -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE SEMICOLON <jagged2init>
 <j3list> -> <value_list> SEMICOLON <j3list>
 <value_list> -> CONST <value_list> | ID <value_list>
-<range_list> -> <range_list> OF <primitive_type>
-<primitive_type> -> INTEGER | REAL | BOOLEAN
-<range_list> -> SQBO <var> ELIPSIS <var> SQBC <range_list>
 
 <index_list> -> <var> <index_list> | <var>
 <var> -> ID | ID SQBO <index_list> SQBC
-<assignment_stmt> -> <var> EQUALS <expr>
-<expr> -> <arithmeticexpr> | <boolexpr>
-<arithmeticexpr> -> <expr> PLUS <term> | <arithmeticexpr> MINUS <term> | <term>
-<term> -> <term> MULT <fact> | <term> DIV <fact> | <fact>
-<fact> -> <var> | CONST | LPAREN <arithmeticexpr> RPAREN | MINUS <fact>
 
-<boolexpr> -> <logterm> OR <logterm> | <logterm>
-<logterm> -> <logfactor> AND <logfactor> | <logfactor>
-<logfactor> -> <var> | LPAREN <boolexpr> RPAREN | TRUE | FALSE |
+
+<assign_stmt>         -> <var> EQUALS <expr> SEMICOLON
+<expr>                -> <arithmeticexpr> | <boolexpr>
+<arithmeticexpr>      -> <expr> PLUS <term> | <arithmeticexpr> MINUS <term> | <term>
+<term>                -> <term> MULT <fact> | <term> DIV <fact> | <fact>
+<fact>                -> <var> | CONST | LPAREN <arithmeticexpr> RPAREN
+
+<boolexpr>            -> <logterm> OR <logterm> | <logterm>
+<logterm>             -> <logfactor> AND <logfactor> | <logfactor>
+<logfactor>           -> <var> | LPAREN <boolexpr> RPAREN | CONST
