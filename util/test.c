@@ -13,4 +13,8 @@ int main(){
     printSymbol(sym);
     sym = toSymbol("(");
     printSymbol(sym);
+    sym = toSymbol("main_program");
+    printSymbol(sym);
+    sym = toSymbol("program");
+    printSymbol(sym);
 }

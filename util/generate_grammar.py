@@ -65,6 +65,9 @@ def parse_file(
     output_file = open(output_file_location, "w")
     non_terminals = set()
     terminals = set()
+    json_input_file = open(json_in)
+    terminals_json = json.load(json_input_file)
+    json_input_file.close()
     for line in input_file:
         line = line.strip()
         line_wo_comment = line.split("//")[0].strip()
@@ -76,7 +79,9 @@ def parse_file(
         non_term = line_split[0].strip()
         non_terminals.add(non_term)
         rhs = line_split[1].strip()
+
         terminals = terminals.union(rhs.split())
+        rhs = " ".join([terminals_json.get(x, x) for x in rhs.split()])
         for rhs_tok in rhs.split("|"):
             rhs_tok.strip()
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
