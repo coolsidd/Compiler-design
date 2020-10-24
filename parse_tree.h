@@ -3,7 +3,9 @@
 
 #include <stdlib.h>
 #include "./grammar.h"
+#include "./read_grammar.h"
 #include "./tokenizer_structs.h"
+#include "./tokenize_source_code.h"
 #include "./util/output_file_structs.h"
 
 typedef struct parse_tree_node {
@@ -14,7 +16,7 @@ typedef struct parse_tree_node {
     Token *tok;
 } Parse_tree_node;
 
-void createParseTree(Parse_tree_node* t, TokenStream *s, Grammar *g);
+Parse_tree_node* createParseTree(TokenStream *s, Grammar *g);
 Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *g);
 Parse_tree_node* new_parse_tree();
 void free_parse_tree(Parse_tree_node *root);

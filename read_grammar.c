@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "grammar.h"
-#define MAXLINELEN 2048
-#define MAXTOKLEN 50
-#define MAXRULES 100
+#include "read_grammar.h"
 
 char* replace_char(char* str, char find, char replace){
     char *current_pos = strchr(str,find);
@@ -73,9 +70,9 @@ void readGrammar(char *filename, Grammar* g){
                     rn_ptr = rn_ptr->next;
                 }
             }
-            //printf("%s | ", tok);
+            printf("%s|", tok);
             tok = strtok(NULL, sep);
-        } //printf("\n");
+        } printf("\n");
 
         rule_new.rhs = rn_head;
         (g->rules)[(g->num_rules)++] = rule_new;
@@ -84,11 +81,11 @@ void readGrammar(char *filename, Grammar* g){
     }
 }
 
-int main() {
-    Grammar* g = (Grammar*)malloc(sizeof(Grammar));
-    g->num_rules = 0;
-    g->start_symb = toSymbol("program");
-    g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    readGrammar("machine_grammar.txt", g);
-    printGrammar(g);
-}
+/* int main() { */
+/*     Grammar* g = (Grammar*)malloc(sizeof(Grammar)); */
+/*     g->num_rules = 0; */
+/*     g->start_symb = toSymbol("program"); */
+/*     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule)); */
+/*     readGrammar("machine_grammar.txt", g); */
+/*     printGrammar(g); */
+/* } */

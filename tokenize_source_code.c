@@ -1,19 +1,4 @@
-#include "tokenizer_structs.h"
-#include "util/output_file_structs.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define MAXLINELEN 2048
-#define MAXTOKLEN 50
-
-char *replace_char(char *str, char find, char replace) {
-    char *current_pos = strchr(str, find);
-    while (current_pos) {
-        *current_pos = replace;
-        current_pos = strchr(current_pos, find);
-    }
-    return str;
-}
+#include "tokenize_source_code.h"
 
 void tokenizeSourceCode(char *filename, TokenStream *s) {
     char *sep = " ";
@@ -42,10 +27,10 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
     }
 }
 
-int main() {
-    TokenStream *s = newTokenStream();
-    tokenizeSourceCode("sample_code_1.txt", s);
-    for(Token *temp = s->head; temp; temp=temp->next){
-        printSymbol(temp->lexeme);
-    }
-}
+/* int main() { */
+/*     TokenStream *s = newTokenStream(); */
+/*     tokenizeSourceCode("sample_code_1.txt", s); */
+/*     for(Token *temp = s->head; temp; temp=temp->next){ */
+/*         printSymbol(temp->lexeme); */
+/*     } */
+/* } */
