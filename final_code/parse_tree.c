@@ -1,5 +1,4 @@
 #include "parse_tree.h"
-#include "util/output_file_structs.h"
 #include <stdio.h>
 
 Parse_tree_node* createParseTree(TokenStream *s, Grammar *g){
@@ -108,7 +107,7 @@ void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
 }
 
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
     g->num_rules = 0;
     g->start_symb = toSymbol("main_program");

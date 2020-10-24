@@ -1,5 +1,4 @@
 #include "tokenizer_structs.h"
-#include "util/output_file_structs.h"
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>

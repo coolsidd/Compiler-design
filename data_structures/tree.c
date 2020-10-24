@@ -7,7 +7,7 @@ tree *create_tree()
     return new_tree;
 }
 
-void set_root(tree *t, void *data)
+void set_root(tree *t, Symbol *data)
 {
     assert(t->root == NULL, "setting root of empty tree");
 
@@ -31,14 +31,14 @@ void expand_child_array(tree_node *n)
 {
     assert(n->num_children == n->max_children, "tree node child array expansion function called on overflow");
 
-    n->child = (tree_node **)realloc((void *)(n->child), 2 * (n->max_children) * sizeof(tree_node *));
+    n->child = (tree_node **)realloc((Symbol *)(n->child), 2 * (n->max_children) * sizeof(tree_node *));
 
     assert(n->child != NULL, "expansion of tree node child array successful");
 
     n->max_children = 2 * n->max_children;
 }
 
-void add_child_at(tree_node *n, void *data, int idx)
+void add_child_at(tree_node *n, Symbol *data, int idx)
 {
     assert(idx <= n->num_children && idx >= 0, "tree add child called with valid index");
 
@@ -74,7 +74,7 @@ void add_child_at(tree_node *n, void *data, int idx)
     (n->num_children)++;
 }
 
-void add_child(tree_node *n, void *data)
+void add_child(tree_node *n, Symbol *data)
 {
     add_child_at(n, data, n->num_children);
 }
@@ -84,7 +84,7 @@ int get_num_children(tree_node *n)
     return n->num_children;
 }
 
-void *get_data(tree_node *n)
+Symbol *get_data(tree_node *n)
 {
     return n->data;
 }
@@ -100,7 +100,7 @@ tree_node *get_parent(tree_node *n)
     return n->parent;
 }
 
-void *remove_child(tree_node *n, int idx)
+Symbol *remove_child(tree_node *n, int idx)
 {
     assert(idx < n->num_children, "removal of valid child requested");
     assert(n->child[idx]->num_children == 0, "removal of leaf node requested");
@@ -113,7 +113,7 @@ void *remove_child(tree_node *n, int idx)
     }
 
     n->num_children = n->num_children - 1;
-    void *old_data = old_node->data;
+    Symbol *old_data = old_node->data;
     free(old_node->child);
     old_node->parent = NULL;
     old_node->data = NULL;
@@ -121,13 +121,13 @@ void *remove_child(tree_node *n, int idx)
     return old_data;
 }
 
-void set_data(tree_node *n, void *data)
+void set_data(tree_node *n, Symbol *data)
 {
     assert(n->data == NULL, "setting tree data on empty node");
     n->data = data;
 }
 
-tree_node *create_tree_node(void *data)
+tree_node *create_tree_node(Symbol *data)
 {
     tree_node *new_node = (tree_node *)calloc(1, sizeof(tree_node));
     new_node->parent = NULL;
