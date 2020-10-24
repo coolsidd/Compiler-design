@@ -1,4 +1,3 @@
-// TODO Check if unary minus is removed correctly
 <main_program>        -> PROGRAM LPAREN RPAREN CURLYOPEN <stmts> CURLYCLOSE
 
 <stmts>               -> <decl_stmts> <assign_stmts>
@@ -29,11 +28,11 @@
 <value_list>          -> <var> <value_list> | <var>
 
 <index_list>          -> <var> <index_list> | <var>
-<var>                 -> ID | ID SQBO <index_list> SQBC | CONST
-<var_lhs>             -> ID | ID SQBO <index_list> SQBC
 
-<assign_stmt>         -> <var_lhs> EQUALS <expr> SEMICOLON
-<expr>                -> <arithmeticexpr> | <boolexpr>
+<var>                 -> ID SQBO <index_list> SQBC | CONST | ID
+<assign_stmt>         -> <var_lhs> EQUALS <expr>
+<var_lhs>             -> ID SQBO <index_list> SQBC | ID
+<expr>                -> <arithmeticexpr> SEMICOLON | <boolexpr> SEMICOLON
 
 <arithmeticexpr>      -> <term> PLUS <arithmeticexpr> | <term> MINUS <arithmeticexpr> | <term>
 <term>                -> <fact> MULT <term> | <fact> DIV <term> | <fact>
