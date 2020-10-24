@@ -11,7 +11,7 @@ typedef struct ____RECT_ARRAY_TYPE____ rect_array_type;
 
 struct ____RECT_ARRAY_TYPE____{
     int dimensions; // to keep or not? We can keep this in array_ranges.num_nodes
-    linked_list array_ranges;
+    linked_list* array_ranges;
 };
 
 /* Function Prototypes */

@@ -7,7 +7,7 @@ typedef enum {false, true} bool;
 
 typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 
-typedef enum {BOOL, INTEGER, REAL} PrimitiveDataType;
+typedef enum {BOOLEAN, INTEGER, REAL} PrimitiveDataType;
 
 typedef union ____UNION_TO_BE_NAMED____ union_to_be_named;
 
@@ -26,6 +26,11 @@ struct ____TYPE_EXPRESSION____{
 };
 
 /* Function Prototypes */
+
+// construct type_expression given the values for reqd fields
+// called only through declarative statements of a variable
+// how would we pass the fields?
+type_expression construct_type_expression(VariableType variable_type);
 
 // get the desired String Representation of TypeExpression
 char* get_string_representation(type_expression tp);
