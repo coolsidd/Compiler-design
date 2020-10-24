@@ -3,20 +3,38 @@
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
 
-int main() {
+int main(int argc, char** argv){
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
     g->num_rules = 0;
-    g->start_symb = toSymbol("program");
+    g->start_symb = toSymbol("main_program");
     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    readGrammar("grammar/machine_grammar.txt", g);
-    //printGrammar(g);
-
+    readGrammar("./grammar/machine_grammar.txt", g);
+    printGrammar(g);
     TokenStream *s = newTokenStream();
-    tokenizeSourceCode("sample_code_2.txt", s);
-    //for(Token *temp = s->head; temp; temp=temp->next) {
-    //    printSymbol(temp->lexeme);
-    //}
-
+    tokenizeSourceCode(argv[1], s);
+    /* for(Token *temp = s->head; temp; temp=temp->next){ */
+    /*      printSymbol(temp->lexeme); */
+    /* } */
     Parse_tree_node * p;
     p = createParseTree(s,g);
+
+    return 0;
 }
+
+/* int main() { */
+/*     Grammar* g = (Grammar*)malloc(sizeof(Grammar)); */
+/*     g->num_rules = 0; */
+/*     g->start_symb = toSymbol("program"); */
+/*     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule)); */
+/*     readGrammar("grammar/machine_grammar.txt", g); */
+/*     //printGrammar(g); */
+
+/*     TokenStream *s = newTokenStream(); */
+/*     tokenizeSourceCode("sample_code_2.txt", s); */
+/*     //for(Token *temp = s->head; temp; temp=temp->next) { */
+/*     //    printSymbol(temp->lexeme); */
+/*     //} */
+
+/*     Parse_tree_node * p; */
+/*     p = createParseTree(s,g); */
+/* } */
