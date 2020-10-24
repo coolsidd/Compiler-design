@@ -117,7 +117,7 @@ def parse_file(
                 for x in list(sorted(terminals)) + list(sorted(non_terminals))
             ]
             output_file_structs.write(
-                """#include "./output_file_structs.h"\n#include <stdio.h>\n#include <string.h>\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n    ans.is_terminal = false;\n    ans.s = UNKNOWN;\n{}\n    return ans;\n}}\n
+                """#include "./output_file_structs.h"\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n    ans.is_terminal = false;\n    ans.s = UNKNOWN;\n{}\n    return ans;\n}}\n
 char *toStringSymbol(Symbol symb) {{
     switch (symb.s) {{
 {}
