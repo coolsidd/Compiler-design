@@ -70,9 +70,9 @@ void readGrammar(char *filename, Grammar* g){
                     rn_ptr = rn_ptr->next;
                 }
             }
-            printf("%s|", tok);
+            /* printf("%s|", tok); */
             tok = strtok(NULL, sep);
-        } printf("\n");
+        } /* printf("\n"); */
 
         rule_new.rhs = rn_head;
         (g->rules)[(g->num_rules)++] = rule_new;

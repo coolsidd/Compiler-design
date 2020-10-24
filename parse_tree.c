@@ -73,9 +73,17 @@ Parse_tree_node* new_parse_tree(Token *tok){
     return new_tree;
 }
 void free_parse_tree(Parse_tree_node *root){
-    // TODO : Free tree
-    //
-    printf("WIP!ERROR\nMEMLEAK\nERROR\n");
+
+    Parse_tree_node* temp =  root->child;
+
+    while(temp){
+        root->child = root->child->next;
+        free_parse_tree(temp);
+        temp = root->child;
+        root->num_children--;
+    }
+    //free(root->tok);
+    free (root);
     return ;
 }
 void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
@@ -97,15 +105,14 @@ int main(){
     g->start_symb = toSymbol("main_program");
     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
     readGrammar("./util/grammar.out", g);
-    printGrammar(g);
+    //printGrammar(g);
     TokenStream *s = newTokenStream();
     tokenizeSourceCode("sample_code_1.txt", s);
-    for(Token *temp = s->head; temp; temp=temp->next){
-         printSymbol(temp->lexeme);
-     }
+    /* for(Token *temp = s->head; temp; temp=temp->next){ */
+    /*      printSymbol(temp->lexeme); */
+    /* } */
     Parse_tree_node * p;
     p = createParseTree(s,g);
-
 
     return 0;
 }
