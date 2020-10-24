@@ -1,5 +1,5 @@
 // TODO Check if unary minus is removed correctly
-<program>             -> PROGRAM LPAREN RPAREN CURLYOPEN <stmts> CURLYCLOSE
+<main_program>        -> PROGRAM LPAREN RPAREN CURLYOPEN <stmts> CURLYCLOSE
 
 <stmts>               -> <decl_stmts> <assign_stmts>
 <decl_stmts>          -> <decl_stmt> <decl_stmts> | <decl_stmt> // don’t want to derive epsilon explicitly as it is difficult to parse
