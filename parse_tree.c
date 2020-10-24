@@ -1,4 +1,6 @@
 #include "parse_tree.h"
+#include "util/output_file_structs.h"
+#include <stdio.h>
 
 Parse_tree_node* createParseTree(TokenStream *s, Grammar *g){
     Symbol starting_symb;
@@ -13,7 +15,12 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
     for(int i=0; i<g->num_rules; i++){
 
         if(g->rules[i].lhs.s == symb.s){
-            printf("trying to apply rule no. %d\n", i);
+            //printf("trying to apply rule no. %d\n", i);
+            printf("Trying \"%s -> ",toStringSymbol(g->rules[i].lhs) );
+            for(RuleNode* check_rule = g->rules[i].rhs; check_rule; check_rule = check_rule->next){
+                printf("%s ", toStringSymbol(check_rule->s));
+            }
+            printf("\"\n");
 
             bool flag_successful = true;
             Token *temp_tstr = *tstr;
@@ -35,6 +42,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
                         continue;
                     }
                     else{
+                        printf("Expected %s found %s\n", toStringSymbol(check_rule->s), toStringSymbol(temp_tstr->lexeme));
                         flag_successful = false;
                         break;
                     }
@@ -43,6 +51,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
                     if(tempChildNode){
                         add_parsed_child(new_node, tempChildNode);
                     }else{
+                        printf("%s failed \n", toStringSymbol(check_rule->s));
                         flag_successful = false;
                         break;
                     }
@@ -99,7 +108,7 @@ void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
 }
 
 
-int main(){
+int main(int argc, char** argv){
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
     g->num_rules = 0;
     g->start_symb = toSymbol("main_program");
@@ -107,7 +116,7 @@ int main(){
     readGrammar("./util/grammar.out", g);
     //printGrammar(g);
     TokenStream *s = newTokenStream();
-    tokenizeSourceCode("sample_code_1.txt", s);
+    tokenizeSourceCode(argv[1], s);
     /* for(Token *temp = s->head; temp; temp=temp->next){ */
     /*      printSymbol(temp->lexeme); */
     /* } */

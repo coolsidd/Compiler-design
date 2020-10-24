@@ -6,7 +6,7 @@
 <assign_stmts>        -> <assign_stmt> <assign_stmts> | <assign_stmt>
 
 <decl_stmt>           -> <decl_non_jagged> | <decl_jagged> // separate declarations as non jagged have semicolon at the end while jagged arrays don’t
-<decl_non_jagged>     -> DECLARE <list_of_identifiers> COLON <declaration_type> SEMICOLON
+<decl_non_jagged>     -> DECLARE <list_of_identifiers> COLON <declaration_type>
 <decl_jagged>         -> DECLARE <list_of_identifiers> COLON <jagged_array>
 <list_of_identifiers> -> LIST OF VARIABLES <id_list> | ID
 <id_list>             -> ID <id_list> | ID ID
