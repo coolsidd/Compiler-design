@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grammar.h"
-#include "symb_conv.h"
 #define MAXLINELEN 2048
 #define MAXTOKLEN 50
 #define MAXRULES 100
@@ -20,13 +19,13 @@ void printGrammar(Grammar* g) {
     printf("Rules(%d): \n", g->num_rules);
     printf("-------------\n");
     for (int i=0;i<g->num_rules;i++) {
-        printf("%s -> ",getSymbol((g->rules)[i].lhs));
+        printf("%s -> ", toStringSymbol((g->rules)[i].lhs));
         RuleNode* rnptr = (g->rules)[i].rhs;
         while (rnptr != NULL) {
             if ( (rnptr->s).is_terminal ) {
-                printf("T<%s> ", getSymbol(rnptr->s));
+                printf("T<%s> ", toStringSymbol(rnptr->s));
             } else {
-                printf("NT<%s> ", getSymbol(rnptr->s));
+                printf("NT<%s> ", toStringSymbol(rnptr->s));
             }
             rnptr = rnptr->next;
         }
