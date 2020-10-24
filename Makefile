@@ -1,4 +1,4 @@
-all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_structs.o parse_tree.o
+all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_structs.o parse_tree.o machine_grammar
 	gcc -o driver.exe final_code/driver.c read_grammar.o tokenizer.o grammar_structs.o tokenizer_structs.o parse_tree.o
 
 machine_grammar:

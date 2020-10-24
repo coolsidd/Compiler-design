@@ -9,13 +9,13 @@ int main() {
     g->start_symb = toSymbol("program");
     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
     readGrammar("grammar/machine_grammar.txt", g);
-    printGrammar(g);
+    //printGrammar(g);
 
     TokenStream *s = newTokenStream();
-    tokenizeSourceCode("sample_code_1.txt", s);
-    for(Token *temp = s->head; temp; temp=temp->next) {
-        printSymbol(temp->lexeme);
-    }
+    tokenizeSourceCode("sample_code_2.txt", s);
+    //for(Token *temp = s->head; temp; temp=temp->next) {
+    //    printSymbol(temp->lexeme);
+    //}
 
     Parse_tree_node * p;
     p = createParseTree(s,g);
