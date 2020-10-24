@@ -34,14 +34,14 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
             for(RuleNode* check_rule = g->rules[i].rhs; check_rule; check_rule = check_rule->next){
                 if(check_rule->s.is_terminal && temp_tstr->lexeme.is_terminal){
                     if(check_rule->s.s == temp_tstr->lexeme.s){
-                        printf("Found %s next\n", toStringSymbol(check_rule->s));
+                        printf("Found %s at line %d next\n", toStringSymbol(check_rule->s), temp_tstr->line_no);
                         Parse_tree_node *tempChildNode = new_parse_tree(temp_tstr);
                         add_parsed_child(new_node, tempChildNode);
                         temp_tstr = temp_tstr->next;
                         continue;
                     }
                     else{
-                        printf("Expected %s found %s\n", toStringSymbol(check_rule->s), toStringSymbol(temp_tstr->lexeme));
+                        printf("Expected %s found %s at line %d\n", toStringSymbol(check_rule->s), temp_tstr->token_name, temp_tstr->line_no);
                         flag_successful = false;
                         break;
                     }
@@ -58,6 +58,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
             }
             if(flag_successful){
                 printf("%s successfully derived\n", toStringSymbol(symb));
+                printf("Parsing till line %d done\n", temp_tstr->line_no);
                 *tstr = temp_tstr;
                 return new_node;
             }else{
@@ -105,3 +106,21 @@ void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
     root->num_children++;
     return;
 }
+
+/* int main(int argc, char** argv){ */
+/*     Grammar* g = (Grammar*)malloc(sizeof(Grammar)); */
+/*     g->num_rules = 0; */
+/*     g->start_symb = toSymbol("main_program"); */
+/*     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule)); */
+/*     readGrammar("./util/grammar.out", g); */
+/*     printGrammar(g); */
+/*     TokenStream *s = newTokenStream(); */
+/*     tokenizeSourceCode(argv[1], s); */
+/*     /\* for(Token *temp = s->head; temp; temp=temp->next){ *\/ */
+/*     /\*      printSymbol(temp->lexeme); *\/ */
+/*     /\* } *\/ */
+/*     Parse_tree_node * p; */
+/*     p = createParseTree(s,g); */
+
+/*     return 0; */
+/* } */

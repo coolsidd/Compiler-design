@@ -81,8 +81,8 @@ def parse_file(
         rhs = line_split[1].strip()
 
         terminals = terminals.union(rhs.split())
-        rhs = " ".join([terminals_json.get(x, x) for x in rhs.split()])
         for rhs_tok in rhs.split("|"):
+            rhs_tok = " ".join([terminals_json.get(x, x) for x in rhs_tok.split()])
             rhs_tok.strip()
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
     input_file.close()
