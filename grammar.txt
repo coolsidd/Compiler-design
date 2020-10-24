@@ -34,8 +34,8 @@
 
 <assign_stmt>         -> <var> EQUALS <expr> SEMICOLON
 <expr>                -> <arithmeticexpr> | <boolexpr>
-<arithmeticexpr>      -> <expr> PLUS <term> | <arithmeticexpr> MINUS <term> | <term>
-<term>                -> <term> MULT <fact> | <term> DIV <fact> | <fact>
+<arithmeticexpr>      -> <term> PLUS <arithmeticexpr> | <term> MINUS <arithmeticexpr> | <term>
+<term>                -> <fact> MULT <term> | <fact> DIV <term> | <fact>
 <fact>                -> <var> | CONST | LPAREN <arithmeticexpr> RPAREN
 
 <boolexpr>            -> <logterm> OR <logterm> | <logterm>
