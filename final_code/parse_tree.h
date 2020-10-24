@@ -2,11 +2,8 @@
 #define __PARSE_TREE_H_
 
 #include <stdlib.h>
-#include "./grammar.h"
-#include "./read_grammar.h"
-#include "./tokenizer_structs.h"
-#include "./tokenize_source_code.h"
-#include "./util/output_file_structs.h"
+#include "grammar.h"
+#include "tokenizer_structs.h"
 
 typedef struct parse_tree_node {
     int num_children;

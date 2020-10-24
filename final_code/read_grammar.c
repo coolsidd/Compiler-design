@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "read_grammar.h"
+#include "grammar.h"
 
 char* replace_char(char* str, char find, char replace){
     char *current_pos = strchr(str,find);
@@ -16,7 +16,7 @@ void printGrammar(Grammar* g) {
     printf("Rules(%d): \n", g->num_rules);
     printf("-------------\n");
     for (int i=0;i<g->num_rules;i++) {
-        printf("%s -> ", toStringSymbol((g->rules)[i].lhs));
+        printf("%s -> ",toStringSymbol((g->rules)[i].lhs));
         RuleNode* rnptr = (g->rules)[i].rhs;
         while (rnptr != NULL) {
             if ( (rnptr->s).is_terminal ) {
@@ -80,12 +80,3 @@ void readGrammar(char *filename, Grammar* g){
         free(tmp_line);
     }
 }
-
-/* int main() { */
-/*     Grammar* g = (Grammar*)malloc(sizeof(Grammar)); */
-/*     g->num_rules = 0; */
-/*     g->start_symb = toSymbol("program"); */
-/*     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule)); */
-/*     readGrammar("machine_grammar.txt", g); */
-/*     printGrammar(g); */
-/* } */

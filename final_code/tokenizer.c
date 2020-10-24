@@ -1,4 +1,9 @@
-#include "tokenize_source_code.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tokenizer_structs.h"
+#define MAXLINELEN 2048
+#define MAXTOKLEN 50
 
 void tokenizeSourceCode(char *filename, TokenStream *s) {
     char *sep = " ";
@@ -26,11 +31,3 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
         } //printf("\n");
     }
 }
-
-/* int main() { */
-/*     TokenStream *s = newTokenStream(); */
-/*     tokenizeSourceCode("sample_code_1.txt", s); */
-/*     for(Token *temp = s->head; temp; temp=temp->next){ */
-/*         printSymbol(temp->lexeme); */
-/*     } */
-/* } */
