@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "../util/gen_utils.h"
 
 typedef struct ____TREE_NODE____ tree_node;
 

@@ -1,5 +1,5 @@
-
 #include <stdlib.h>
+#include "../util/gen_utils.h"
 
 typedef struct ____LINKED_LIST_NODE____ ll_node;
 
