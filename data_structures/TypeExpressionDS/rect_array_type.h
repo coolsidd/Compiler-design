@@ -4,7 +4,7 @@ typedef struct ____RECT_ARRAY_RANGE____ rect_array_range;
 
 struct ____RECT_ARRAY_RANGE____{
     int lower_bound;
-    int higher_bound;
+    int upper_bound;
 };
 
 typedef struct ____RECT_ARRAY_TYPE____ rect_array_type;
