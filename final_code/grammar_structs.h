@@ -38,6 +38,7 @@ typedef enum { // list all the non terminals or terminals
     term,
     value_list,
     var,
+    var_lhs,
     AND,
     ARRAY,
     BOOLEAN,

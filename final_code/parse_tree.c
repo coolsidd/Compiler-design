@@ -9,7 +9,7 @@ Parse_tree_node* createParseTree(TokenStream *s, Grammar *g){
 }
 
 Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *g){
-    printf("Trying to derive %s\n", toStringSymbol(symb));
+    printf("Trying to derive %s:\n", toStringSymbol(symb));
     Parse_tree_node * new_node = NULL;
     for(int i=0; i<g->num_rules; i++){
 
@@ -54,12 +54,18 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
                         flag_successful = false;
                         break;
                     }
+                }else{
+                    printf("Expected %s found %s at line %d\n", toStringSymbol(check_rule->s), temp_tstr->token_name, temp_tstr->line_no);
+                    flag_successful = false;
+                    break;
                 }
             }
             if(flag_successful){
                 printf("%s successfully derived\n", toStringSymbol(symb));
-                printf("Parsing till line %d done\n", temp_tstr->line_no);
-                *tstr = temp_tstr;
+                if(temp_tstr){
+                    printf("Parsing till line %d done\n", temp_tstr->line_no);
+                    *tstr = temp_tstr;
+                }
                 return new_node;
             }else{
                 free(tempToken);
