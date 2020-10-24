@@ -1,5 +1,5 @@
-all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_structs.o
-	gcc -o driver.exe final_code/driver.c read_grammar.o tokenizer.o grammar_structs.o tokenizer_structs.o
+all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_structs.o parse_tree.o
+	gcc -o driver.exe final_code/driver.c read_grammar.o tokenizer.o grammar_structs.o tokenizer_structs.o parse_tree.o
 
 machine_grammar:
 	python generate_grammar.py -o grammar/machine_grammar.txt --grammar-struct-out final_code/grammar_structs --json_in grammar/symbols.json grammar/grammar.txt
@@ -15,9 +15,11 @@ tokenizer_structs.o: final_code/tokenizer_structs.c final_code/tokenizer_structs
 
 tokenizer.o:
 	gcc -c final_code/tokenizer.c
+	parse_tree: tokenizer_structs.o grammar_structs.o read_grammar.o tokenizer.o
+		gcc -o parse_tree.exe final_code/parse_tree.c read_grammar.o tokenize_source_code.o tokenizer_structs.o grammar_structs.o
 
-parse_tree: tokenizer_structs.o grammar_structs.o read_grammar.o tokenizer.o
-	gcc -o parse_tree.exe final_code/parse_tree.c read_grammar.o tokenize_source_code.o tokenizer_structs.o grammar_structs.o
+parse_tree.o:
+	gcc -c final_code/parse_tree.c
 
 .PHONY: clean
 clean:

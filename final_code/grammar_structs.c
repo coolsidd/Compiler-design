@@ -6,168 +6,6 @@ Symbol toSymbol(char *enustr) {
     Symbol ans;
     ans.is_terminal = false;
     ans.s = UNKNOWN;
-    if (strcmp(enustr, ";") == 0) {
-        ans.is_terminal = true;
-        ans.s = SEMICOLON;
-        return ans;
-    }
-
-    if (strcmp(enustr, "of") == 0) {
-        ans.is_terminal = true;
-        ans.s = OF;
-        return ans;
-    }
-
-    if (strcmp(enustr, ")") == 0) {
-        ans.is_terminal = true;
-        ans.s = RPAREN;
-        return ans;
-    }
-
-    if (strcmp(enustr, "list") == 0) {
-        ans.is_terminal = true;
-        ans.s = LIST;
-        return ans;
-    }
-
-    if (strcmp(enustr, "|||") == 0) {
-        ans.is_terminal = true;
-        ans.s = OR;
-        return ans;
-    }
-
-    if (strcmp(enustr, "UNKNOWN") == 0) {
-        ans.is_terminal = true;
-        ans.s = UNKNOWN;
-        return ans;
-    }
-
-    if (strcmp(enustr, "array") == 0) {
-        ans.is_terminal = true;
-        ans.s = ARRAY;
-        return ans;
-    }
-
-    if (strcmp(enustr, "ID") == 0) {
-        ans.is_terminal = true;
-        ans.s = ID;
-        return ans;
-    }
-
-    if (strcmp(enustr, "{") == 0) {
-        ans.is_terminal = true;
-        ans.s = CURLYOPEN;
-        return ans;
-    }
-
-    if (strcmp(enustr, "integer") == 0) {
-        ans.is_terminal = true;
-        ans.s = INTEGER;
-        return ans;
-    }
-
-    if (strcmp(enustr, "+") == 0) {
-        ans.is_terminal = true;
-        ans.s = PLUS;
-        return ans;
-    }
-
-    if (strcmp(enustr, "(") == 0) {
-        ans.is_terminal = true;
-        ans.s = LPAREN;
-        return ans;
-    }
-
-    if (strcmp(enustr, "*") == 0) {
-        ans.is_terminal = true;
-        ans.s = MULT;
-        return ans;
-    }
-
-    if (strcmp(enustr, "..") == 0) {
-        ans.is_terminal = true;
-        ans.s = ELIPSIS;
-        return ans;
-    }
-
-    if (strcmp(enustr, "&&&") == 0) {
-        ans.is_terminal = true;
-        ans.s = AND;
-        return ans;
-    }
-
-    if (strcmp(enustr, "/") == 0) {
-        ans.is_terminal = true;
-        ans.s = DIV;
-        return ans;
-    }
-
-    if (strcmp(enustr, "real") == 0) {
-        ans.is_terminal = true;
-        ans.s = REAL;
-        return ans;
-    }
-
-    if (strcmp(enustr, "size") == 0) {
-        ans.is_terminal = true;
-        ans.s = SIZE;
-        return ans;
-    }
-
-    if (strcmp(enustr, "CONST") == 0) {
-        ans.is_terminal = true;
-        ans.s = CONST;
-        return ans;
-    }
-
-    if (strcmp(enustr, "R1") == 0) {
-        ans.is_terminal = true;
-        ans.s = R1;
-        return ans;
-    }
-
-    if (strcmp(enustr, "values") == 0) {
-        ans.is_terminal = true;
-        ans.s = VALUES;
-        return ans;
-    }
-
-    if (strcmp(enustr, "variables") == 0) {
-        ans.is_terminal = true;
-        ans.s = VARIABLES;
-        return ans;
-    }
-
-    if (strcmp(enustr, "}") == 0) {
-        ans.is_terminal = true;
-        ans.s = CURLYCLOSE;
-        return ans;
-    }
-
-    if (strcmp(enustr, "boolean") == 0) {
-        ans.is_terminal = true;
-        ans.s = BOOLEAN;
-        return ans;
-    }
-
-    if (strcmp(enustr, "-") == 0) {
-        ans.is_terminal = true;
-        ans.s = MINUS;
-        return ans;
-    }
-
-    if (strcmp(enustr, "=") == 0) {
-        ans.is_terminal = true;
-        ans.s = EQUALS;
-        return ans;
-    }
-
-    if (strcmp(enustr, "jagged") == 0) {
-        ans.is_terminal = true;
-        ans.s = JAGGED;
-        return ans;
-    }
-
     if (strcmp(enustr, "]") == 0) {
         ans.is_terminal = true;
         ans.s = SQBC;
@@ -180,9 +18,75 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "declare") == 0) {
+    if (strcmp(enustr, ":") == 0) {
         ans.is_terminal = true;
-        ans.s = DECLARE;
+        ans.s = COLON;
+        return ans;
+    }
+
+    if (strcmp(enustr, "|||") == 0) {
+        ans.is_terminal = true;
+        ans.s = OR;
+        return ans;
+    }
+
+    if (strcmp(enustr, "/") == 0) {
+        ans.is_terminal = true;
+        ans.s = DIV;
+        return ans;
+    }
+
+    if (strcmp(enustr, "=") == 0) {
+        ans.is_terminal = true;
+        ans.s = EQUALS;
+        return ans;
+    }
+
+    if (strcmp(enustr, ";") == 0) {
+        ans.is_terminal = true;
+        ans.s = SEMICOLON;
+        return ans;
+    }
+
+    if (strcmp(enustr, "}") == 0) {
+        ans.is_terminal = true;
+        ans.s = CURLYCLOSE;
+        return ans;
+    }
+
+    if (strcmp(enustr, ")") == 0) {
+        ans.is_terminal = true;
+        ans.s = RPAREN;
+        return ans;
+    }
+
+    if (strcmp(enustr, "of") == 0) {
+        ans.is_terminal = true;
+        ans.s = OF;
+        return ans;
+    }
+
+    if (strcmp(enustr, "{") == 0) {
+        ans.is_terminal = true;
+        ans.s = CURLYOPEN;
+        return ans;
+    }
+
+    if (strcmp(enustr, "real") == 0) {
+        ans.is_terminal = true;
+        ans.s = REAL;
+        return ans;
+    }
+
+    if (strcmp(enustr, "(") == 0) {
+        ans.is_terminal = true;
+        ans.s = LPAREN;
+        return ans;
+    }
+
+    if (strcmp(enustr, "..") == 0) {
+        ans.is_terminal = true;
+        ans.s = ELIPSIS;
         return ans;
     }
 
@@ -192,21 +96,123 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, ":") == 0) {
+    if (strcmp(enustr, "-") == 0) {
         ans.is_terminal = true;
-        ans.s = COLON;
+        ans.s = MINUS;
         return ans;
     }
 
-    if (strcmp(enustr, "assign_stmt") == 0) {
-        ans.is_terminal = false;
-        ans.s = assign_stmt;
+    if (strcmp(enustr, "&&&") == 0) {
+        ans.is_terminal = true;
+        ans.s = AND;
         return ans;
     }
 
-    if (strcmp(enustr, "jagged_array") == 0) {
+    if (strcmp(enustr, "size") == 0) {
+        ans.is_terminal = true;
+        ans.s = SIZE;
+        return ans;
+    }
+
+    if (strcmp(enustr, "declare") == 0) {
+        ans.is_terminal = true;
+        ans.s = DECLARE;
+        return ans;
+    }
+
+    if (strcmp(enustr, "UNKNOWN") == 0) {
+        ans.is_terminal = true;
+        ans.s = UNKNOWN;
+        return ans;
+    }
+
+    if (strcmp(enustr, "ID") == 0) {
+        ans.is_terminal = true;
+        ans.s = ID;
+        return ans;
+    }
+
+    if (strcmp(enustr, "variables") == 0) {
+        ans.is_terminal = true;
+        ans.s = VARIABLES;
+        return ans;
+    }
+
+    if (strcmp(enustr, "values") == 0) {
+        ans.is_terminal = true;
+        ans.s = VALUES;
+        return ans;
+    }
+
+    if (strcmp(enustr, "+") == 0) {
+        ans.is_terminal = true;
+        ans.s = PLUS;
+        return ans;
+    }
+
+    if (strcmp(enustr, "jagged") == 0) {
+        ans.is_terminal = true;
+        ans.s = JAGGED;
+        return ans;
+    }
+
+    if (strcmp(enustr, "integer") == 0) {
+        ans.is_terminal = true;
+        ans.s = INTEGER;
+        return ans;
+    }
+
+    if (strcmp(enustr, "array") == 0) {
+        ans.is_terminal = true;
+        ans.s = ARRAY;
+        return ans;
+    }
+
+    if (strcmp(enustr, "*") == 0) {
+        ans.is_terminal = true;
+        ans.s = MULT;
+        return ans;
+    }
+
+    if (strcmp(enustr, "CONST") == 0) {
+        ans.is_terminal = true;
+        ans.s = CONST;
+        return ans;
+    }
+
+    if (strcmp(enustr, "boolean") == 0) {
+        ans.is_terminal = true;
+        ans.s = BOOLEAN;
+        return ans;
+    }
+
+    if (strcmp(enustr, "list") == 0) {
+        ans.is_terminal = true;
+        ans.s = LIST;
+        return ans;
+    }
+
+    if (strcmp(enustr, "R1") == 0) {
+        ans.is_terminal = true;
+        ans.s = R1;
+        return ans;
+    }
+
+    if (strcmp(enustr, "boolexpr") == 0) {
         ans.is_terminal = false;
-        ans.s = jagged_array;
+        ans.s = boolexpr;
+        return ans;
+    }
+
+    if (strcmp(enustr, "decl_stmt") == 0) {
+        ans.is_terminal = false;
+        ans.s = decl_stmt;
+        return ans;
+    }
+
+    if (strcmp(enustr, "decl_stmts") == 0) {
+        ans.is_terminal = false;
+        ans.s = decl_stmts;
         return ans;
     }
 
@@ -216,9 +222,27 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
+    if (strcmp(enustr, "jagged2list") == 0) {
+        ans.is_terminal = false;
+        ans.s = jagged2list;
+        return ans;
+    }
+
     if (strcmp(enustr, "list_of_identifiers") == 0) {
         ans.is_terminal = false;
         ans.s = list_of_identifiers;
+        return ans;
+    }
+
+    if (strcmp(enustr, "j2list") == 0) {
+        ans.is_terminal = false;
+        ans.s = j2list;
+        return ans;
+    }
+
+    if (strcmp(enustr, "jagged3init") == 0) {
+        ans.is_terminal = false;
+        ans.s = jagged3init;
         return ans;
     }
 
@@ -234,33 +258,15 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "stmts") == 0) {
+    if (strcmp(enustr, "index_list") == 0) {
         ans.is_terminal = false;
-        ans.s = stmts;
+        ans.s = index_list;
         return ans;
     }
 
-    if (strcmp(enustr, "decl_jagged") == 0) {
+    if (strcmp(enustr, "value_list") == 0) {
         ans.is_terminal = false;
-        ans.s = decl_jagged;
-        return ans;
-    }
-
-    if (strcmp(enustr, "fact") == 0) {
-        ans.is_terminal = false;
-        ans.s = fact;
-        return ans;
-    }
-
-    if (strcmp(enustr, "range_list") == 0) {
-        ans.is_terminal = false;
-        ans.s = range_list;
-        return ans;
-    }
-
-    if (strcmp(enustr, "assign_stmts") == 0) {
-        ans.is_terminal = false;
-        ans.s = assign_stmts;
+        ans.s = value_list;
         return ans;
     }
 
@@ -270,15 +276,63 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "boolexpr") == 0) {
+    if (strcmp(enustr, "decl_jagged") == 0) {
         ans.is_terminal = false;
-        ans.s = boolexpr;
+        ans.s = decl_jagged;
         return ans;
     }
 
-    if (strcmp(enustr, "j2list") == 0) {
+    if (strcmp(enustr, "var") == 0) {
         ans.is_terminal = false;
-        ans.s = j2list;
+        ans.s = var;
+        return ans;
+    }
+
+    if (strcmp(enustr, "arithmeticexpr") == 0) {
+        ans.is_terminal = false;
+        ans.s = arithmeticexpr;
+        return ans;
+    }
+
+    if (strcmp(enustr, "fact") == 0) {
+        ans.is_terminal = false;
+        ans.s = fact;
+        return ans;
+    }
+
+    if (strcmp(enustr, "jagged2init") == 0) {
+        ans.is_terminal = false;
+        ans.s = jagged2init;
+        return ans;
+    }
+
+    if (strcmp(enustr, "stmts") == 0) {
+        ans.is_terminal = false;
+        ans.s = stmts;
+        return ans;
+    }
+
+    if (strcmp(enustr, "jagged_array") == 0) {
+        ans.is_terminal = false;
+        ans.s = jagged_array;
+        return ans;
+    }
+
+    if (strcmp(enustr, "assign_stmts") == 0) {
+        ans.is_terminal = false;
+        ans.s = assign_stmts;
+        return ans;
+    }
+
+    if (strcmp(enustr, "id_list") == 0) {
+        ans.is_terminal = false;
+        ans.s = id_list;
+        return ans;
+    }
+
+    if (strcmp(enustr, "rect_array") == 0) {
+        ans.is_terminal = false;
+        ans.s = rect_array;
         return ans;
     }
 
@@ -294,15 +348,9 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "jagged3init") == 0) {
+    if (strcmp(enustr, "logterm") == 0) {
         ans.is_terminal = false;
-        ans.s = jagged3init;
-        return ans;
-    }
-
-    if (strcmp(enustr, "expr") == 0) {
-        ans.is_terminal = false;
-        ans.s = expr;
+        ans.s = logterm;
         return ans;
     }
 
@@ -312,21 +360,9 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "logterm") == 0) {
+    if (strcmp(enustr, "assign_stmt") == 0) {
         ans.is_terminal = false;
-        ans.s = logterm;
-        return ans;
-    }
-
-    if (strcmp(enustr, "arithmeticexpr") == 0) {
-        ans.is_terminal = false;
-        ans.s = arithmeticexpr;
-        return ans;
-    }
-
-    if (strcmp(enustr, "id_list") == 0) {
-        ans.is_terminal = false;
-        ans.s = id_list;
+        ans.s = assign_stmt;
         return ans;
     }
 
@@ -336,51 +372,15 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "jagged2init") == 0) {
+    if (strcmp(enustr, "range_list") == 0) {
         ans.is_terminal = false;
-        ans.s = jagged2init;
+        ans.s = range_list;
         return ans;
     }
 
-    if (strcmp(enustr, "value_list") == 0) {
+    if (strcmp(enustr, "expr") == 0) {
         ans.is_terminal = false;
-        ans.s = value_list;
-        return ans;
-    }
-
-    if (strcmp(enustr, "jagged2list") == 0) {
-        ans.is_terminal = false;
-        ans.s = jagged2list;
-        return ans;
-    }
-
-    if (strcmp(enustr, "decl_stmts") == 0) {
-        ans.is_terminal = false;
-        ans.s = decl_stmts;
-        return ans;
-    }
-
-    if (strcmp(enustr, "decl_stmt") == 0) {
-        ans.is_terminal = false;
-        ans.s = decl_stmt;
-        return ans;
-    }
-
-    if (strcmp(enustr, "rect_array") == 0) {
-        ans.is_terminal = false;
-        ans.s = rect_array;
-        return ans;
-    }
-
-    if (strcmp(enustr, "index_list") == 0) {
-        ans.is_terminal = false;
-        ans.s = index_list;
-        return ans;
-    }
-
-    if (strcmp(enustr, "var") == 0) {
-        ans.is_terminal = false;
-        ans.s = var;
+        ans.s = expr;
         return ans;
     }
 

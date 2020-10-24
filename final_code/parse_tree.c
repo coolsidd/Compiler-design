@@ -105,22 +105,3 @@ void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
     root->num_children++;
     return;
 }
-
-
-int main(int argc, char** argv) {
-    Grammar* g = (Grammar*)malloc(sizeof(Grammar));
-    g->num_rules = 0;
-    g->start_symb = toSymbol("main_program");
-    g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    readGrammar("./util/grammar.out", g);
-    //printGrammar(g);
-    TokenStream *s = newTokenStream();
-    tokenizeSourceCode(argv[1], s);
-    /* for(Token *temp = s->head; temp; temp=temp->next){ */
-    /*      printSymbol(temp->lexeme); */
-    /* } */
-    Parse_tree_node * p;
-    p = createParseTree(s,g);
-
-    return 0;
-}

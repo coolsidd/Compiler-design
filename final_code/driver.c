@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "grammar.h"
 #include "tokenizer_structs.h"
-#include "grammar_structs.h"
+#include "parse_tree.h"
 
 int main() {
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
@@ -16,4 +16,7 @@ int main() {
     for(Token *temp = s->head; temp; temp=temp->next) {
         printSymbol(temp->lexeme);
     }
+
+    Parse_tree_node * p;
+    p = createParseTree(s,g);
 }
