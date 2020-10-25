@@ -44,23 +44,24 @@ void add_entry_to_table(type_exp_table* txp_table, char* variable_name,
     add_to_symbol_table(txp_table->symbol_table, variable_name, txp);
     }
 
+// Below functions wont be used.
 /* delete txp_table_node corresponding to a variable_name
     Should We raise an error if the var_name's node not present
 */
-void ll_delete_txp_node(linked_list* root, char* variable_name){
-    int idx = ll_get_index_by_var(root, variable_name);
-    ll_remove_at(root, idx);
-}
+// void ll_delete_txp_node(linked_list* root, char* variable_name){
+//     int idx = ll_get_index_by_var(root, variable_name);
+//     ll_remove_at(root, idx);
+// }
 
-/*
-    To remove a variable's entry from Type Expression Table,
-    we need to remove it from both linked_list of txp_table_node(s)
-    as well as symbol_table
-    To raise error if not found or no?
-*/
-void remove_entry_from_table(type_exp_table* txp_table, char* variable_name){
-    remove_from_hash_map(txp_table->symbol_table, variable_name);
-    // remove txp_table_node corresponding to variable_name
-    delete_txp_node(txp_table->root, variable_name);
+// /*
+//     To remove a variable's entry from Type Expression Table,
+//     we need to remove it from both linked_list of txp_table_node(s)
+//     as well as symbol_table
+//     To raise error if not found or no?
+// */
+// void remove_entry_from_table(type_exp_table* txp_table, char* variable_name){
+//     remove_from_hash_map(txp_table->symbol_table, variable_name);
+//     // remove txp_table_node corresponding to variable_name
+//     ll_delete_txp_node(txp_table->root, variable_name);
 
-}
+// }

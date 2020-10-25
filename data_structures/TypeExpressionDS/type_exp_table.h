@@ -43,13 +43,13 @@ void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expre
 void add_entry_to_table(type_exp_table* txp_table, char* variable_name, VariableType var_type,
                         declaration_type decl_type, type_expression t);
 
-// remove entry
-void remove_entry_from_table(type_exp_table* txp_table, char* variable_name);
+// // remove entry
+// void remove_entry_from_table(type_exp_table* txp_table, char* variable_name);
 
-// delete txp_table_node corresponding to a variable_name
-void ll_delete_txp_node(linked_list* root, char* variable_name);
+// // delete txp_table_node corresponding to a variable_name
+// void ll_delete_txp_node(linked_list* root, char* variable_name);
 
-// get index of a txp_node in linked_list* root corresponding to a variable name
-int ll_get_index_by_var(linked_list* root, char* variable_name);
+// // get index of a txp_node in linked_list* root corresponding to a variable name
+// int ll_get_index_by_var(linked_list* root, char* variable_name);
 
 #endif

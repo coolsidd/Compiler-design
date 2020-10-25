@@ -1,33 +1,17 @@
 #include "type_expression.h"
 
-// char* get_str_variable_type(enum variable_type){
-//     char* res;
-//     if(variable_type == PRIMITIVE_TYPE){
-//         res = "";
-//     }
-//     elif(variable_type == RECT_ARRAY){
-//         res = "rectangularArray";
-//     }
-//     else{
-//         res = "jaggedArray";
-//     }
-
-//     return res;
-// }
-
 char* get_str_primitive_type(enum primitive_type){
-    char* res;
-    if(primitive_type == BOOLEAN){
-        res = "Boolean";
+    switch(primitive_type){
+        case(BOOLEAN):
+            return "Boolean";
+            break;
+        case(INTEGER):
+            return "integer";
+            break;
+        case(REAL):
+            return "real";
+            break;
     }
-    elif(primitive_type == INTEGER){
-        res = "integer";
-    }
-    else{
-        res = "real";
-    }
-
-    return res;
 }
 
 // get the desired String Representation of TypeExpression
