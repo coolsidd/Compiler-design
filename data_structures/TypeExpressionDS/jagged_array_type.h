@@ -22,3 +22,20 @@ struct ____JAGGED_ARRAY_TYPE____{
 jagged_array_type* create_jagged_array_type(Parse_tree_node* p);
 
 #endif
+
+/*
+
+common:
+    linkedlist* sizes
+    (sizes is a ll with data as integers)
+
+Jagged_2d:
+    UpperBound, Lower Bound;
+    common c1;
+    
+Jagged_3d:
+    UpperBound, Lower Bound
+    linked_list* c;
+    (linked_list of common(s))
+
+*/
