@@ -24,18 +24,22 @@ jagged_array_type* create_jagged_array_type(Parse_tree_node* p);
 #endif
 
 /*
-
-common:
+R2_Dimension:
     linkedlist* sizes
     (sizes is a ll with data as integers)
 
 Jagged_2d:
     UpperBound, Lower Bound;
-    common c1;
-    
+    R2_Dimension c1;
+
 Jagged_3d:
     UpperBound, Lower Bound
     linked_list* c;
-    (linked_list of common(s))
+    (linked_list of R2_Dimension(s))
 
+// Functionalities
+R2_Dimension* create_R2_Dimension();
+void append_size(linked_list* ll, int size);
+// to change get_type_expression
+// print exp_table
 */
