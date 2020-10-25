@@ -1,16 +1,16 @@
 #include "type_expression.h"
 #define MAX_BUFFER_SIZE 200
 
-char *get_str_primitive_type(primitive_type primitive_data)
+char *get_str_primitive_type(t_primitive_type primitive_data)
 {
     switch(primitive_data){
-        case(BOOLEAN):
+        case(t_BOOLEAN):
             return "Boolean";
             break;
-        case(INTEGER):
+        case(t_INTEGER):
             return "integer";
             break;
-        case(REAL):
+        case(t_REAL):
             return "real";
             break;
     }

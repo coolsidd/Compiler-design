@@ -1,6 +1,9 @@
-#include "../../final_code/grammar_structs.h"
-#include "../../final_code/parse_tree.h"
-typedef enum {BOOLEAN, INTEGER, REAL} primitive_type;
+#ifndef PRIMITITVE_TYPE_H
+#define PRIMITITVE_TYPE_H
+#include "type_exp_table.h"
+typedef enum {t_BOOLEAN, t_INTEGER, t_REAL} t_primitive_type;
 
 // to get primitive_type object from parse tree node
-primitive_type* get_primitive_type(Parse_tree_node* p);
+t_primitive_type* get_primitive_type(Parse_tree_node* p);
+
+#endif

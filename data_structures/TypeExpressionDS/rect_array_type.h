@@ -1,5 +1,7 @@
-#include "../linked_list.h"
-#include "../../final_code/parse_tree.h"
+#ifndef RECT_ARRAY_TYPE_H
+#define RECT_ARRAY_TYPE_H
+
+#include "type_exp_table.h"
 
 typedef struct ____RECT_ARRAY_RANGE____ rect_array_range;
 
@@ -24,8 +26,9 @@ rect_array_range* create_rect_array_node();
 rect_array_type* create_rect_array_type(Parse_tree_node* p);
 
 // get number of dimensions of rect array
-int get_dimension(rect_array_range* r_type);
+int get_dimension(rect_array_type* r_type);
 
+#endif
 
 // not required for now
 

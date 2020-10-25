@@ -5,13 +5,17 @@
 
 #include <stdlib.h>
 #include "../../util/gen_utils.h"
+#include "../../final_code/parse_tree.h"
 #include "../hash_map.h"
 #include "../linked_list.h"
+#include "primitive_type.h"
+#include "rect_array_type.h"
+#include "jagged_array_type.h"
 #include "type_expression.h"
 
-typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 
-typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
+
+typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 
 typedef enum {NOT_APPLICABLE, STATIC, DYNAMIC} DeclarationType;
 

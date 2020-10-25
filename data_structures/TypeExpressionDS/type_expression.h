@@ -1,18 +1,15 @@
-#include <stdlib.h>
-#include "../../util/gen_utils.h"
-#include "../../final_code/parse_tree.h"
-#include "primitive_type.h"
-#include "rect_array_type.h"
-#include "jagged_array_type.h"
+#ifndef TYPE_EXP_H
+#define TYPE_EXP_H
 
-typedef enum {false, true} bool;
+#include "type_exp_table.h"
 
+// typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 
 typedef union ____UNION_TO_BE_NAMED____ union_to_be_named;
 
 union ____UNION_TO_BE_NAMED____{
-    primitive_type primitive_data;
+    t_primitive_type primitive_data;
     rect_array_type rect_array_data;
     jagged_array_type jagged_array_data;
 };
@@ -37,3 +34,5 @@ char* get_string_representation(type_expression* tp);
 
 // set is_declared to true on encountering decl_stmt
 void set_declare_flag(type_expression* tp);
+
+#endif
