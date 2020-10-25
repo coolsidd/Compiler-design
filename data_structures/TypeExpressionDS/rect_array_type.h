@@ -21,7 +21,7 @@ struct ____RECT_ARRAY_TYPE____{
 rect_array_range* create_rect_array_node();
 
 // initialise rect_array_type
-rect_array_type* create_rect_array_type(parse_tree_node* p);
+rect_array_type* create_rect_array_type(Parse_tree_node* p);
 
 // get number of dimensions of rect array
 int get_dimension(rect_array_range* r_type);

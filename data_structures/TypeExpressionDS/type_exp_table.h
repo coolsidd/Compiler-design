@@ -37,11 +37,11 @@ type_exp_table* create_type_expression_table();
 type_expression* get_type_expression(type_exp_table* txp_table, char* variable);
 
 // add entry to symbol table
-void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expression txp);
+void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expression* txp);
 
 // add entry to type expression table
-void add_entry_to_table(type_exp_table* txp_table, char* variable_name, VariableType var_type,
-                        declaration_type decl_type, type_expression t);
+void add_entry_to_table(type_exp_table *txp_table, char *variable_name, VariableType var_type,
+                        DeclarationType decl_type, type_expression* t);
 
 // // remove entry
 // void remove_entry_from_table(type_exp_table* txp_table, char* variable_name);

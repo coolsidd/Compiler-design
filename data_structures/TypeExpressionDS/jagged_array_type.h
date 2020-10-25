@@ -1,5 +1,5 @@
 #include "../linked_list.h"
-
+#include "../../final_code/parse_tree.h"
 typedef struct ____RECT_ARRAY_RANGE____ jagged_array_range;
 
 struct ____RECT_ARRAY_RANGE____{
@@ -15,4 +15,4 @@ struct ____RECT_ARRAY_TYPE____{
 };
 
 //to write function prototypes
-jagged_array_type* create_jagged_array_type(parse_tree_node* p);
+jagged_array_type* create_jagged_array_type(Parse_tree_node* p);

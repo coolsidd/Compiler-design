@@ -8,7 +8,7 @@ rect_array_range* create_rect_array_node(int lower_bound, int upper_bound){
     return r_node;
 }
 
-rect_array_type* create_rect_array_type(parse_tree_node* p){
+rect_array_type* create_rect_array_type(Parse_tree_node* p){
     rect_array_type* r = (rect_array_type*)calloc(1,sizeof(rect_array_type));
     linked_list* ll = create_linked_list();
     r->array_ranges = ll;
@@ -17,26 +17,26 @@ rect_array_type* create_rect_array_type(parse_tree_node* p){
     return r;
 }
 
-linked_list* get_type_from_rangelist(parse_tree_node* p, linked_list* ll){
+linked_list* get_type_from_rangelist(Parse_tree_node* p, linked_list* ll){
     /*
         low: 2nd child
         high: 4th child
         iterate on basis of last child:
             (if range_list)
     */
-    parse_tree_node* low = p->child->next;
-    parse_tree_node* high = low->next->next;
+    Parse_tree_node* low = p->child->next;
+    Parse_tree_node* high = low->next->next;
 
     rect_array_range* r_node = create_rect_array_node(stoi(low->tok->token_name),
                             stoi(high->tok->token_name));
-    ll = ll_append(ll, r_node);
-    parse_tree_node* temp = high->next->next;
-    if(!temp && temp->tok->lexeme->s == range_list){
+    ll_append(ll, r_node);
+    Parse_tree_node* temp = high->next->next;
+    if(!temp && temp->tok->lexeme.s == range_list){
         get_type_from_rangelist(temp, ll);
     }
 }
 
-int get_dimension(rect_array_range* r_type){
+int get_dimension(rect_array_type* r_type){
     return r_type->dimensions;
 }
 

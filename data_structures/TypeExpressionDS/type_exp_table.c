@@ -14,16 +14,16 @@ type_exp_table* create_type_expression_table(){
     So, while traversing parse tree we will raise error in this case. 
     To get, string representation of this type_expression(say txp), we can call
     get_string_representation(txp); */
-type_expression get_type_expression(type_exp_table* txp_table, char* variable_name){
+type_expression* get_type_expression(type_exp_table* txp_table, char* variable_name){
     hash_map* symbol_table = txp_table->symbol_table;
-    type_expression txp = (type_expression)fetch_from_hash_map(symbol_table, variable_name);
+    type_expression* txp = (type_expression*)fetch_from_hash_map(symbol_table, variable_name);
     return txp;
 }
 
 /*
     Add entry to symbol_table <-> symbol_table[variable_name] = txp;
 */
-void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expression txp){
+void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expression* txp){
     add_to_hash_map(symbol_table, variable_name, txp);
 }
 
@@ -34,15 +34,16 @@ void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expre
     we would call construct_type_expression(*args) to get type_expression of variable.
     finally call this function with all the above fields.
 */
-void add_entry_to_table(type_exp_table* txp_table, char* variable_name,
-        VariableType var_type, declaration_type decl_type, type_expression txp){
-    
-    txp_table_node* ttn = calloc(1, sizeof(txp_table_node);
+void add_entry_to_table(type_exp_table *txp_table, char *variable_name,
+                        VariableType var_type, DeclarationType decl_type, type_expression* txp)
+{
+
+    txp_table_node* ttn = calloc(1, sizeof(txp_table_node));
     ttn->variable_name = variable_name;
-    ttn->VariableType = var_type;
+    ttn->variable_type = var_type;
     ttn->declaration_type = decl_type;
     add_to_symbol_table(txp_table->symbol_table, variable_name, txp);
-    }
+}
 
 // Below functions wont be used.
 /* delete txp_table_node corresponding to a variable_name
