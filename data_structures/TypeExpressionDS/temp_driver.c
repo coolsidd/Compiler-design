@@ -31,8 +31,23 @@ int main(){
     printf("%s\n", res);
     DeclarationType decl_type = STATIC;
     char *variable_name = "r";
-    add_entry_to_table(t, variable_name, variable_type,
-                       decl_type, txp);
+    add_entry_to_table(t, variable_name, variable_type,decl_type, txp);
     type_expression *txp2 = get_type_expression(t, variable_name);
-    printf("%s", get_string_representation(txp2));
+    strcpy(res, get_string_representation(txp2));
+    printf("%s\n", res);
+
+    t_primitive_type* primitive = (t_primitive_type*)calloc(1,sizeof(t_primitive_type));
+    variable_name = "primitive";
+    variable_type = PRIMITIVE_TYPE;
+    decl_type = NOT_APPLICABLE;
+    *primitive = t_INTEGER;
+    union_to_be_named *u1 = (union_to_be_named *)calloc(1, sizeof(union_to_be_named));
+    u1->primitive_data = *primitive;
+    txp = construct_type_expression(variable_type, *u1);
+    strcpy(res, get_string_representation(txp));
+    printf("%s\n", res);
+    add_entry_to_table(t, variable_name, variable_type, decl_type, txp);
+    txp2 = get_type_expression(t, variable_name);
+    strcpy(res, get_string_representation(txp2));
+    printf("%s\n", res);
 }
