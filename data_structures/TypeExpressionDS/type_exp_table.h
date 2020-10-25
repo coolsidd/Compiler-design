@@ -34,7 +34,7 @@ struct ____TYPE_EXPRESSION_TABLE____{
 type_exp_table* create_type_expression_table();
 
 // get type expression of a variable
-type_expression get_type_expression(type_exp_table* txp_table, char* variable);
+type_expression* get_type_expression(type_exp_table* txp_table, char* variable);
 
 // add entry to symbol table
 void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expression txp);
