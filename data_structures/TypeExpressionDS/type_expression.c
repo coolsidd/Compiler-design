@@ -27,7 +27,7 @@ char* get_string_representation(type_expression* tp){
     switch(tp->variable_type){
         case(PRIMITIVE_TYPE):
         {
-            snprintf(result, MAX_BUFFER_SIZE, "type = %s", get_str_primitive_type(union_ds.primitive_data));
+            snprintf(result, MAX_BUFFER_SIZE, "<type = %s>", get_str_primitive_type(union_ds.primitive_data));
             return result;
             break;
         }
@@ -38,20 +38,23 @@ char* get_string_representation(type_expression* tp){
                 <type=rectangularArray, dimensions=2, range_R1= (2, 5), range_R2 = (3, 6), basicElementType = integer>
             */
             linked_list* ll = union_ds.rect_array_data.array_ranges;
-            snprintf(result, MAX_BUFFER_SIZE, "type = rectangularArray, dimensions = %d, ",
+            snprintf(result, MAX_BUFFER_SIZE, "<type = rectangularArray, dimensions = %d, ",
                               union_ds.rect_array_data.dimensions);
+            char temp[30];
+            char* temp1 = temp;
             for(int i=1;i<=union_ds.rect_array_data.dimensions;i++){
-                rect_array_range* r = (rect_array_range*)ll_get(ll, i);
-                snprintf(result, MAX_BUFFER_SIZE, "range_R%d= (%d,%d), basicElementType = integer", 
-                                    i,r->lower_bound, r->upper_bound);
+                rect_array_range* r = (rect_array_range*)ll_get(ll, i-1);
+                snprintf(temp1, 100, "range_R%d= (%d,%d), ", i,r->lower_bound, r->upper_bound);
+                result = strcat(result, temp1);
             }
+            result = strcat(result,"basicElementType = integer>");
             return result;
             break;
         }
         
         case(JAGGED_ARRAY):
         {
-            snprintf(result, MAX_BUFFER_SIZE, "type = jaggedArray");
+            snprintf(result, MAX_BUFFER_SIZE, "<type = jaggedArray>");
             return result;
             break;
         }
@@ -67,6 +70,7 @@ type_expression* construct_type_expression(VariableType variable_type, union_to_
 
     type_expression* tp = (type_expression*)calloc(1, sizeof(type_expression));
     set_declare_flag(tp);
+    tp->variable_type = variable_type;
     tp->union_to_be_named = union_ds;
     return tp;
 }
