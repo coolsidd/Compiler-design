@@ -18,7 +18,7 @@ int main(int argc, char** argv){
     /* } */
     Parse_tree_node * p;
     p = createParseTree(s,g);
-    traverseParseTree(p);
+    traverseParseTree(p, 0);
     return 0;
 }
 
