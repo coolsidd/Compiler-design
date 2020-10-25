@@ -90,6 +90,8 @@ def parse_file(
     terminals = terminals.difference(non_terminals)
     terminals.remove("|")
     terminals.add("UNKNOWN")
+    terminals = sorted(terminals)
+    non_terminals = sorted(non_terminals)
     #print("Terminals :")
     #print(sorted(terminals))
     #print("Non_Terminals :")
@@ -99,8 +101,8 @@ def parse_file(
         output_file_structs.write(
             """/* Header guard */\n#ifndef GRAMMAR_STRUCT_H\n#define GRAMMAR_STRUCT_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n\nSymbol toSymbol(char *enustr);\nchar *toStringSymbol(Symbol symb);\nvoid printSymbol(Symbol symb);\n\n#endif\n""".format(
                 "\n".join(
-                    ["    " + x + "," for x in sorted(non_terminals)]
-                    + ["    " + x + "," for x in sorted(terminals)]
+                    ["    " + x + "," for x in non_terminals]
+                    + ["    " + x + "," for x in terminals]
                 )
             )
         )
@@ -119,7 +121,7 @@ def parse_file(
             )
             template_filled_print = [
                 template_str_print.format(x)
-                for x in list(sorted(terminals)) + list(sorted(non_terminals))
+                for x in terminals + non_terminals
             ]
             output_file_structs.write(
                 """#include "grammar_structs.h"\n#include <stdio.h>\n#include <string.h>\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n    ans.is_terminal = false;\n    ans.s = UNKNOWN;\n{}\n    return ans;\n}}\n
