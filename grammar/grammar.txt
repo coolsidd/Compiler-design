@@ -21,7 +21,7 @@
 <jagged3list>         -> <range_list> SQBO SQBC SQBO SQBC
 
 <jagged2init>         -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE <jagged2init> | R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
-<j2list>              -> <var> SEMICOLON <j2list> | <var>
+<j2list>              -> <value_list> SEMICOLON <j2list> | <value_list>
 
 <jagged3init>         -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE <jagged3init> | R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE
 <j3list>              -> <value_list> SEMICOLON <j3list> | <value_list>

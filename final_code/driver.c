@@ -2,6 +2,7 @@
 #include "grammar.h"
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
+#include "traverse_parse.c"
 
 int main(int argc, char** argv){
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
@@ -17,7 +18,7 @@ int main(int argc, char** argv){
     /* } */
     Parse_tree_node * p;
     p = createParseTree(s,g);
-
+    traverseParseTree(p);
     return 0;
 }
 
