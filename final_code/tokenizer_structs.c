@@ -29,7 +29,7 @@ TokenStream *insertIntoStream(TokenStream *s, int line_num, char *token_str) {
                 newToken->lexeme.s = ID;
                 newToken->lexeme.is_terminal = true;
             } else {
-                printf("ERROR parsed an invalid token %s\n", token_str);
+                printf("ERROR parsed an invalid token \"%s\"\n", token_str);
             }
         } else {
             newToken->lexeme.s = CONST;

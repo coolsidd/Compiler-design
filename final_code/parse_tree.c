@@ -102,6 +102,7 @@ void free_parse_tree(Parse_tree_node *root){
     return ;
 }
 void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
+    printf("Adding child %s -> %s\n",toStringSymbol(root->tok->lexeme), toStringSymbol(node->tok->lexeme));
     if(!root->child){
         root->child = node;
         root->last_child = node;
@@ -110,6 +111,7 @@ void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
     }
     root->last_child->next = node;
     root->num_children++;
+    root->last_child = root->last_child->next;
     return;
 }
 
