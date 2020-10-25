@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "../util/gen_utils.h"
 
+#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
 typedef struct ____LINKED_LIST_NODE____ ll_node;
 
 struct ____LINKED_LIST_NODE____
@@ -32,3 +34,5 @@ void *ll_remove_at(linked_list *ll, int idx);
 void *ll_get(linked_list *ll, int idx);
 
 int ll_num_nodes(linked_list *ll);
+
+#endif

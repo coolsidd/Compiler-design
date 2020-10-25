@@ -1,6 +1,9 @@
+#include "../../data_structures/linked_list.h"
+#include "../../final_code/parse_tree.h"
+
 #ifndef JAGGED_ARRAY_TYPE_H
 #define JAGGED_ARRAY_TYPE_H
-#include "type_exp_table.h"
+
 typedef struct ____JAGGED_ARRAY_RANGE____ jagged_array_range;
 
 struct ____JAGGED_ARRAY_RANGE____{

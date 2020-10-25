@@ -1,8 +1,12 @@
+
+
+#include "primitive_type.h"
+#include "rect_array_type.h"
+#include "jagged_array_type.h"
+#include "../../data_structures/hash_map.h"
+
 #ifndef TYPE_EXP_H
 #define TYPE_EXP_H
-
-#include "type_exp_table.h"
-
 // typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 

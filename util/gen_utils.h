@@ -1,4 +1,5 @@
-#include <stdbool.h>
+// #include <stdbool.h>
+#include "../final_code/grammar_structs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

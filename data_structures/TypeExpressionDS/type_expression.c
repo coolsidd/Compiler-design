@@ -27,7 +27,7 @@ char* get_string_representation(type_expression* tp){
     switch(tp->variable_type){
         case(PRIMITIVE_TYPE):
         {
-            result = snprintf(result, MAX_BUFFER_SIZE, "type = %s", get_str_primitive_type(union_ds.primitive_data));
+            snprintf(result, MAX_BUFFER_SIZE, "type = %s", get_str_primitive_type(union_ds.primitive_data));
             return result;
             break;
         }
@@ -38,11 +38,11 @@ char* get_string_representation(type_expression* tp){
                 <type=rectangularArray, dimensions=2, range_R1= (2, 5), range_R2 = (3, 6), basicElementType = integer>
             */
             linked_list* ll = union_ds.rect_array_data.array_ranges;
-            result = snprintf(result, MAX_BUFFER_SIZE, "type = rectangularArray, dimensions = %d, ",
+            snprintf(result, MAX_BUFFER_SIZE, "type = rectangularArray, dimensions = %d, ",
                               union_ds.rect_array_data.dimensions);
             for(int i=1;i<=union_ds.rect_array_data.dimensions;i++){
                 rect_array_range* r = (rect_array_range*)ll_get(ll, i);
-                result = snprintf(result, MAX_BUFFER_SIZE, "range_R%d= (%d,%d), basicElementType = integer", 
+                snprintf(result, MAX_BUFFER_SIZE, "range_R%d= (%d,%d), basicElementType = integer", 
                                     i,r->lower_bound, r->upper_bound);
             }
             return result;
@@ -51,7 +51,7 @@ char* get_string_representation(type_expression* tp){
         
         case(JAGGED_ARRAY):
         {
-            result = snprintf(result, MAX_BUFFER_SIZE, "type = jaggedArray");
+            snprintf(result, MAX_BUFFER_SIZE, "type = jaggedArray");
             return result;
             break;
         }
@@ -101,17 +101,17 @@ union_to_be_named* populate_union(VariableType variable_type, Parse_tree_node* p
         switch(variable_type){
             case(PRIMITIVE_TYPE):
             {
-                u = get_primitive_type(p);   
+                u->primitive_data = *get_primitive_type(p);   
                 break;
             }
             case(RECT_ARRAY):
             {
-                u = create_rect_array_type(p);
+                u->rect_array_data = *create_rect_array_type(p);
                 break;
             }
             case(JAGGED_ARRAY):
             {
-                u = create_jagged_array_type(p);
+                u->jagged_array_data = *create_jagged_array_type(p);
                 break;
             }
         }

@@ -1,19 +1,13 @@
 /* Header guard */
-#ifndef TYPE_EXP_TABLE_H
-#define TYPE_EXP_TABLE_H
+
 /***************/
 
 #include <stdlib.h>
 #include "../../util/gen_utils.h"
-#include "../../final_code/parse_tree.h"
-#include "../hash_map.h"
-#include "../linked_list.h"
-#include "primitive_type.h"
-#include "rect_array_type.h"
-#include "jagged_array_type.h"
 #include "type_expression.h"
 
-
+#ifndef TYPE_EXP_TABLE_H
+#define TYPE_EXP_TABLE_H
 
 typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 

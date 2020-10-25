@@ -1,6 +1,6 @@
 #include<stdlib.h>
 #include "type_exp_table.h"
-
+// gcc *.c ../linked_list.c ../hash_map.c ../../final_code/grammar_structs.c ../../final_code/parse_tree.c ../../util/gen_utils.c -o exe
 int main(){
     rect_array_type* r = (rect_array_type*)calloc(1, sizeof(rect_array_type));
     r->dimensions = 2;
