@@ -8,5 +8,6 @@
 #define GEN_UTILS_H
 
 void assert(bool condition, char *error_string);
+bool assert_debug(bool condition, char *error_string);
 
 #endif

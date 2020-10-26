@@ -122,31 +122,6 @@ type_expression* construct_type_expression(VariableType variable_type, union_to_
     return tp;
 }
 
-/*
-    construct_type_expression:=
-        tp = allocate memory for tp
-        set_declare_flag(tp)
-        variable_type 
-            primitive: assign enum value based on lexeme value
-            rect_array: ll_append(rect_array_node[Lb,Up])
-
-    variable_type->
-        create PrimitiveType
-    primitive:
-        lexeme: int, real, bool
-    rect:
-        create_rect_
-        RectArrayType
-
-    jagged:
-
-    variableType:
-
-    
-    type_expression* tp = construct_type_expression(variable_name, u);
-    add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
-
-*/
 union_to_be_named* populate_union(VariableType variable_type, Parse_tree_node* p){
         union_to_be_named* u = (union_to_be_named*)calloc(1,sizeof(union_to_be_named));
         switch(variable_type){

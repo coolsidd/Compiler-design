@@ -39,4 +39,6 @@ char* get_string_representation(type_expression* tp);
 // set is_declared to true on encountering decl_stmt
 void set_declare_flag(type_expression* tp);
 
+union_to_be_named *populate_union(VariableType variable_type, Parse_tree_node *p);
+
 #endif
