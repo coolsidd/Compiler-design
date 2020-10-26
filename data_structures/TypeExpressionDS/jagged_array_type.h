@@ -35,10 +35,10 @@ struct ____JAGGED_ARRAY_TYPE____{
     union array_type{
         jagged_2d j2d;
         jagged_3d j3d;
-    };
+    }array_type;
 };
 
-r2_dimension* create_r2_dimension();
+r2_dimension create_r2_dimension();
 void append_size(linked_list *ll, int size);
 jagged_array_type *create_jagged_array_type(Parse_tree_node *p);
 
