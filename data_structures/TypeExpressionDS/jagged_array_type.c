@@ -82,7 +82,15 @@ void populate_row_sizes_3d(linked_list *ll, Parse_tree_node *p)
 }
 
 jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
-    
+    /*
+        This function is called only if:
+            there are no type errors(listed below) in the jagged_array
+            - Index out of bounds for jaggedXinit. X=2,3
+            - No of instances of jaggedXinit should be = UB-LB+1
+            - For each row, size should be equal to be number of semicolon 
+                separated values.
+            - For 2d, value_list cannot have last child as value_list
+    */
     jagged_array_type* jat = (jagged_array_type*)calloc(1, sizeof(jagged_array_type));
     
     Parse_tree_node* third_child = getNodeFromIndex(p->child,2);
