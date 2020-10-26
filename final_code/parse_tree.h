@@ -13,6 +13,7 @@ typedef struct parse_tree_node {
     Token *tok;
 } Parse_tree_node;
 
+Parse_tree_node* getNodeFromIndex(int index, Parse_tree_node* p);
 Parse_tree_node* createParseTree(TokenStream *s, Grammar *g);
 Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *g);
 Parse_tree_node* new_parse_tree();

@@ -1,6 +1,14 @@
 #include "parse_tree.h"
 #include <stdio.h>
 
+Parse_tree_node* getNodeFromIndex(int index, Parse_tree_node* p){
+    p = p->child;
+    for(int i = 1; i < index; i++){
+        p = p->next;
+    }
+    return p;
+}
+
 Parse_tree_node* createParseTree(TokenStream *s, Grammar *g){
     Symbol starting_symb;
     starting_symb.s = main_program;
