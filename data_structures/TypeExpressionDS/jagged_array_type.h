@@ -38,7 +38,7 @@ struct ____JAGGED_ARRAY_TYPE____{
     }array_type;
 };
 
-r2_dimension create_r2_dimension();
+r2_dimension* create_r2_dimension();
 void append_size(linked_list *ll, int size);
 jagged_array_type *create_jagged_array_type(Parse_tree_node *p);
 

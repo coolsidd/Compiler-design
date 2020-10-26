@@ -23,8 +23,6 @@ typedef struct hm {
     int num_buckets;
 } hash_map;
 
-typedef struct ____HASH_MAP____ hash_map;
-
 hash_map *create_hash_map(int num_buckets);
 
 void add_to_hash_map(hash_map *hm, char *string, void *data);

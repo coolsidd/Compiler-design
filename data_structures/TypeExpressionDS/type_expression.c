@@ -54,7 +54,54 @@ char* get_string_representation(type_expression* tp){
         
         case(JAGGED_ARRAY):
         {
-            snprintf(result, MAX_BUFFER_SIZE, "<type = jaggedArray>");
+            //3d : <type = jaggedArray, dimensions = 3, range_R1 = (4, 7), range_R2 = (3 [5, 3, 5], 2 [3, 5], 3 [5, 4, 3], 4 [2, 5, 4, 4]), basicElementType = integer> 
+            //2d : <type = jaggedArray, dimensions = 2, range_R1 = (3, 8), range_R2 = (3, 6, 2, 4, 1, 5), basicElementType = integer>
+            int dimen = tp->union_to_be_named.jagged_array_data.dimensions;
+            snprintf(result, MAX_BUFFER_SIZE, "<type = jaggedArray>, dimensions = %d,",
+                                                dimen);
+            if(dimen == 2){
+                jagged_2d jagg_2d = tp->union_to_be_named.jagged_array_data.array_type.j2d;
+                int l_bound = jagg_2d.lower_bound;
+                int u_bound = jagg_2d.upper_bound;
+                snprintf(result, MAX_BUFFER_SIZE, "%s range_R1 = (%d, %d), range_R2 = (", result, l_bound, u_bound);
+                r2_dimension r2d = jagg_2d.row_sizes;
+                int i, *data;
+                for(i = 0; i < (u_bound-l_bound); i++){
+                    data = (int *)get_ll(r2d, i);
+                    snprintf(result, MAX_BUFFER_SIZE, "%s%d, ", result, *data);
+                }
+                data = (int *)get_ll(r2d, i);
+                snprintf(result, MAX_BUFFER_SIZE, "%s%d)", result, *data);
+            }
+
+            else if(dimen == 3){
+                jagged_3d jagg_3d = tp->union_to_be_named.jagged_array_data.array_type.j3d;
+                int l_bound = jagg_3d.lower_bound;
+                int u_bound = jagg_3d.upper_bound;
+                snprintf(result, MAX_BUFFER_SIZE, "%s range_R1 = (%d, %d), range_R2 = (", result, l_bound, u_bound);
+                linked_list* ll = jagg_3d.row_sizes;
+                for(int i = 0; i < ll->num_nodes; i++){
+                    r2_dimension* r = (r2_dimension*)ll_get(ll, i);
+                    int s = r->sizes->num_nodes;
+                    snprintf(result, MAX_BUFFER_SIZE, "%s%d [", result, s);
+                    for(int j = 0; j < s; j++){
+                        int* data = (int *)ll_get(r->sizes, j);
+                        if (j < s-1)
+                        {
+                            snprintf(result, MAX_BUFFER_SIZE, "%s%d, ", result, *data);
+                            continue;
+                        }
+                            snprintf(result, MAX_BUFFER_SIZE, "%s%d", result, *data);
+                    }
+                    if(i < ll->num_nodes-1){
+                        snprintf(result, MAX_BUFFER_SIZE, "%s], ", result);
+                        continue;
+                    }
+
+                    snprintf(result, MAX_BUFFER_SIZE, "%s]),", result);
+                }
+            }
+            snprintf(result, MAX_BUFFER_SIZE, "%sbasicElementType = integer", result); 
             return result;
             break;
         }
