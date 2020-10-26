@@ -12,8 +12,7 @@ char *trim(char *s) {
     char* back = s + strlen(s);
     while(isspace(*--back));
     *(back+1) = '\0';
-
-    return s;
+    return strdup(s);
 }
 
 void tokenizeSourceCode(char *filename, TokenStream *s) {
@@ -38,8 +37,10 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
         while (tok) {
             char* new_tok = strdup(tok);
             //printf("`%s` | ", trim(new_tok));
-            if (*trim(new_tok)) insertIntoStream(s, line_num, trim(new_tok));
+            char * next_tok = trim(new_tok);
+            if (*next_tok) insertIntoStream(s, line_num, strdup(next_tok));
             free(new_tok);
+            free(next_tok);
             tok = strtok(NULL, sep); // read next token
         } //printf("\n");
     }
