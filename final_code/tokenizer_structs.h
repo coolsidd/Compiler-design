@@ -19,9 +19,9 @@ typedef struct tokenStream{
 TokenStream* insertIntoStream(TokenStream *s, int line_num, char *token_str);
 TokenStream* newTokenStream();
 void freeTokenStream(TokenStream* s);
-void tokenizeSourceCode(char *filename, TokenStream *s);
+int tokenizeSourceCode(char *filename, TokenStream *s);
 
 char *replace_char(char *str, char find, char replace);
-void tokenizeSourceCode(char *filename, TokenStream *s);
+int tokenizeSourceCode(char *filename, TokenStream *s);
 
 #endif // __TOKENIZER_STRUCT_H_
