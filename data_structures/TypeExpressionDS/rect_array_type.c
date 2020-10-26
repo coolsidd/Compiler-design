@@ -6,7 +6,7 @@ rect_array_range* create_rect_array_node(int lower_bound, int upper_bound){
     r_node->upper_bound = upper_bound;
     return r_node;
 }
-linked_list *get_type_from_rangelist(Parse_tree_node *p, linked_list *ll)
+void get_type_from_rangelist(Parse_tree_node *p, linked_list *ll)
 {
     /*
         low: 2nd child
@@ -25,19 +25,16 @@ linked_list *get_type_from_rangelist(Parse_tree_node *p, linked_list *ll)
     {
         get_type_from_rangelist(temp, ll);
     }
-    return ll;
 }
 
 rect_array_type* create_rect_array_type(Parse_tree_node* p){
     rect_array_type* r = (rect_array_type*)calloc(1,sizeof(rect_array_type));
     linked_list* ll = create_linked_list();
     r->array_ranges = ll;
-    r->array_ranges = get_type_from_rangelist(p,r->array_ranges);
+    get_type_from_rangelist(p,r->array_ranges);
     r->dimensions = r->array_ranges->num_nodes;
     return r;
 }
-
-
 
 int get_dimension(rect_array_type* r_type){
     return r_type->dimensions;
