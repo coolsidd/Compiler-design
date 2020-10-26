@@ -1,4 +1,5 @@
-#include "traverse_parse.h"
+//#include "traverse_parse.h"
+#include "parse_tree.h"
 
 void traverseParseTree(Parse_tree_node *p, int height) {
     printf("%d. At node %s\n", height, toStringSymbol(p->tok->lexeme));

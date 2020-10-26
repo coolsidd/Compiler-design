@@ -9,8 +9,8 @@ int main(int argc, char** argv){
     g->num_rules = 0;
     g->start_symb = toSymbol("main_program");
     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    readGrammar("./grammar/machine_grammar.txt", g);
-    printGrammar(g);
+    readGrammar("grammar/machine_grammar.txt", g);
+    //printGrammar(g);
     TokenStream *s = newTokenStream();
     tokenizeSourceCode(argv[1], s);
     /* for(Token *temp = s->head; temp; temp=temp->next){ */
@@ -18,7 +18,7 @@ int main(int argc, char** argv){
     /* } */
     Parse_tree_node * p;
     p = createParseTree(s,g);
-    traverseParseTree(p, 0);
+    //traverseParseTree(p, 0);
     return 0;
 }
 
