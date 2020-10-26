@@ -49,6 +49,7 @@ checker(jagged2init, index)
 */
 
 #include "type_exp_table.h"
+#include <math.h>
 
 void traverseParseTree(type_exp_table* txp_table, Parse_tree_node *p)
 {
@@ -101,7 +102,7 @@ void traverseParseTree(type_exp_table* txp_table, Parse_tree_node *p)
 
 */
 
-type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
+void type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
     char* variable_name;
     VariableType variable_type;
     DeclarationType decl_type;
@@ -151,7 +152,7 @@ type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
         case rect_array:
         {
             // proceed only if type checks success
-            bool flag = rect_decl_checks(p);
+            bool flag = rect_decl_checks(txp_table, p);
             if(flag){
                 variable_type = RECT_ARRAY;
                 for (int i = 0; i < variables->num_nodes; i++)
@@ -186,7 +187,7 @@ type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
     }
 }
 
-bool rect_decl_checks(Parse_tree_node* p){
+bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     bool flag = true;
     p = p->child;
     Parse_tree_node* range_list_node = getNodeFromIndex(p,2)->child;
@@ -194,9 +195,26 @@ bool rect_decl_checks(Parse_tree_node* p){
     flag = assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "Rect Array Type has to be integer");
     do{
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node, 1);
-        Parse_tree_node *upper_bound = getNodeFromIndex(range_list_node, 3);
-        flag = assert_debug(lower_bound->tok->lexeme.s == INTEGER,"RectArray Lower Bound has to be Integer");
-        flag = assert_debug(upper_bound->tok->lexeme.s == INTEGER, "RectArray Upper Bound has to be Integer");
+        Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node, 3);
+        type_expression * lower_type = get_type_of_var(txp_table, lower_bound);
+        bool flag = true;
+        if(lower_type->variable_type == PRIMITIVE_TYPE){
+            flag &= assert_debug(lower_type->union_to_be_named.primitive_data == INTEGER, "Rect Array indices should be integers");
+            if(lower_bound->child->tok->lexeme.s == CONST){
+                // TODO WIP
+                atoi(lower_bound->child->tok->token_name);
+            }
+            else{
+
+            }
+
+        }else{
+
+        }
+
+        /* get_type_of_var(txp_table, upper_bound); */
+        /* flag &= assert_debug(lower_bound->tok->lexeme.s == INTEGER,"RectArray Lower Bound has to be Integer"); */
+        /* flag &= assert_debug(upper_bound->tok->lexeme.s == INTEGER, "RectArray Upper Bound has to be Integer") */;
     }while(range_list_node->last_child->tok->lexeme.s==range_list);
     
     return flag;
@@ -244,19 +262,18 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
     }
 
     else if(p->last_child->tok->lexeme.s == SQBC){
-        /*
-            TODO:
-                Return the type of index_list
-        */
+
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         if(!bounds){
             printf("Not Checking Variable Bounds");
             return get_type_expression(txp_table, p->child->tok->token_name);
         }
-        /*
-        ll of integers, array
-        */
-       
+        if(do_bound_checking(txp_table, p, bounds)){
+            return get_type_expression(txp_table, p->child->tok->token_name)
+        }
+
+
+
     }
 
     else if(p->last_child->tok->lexeme.s == ID){
@@ -286,7 +303,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
             }
             else{
                 ll->tail->next = temp->head;
-                ll->num_nodes+= temp->num_nodes;
+                ll->num_nodes += temp->num_nodes;
                 return ll;
             }
         }
@@ -327,10 +344,41 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
         }
         case(JAGGED_ARRAY):
         {
-            /*
-            TODO
-            */
-            break;
+            bool flag = true;
+            switch(txp->union_to_be_named.jagged_array_data.dimensions){
+                case 2:{
+                    jagged_2d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j2d;
+                    flag &= assert_debug(ll->num_nodes==2, "Dimension Number Mismatch");
+                    int first = *((int*)ll->head->data);
+                    flag &= assert_debug(jagged_bounds.lower_bound<= first && jagged_bounds.upper_bound>=first
+                                 , "IndexOutOfBoundsError");
+                    int second = *((int*)ll->head->next->data);
+                    flag &= assert_debug(second<=*((int*)ll_get(jagged_bounds.row_sizes.sizes, first - jagged_bounds.lower_bound)), "IndexOutOfBoundsError");
+                    return flag;
+                    break;
+                }
+                case 3:{
+                    // TODO Crosscheck
+                    jagged_3d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j3d;
+                    flag &= assert_debug(ll->num_nodes==3, "Dimension Number Mismatch");
+                    int first = *((int *)ll->head->data);
+
+                    flag &= assert_debug(jagged_bounds.lower_bound <= first && jagged_bounds.upper_bound>= first, "IndexOutOfBoundsError");
+                    int second = *((int *)ll->head->next->data);
+                    int third = *((int *)ll->head->next->next->data);
+                    linked_list * ll_temp = jagged_bounds.row_sizes;
+
+                    flag &= assert_debug(second <= ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->num_nodes, "IndexOutOfBounds");
+
+                    if(flag){
+                        linked_list * third_dim = ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound));
+                        flag &= assert_debug(*((int*)ll_get(third_dim,second))<=third, "IndexOutOfBoundsError");
+                        return flag;
+                    }else{
+                        return flag;
+                    }
+                    break;
+                }
         }
     }
 }

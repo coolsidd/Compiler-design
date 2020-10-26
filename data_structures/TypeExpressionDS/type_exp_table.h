@@ -41,7 +41,20 @@ void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expre
 void add_entry_to_table(type_exp_table *txp_table, char *variable_name, VariableType var_type,
                         DeclarationType decl_type, type_expression* t);
 
+
+void type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p);
+
+
+linked_list * get_type_of_index_list(type_exp_table*  txp_table, Parse_tree_node *p);
+
+bool rect_decl_checks(type_exp_table* t, Parse_tree_node* p);
+
+bool jagged_decl_checks(Parse_tree_node* p);
+
+bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll);
+type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p);
 // // remove entry
+//
 // void remove_entry_from_table(type_exp_table* txp_table, char* variable_name);
 
 // // delete txp_table_node corresponding to a variable_name
