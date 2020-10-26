@@ -1,0 +1,8 @@
+program ( )
+{
+	declare list of variables s1 s2 s3 :  jagged array [ 4 .. 5 ] [ ] [ ]  of integer ;
+	R1 [ 4 ]  : size 3 : values { 21 641 23 36 125 ; 54 221 43 ; 287 501 453 334 23 }
+	R1 [ 5 ]  : size 2 : values { 12 10 100 ; 76 15 8 54 432 }
+
+	q1 = q2 + q3 ;
+}
