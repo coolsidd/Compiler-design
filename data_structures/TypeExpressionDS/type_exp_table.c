@@ -42,6 +42,7 @@ void add_entry_to_table(type_exp_table *txp_table, char *variable_name,
     ttn->variable_name = variable_name;
     ttn->variable_type = var_type;
     ttn->declaration_type = decl_type;
+    ll_append(txp_table->root, ttn);
     add_to_symbol_table(txp_table->symbol_table, variable_name, txp);
 }
 

@@ -1,8 +1,11 @@
 #include "jagged_array_type.h"
 
-jagged_array_type *create_jagged_array_type(Parse_tree_node *p)
-{
-    jagged_array_type *r = (jagged_array_type *)calloc(1, sizeof(jagged_array_type));
-    return r;
+r2_dimension *create_r2_dimension(){
+    r2_dimension* r2 = (r2_dimension*) calloc(1, sizeof(r2_dimension));
+    r2->sizes = create_linked_list();
+    return r2;
 }
 
+void append_size(linked_list *ll, int size){
+    ll_append(ll, size);
+}

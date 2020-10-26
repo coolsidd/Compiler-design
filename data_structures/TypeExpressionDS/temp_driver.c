@@ -1,5 +1,6 @@
 #include<stdlib.h>
 #include "type_exp_table.h"
+#include "print.h"
 // gcc *.c ../linked_list.c ../hash_map.c ../../final_code/grammar_structs.c ../../final_code/parse_tree.c ../../util/gen_utils.c -o exe
 
 int main(){
@@ -50,4 +51,8 @@ int main(){
     txp2 = get_type_expression(t, variable_name);
     strcpy(res, get_string_representation(txp2));
     printf("%s\n", res);
+    printf("%d\n", t->root->num_nodes);
+
+    print_type_exp_table(t);
+
 }
