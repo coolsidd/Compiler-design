@@ -21,7 +21,7 @@ linked_list *get_type_from_rangelist(Parse_tree_node *p, linked_list *ll)
                                                       atoi(high->tok->token_name));
     ll_append(ll, r_node);
     Parse_tree_node *temp = high->next->next;
-    if (!temp && temp->tok->lexeme.s == range_list)
+    if (temp && temp->tok->lexeme.s == range_list)
     {
         get_type_from_rangelist(temp, ll);
     }

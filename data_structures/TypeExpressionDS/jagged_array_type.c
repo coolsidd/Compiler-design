@@ -28,6 +28,7 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
     Parse_tree_node* third_child = p->child->next->next;
     Parse_tree_node *lower_bound = third_child->child->child->next;
     Parse_tree_node *upper_bound = lower_bound->next->next;
+    Parse_tree_node* last_child = third_child->next->next->next->next;
     int l_bound = atoi(lower_bound->tok->token_name);
     int u_bound = atoi(upper_bound->tok->token_name);
     if(third_child->tok->lexeme.s == jagged2list){
@@ -35,6 +36,19 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
         jat->array_type.j2d = *create_jagged_2d();
         jat->array_type.j2d.lower_bound = l_bound;
         jat->array_type.j2d.upper_bound = u_bound;
+
+        Parse_tree_node* row_size_node = last_child->next->next->next->next->next->next;
+        int row_size = atoi(row_size_node->tok->token_name);
+        // Parse_tree_node *row = row_size_node->next->next->next->next;
+        // for(int i=0;i<row_size;i++){
+        //     int value = atoi(row->child->child->tok->token_name);
+        //     append_size(jat->array_type.j2d.row_sizes.sizes, value);
+        // }
+        append_size(jat->array_type.j2d.row_sizes.sizes, row_size);
+        Parse_tree_node *last_child_1 = row_size_node->next->next->next->next->next->next;
+        if(last_child_1 && last_child_1->tok->lexeme.s==jagged2init){
+            // call this again
+        }
     }
     
     else{
@@ -43,4 +57,7 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
         jat->array_type.j3d.lower_bound = l_bound;
         jat->array_type.j3d.upper_bound = u_bound;
     }
+
+
+    return jat;
 }

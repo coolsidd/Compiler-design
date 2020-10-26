@@ -1,7 +1,8 @@
 #include "parse_tree.h"
 #include <stdio.h>
 
-Parse_tree_node* getNodeFromIndex(int index, Parse_tree_node* p){
+Parse_tree_node *getNodeFromIndex(Parse_tree_node *p, int index)
+{
     p = p->child;
     for(int i = 1; i < index; i++){
         p = p->next;
