@@ -9,12 +9,12 @@ typedef struct en {
 } ErrorNode;
 
 void printErrors(ErrorNode* err) {
-    printf( "| %5s | %10s | %10s | %10s | %10s | %10s | %5s | %20s |\n\n",
+    printf( "|%5s|%10s|%10s|%10s|%10s|%10s|%10s|%5s|%20s|\n",
             "num", "stmt type", "operator", "lexeme 1", "type 1",
             "lexeme 2", "type 2", "depth", "error message");
 
     while (err != NULL) {
-        printf( "| %5d | %10s | %10s | %10s | %10s | %10s | %5d | %20s |\n",
+        printf( "|%5d|%10s|%10s|%10s|%10s|%10s|%10s|%5|%20s|\n",
                 err->line_num, err->stmt_type, err->op, err->lex1, err->type1,
                 err->lex2, err->type2, err->depth, err->message);
         err = err->next;

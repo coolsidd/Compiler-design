@@ -4,21 +4,21 @@
 
 void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
     if (t) {
-        printf("| %20s | %20s | %20s | %20s | %5d | %5d |\n", symb, "terminal", typ, name, line, depth);
+        printf("|%20s|%20s|%20s|%20s|%5d|%5d|\n", symb, "terminal", typ, name, line, depth);
     } else {
-        printf("| %20s | %20s | %20s | %20s | %5d | %5d |\n", symb, "non-terminal", typ, name, line, depth);
+        printf("|%20s|%20s|%20s|%20s|%5d|%5d|\n", symb, "non-terminal", typ, name, line, depth);
     }
 }
 
 void printParseTree(Parse_tree_node *p, int d) {
     if (d == 0)
-        printf("| %20s | %20s | %20s | %20s | %5s | %5s |\n\n",
+        printf("|%20s|%20s|%20s|%20s|%5s|%5s|\n",
         "Symbol", "term / non-term", "Type", "Name", "num", "Depth");
 
-    printLine(  toStringSymbol(p->tok->lexeme),
+    printLine(  p->tok->token_name,
                 p->tok->lexeme.is_terminal,
                 "***",
-                p->tok->token_name,
+                toStringSymbol(p->tok->lexeme),
                 p->tok->line_no, d);
     for (Parse_tree_node *temp_child = p->child; temp_child;
          temp_child = temp_child->next) {

@@ -45,7 +45,7 @@ int main(int argc, char** argv){
 
     do {
 
-        printf("Menu: \n");
+        printf("\n\nMenu: \n");
         printf("--------------------------------------------------------\n");
         printf("0 - Exit\n");
         printf("1 - Create parse tree\n");
@@ -54,6 +54,7 @@ int main(int argc, char** argv){
         printf("4 - print type expression table\n");
         printf("--------------------------------------------------------\n");
 
+        printf("> ");
         scanf("%d",&option);
 
         switch(option){
