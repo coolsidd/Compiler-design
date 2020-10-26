@@ -5,28 +5,23 @@
 #ifndef HASH_MAP_H
 #define HASH_MAP_H
 
-typedef struct ____HASH_MAP_NODE____ hm_node;
-
-struct ____HASH_MAP_NODE____
-{
+typedef struct hmnode {
     char *string;
     void *data;
-    hm_node *next;
-};
+    struct hmnode *next;
+} hm_node;
 
-struct ____HASH_MAP_BUCKET____
+typedef struct hmb
 {
     hm_node *first;
     int num_nodes;
-};
+} hm_bucket;
 
-typedef struct ____HASH_MAP_BUCKET____ hm_bucket;
 
-struct ____HASH_MAP____
-{
+typedef struct hm {
     hm_bucket **buckets;
     int num_buckets;
-};
+} hash_map;
 
 typedef struct ____HASH_MAP____ hash_map;
 
