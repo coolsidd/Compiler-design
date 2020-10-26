@@ -3,8 +3,7 @@
 
 Parse_tree_node *getNodeFromIndex(Parse_tree_node *p, int index)
 {
-    p = p->child;
-    for(int i = 1; i < index; i++){
+    for(int i = 0; i < index; i++){
         p = p->next;
     }
     return p;
