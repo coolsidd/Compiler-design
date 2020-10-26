@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAXLINELEN 2048
-#define MAXTOKLEN 50
 
 char *replace_char(char *str, char find, char replace) ;
 void tokenizeSourceCode(char *filename, TokenStream *s);

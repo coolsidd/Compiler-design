@@ -4,7 +4,6 @@
 #include <ctype.h>
 #include "tokenizer_structs.h"
 #define MAXLINELEN 2048
-#define MAXTOKLEN 50
 
 char *trim(char *s) {
     while(isspace(*s)) s++;
@@ -15,14 +14,14 @@ char *trim(char *s) {
     return strdup(s);
 }
 
-void tokenizeSourceCode(char *filename, TokenStream *s) {
+int tokenizeSourceCode(char *filename, TokenStream *s) {
     char *sep = " ";
     FILE *file = fopen(filename, "r");
     int line_num = 0;
 
     if (!file) {
-        printf("File error!");
-        return;
+        printf("Tokenizer: File error!\n");
+        return 0;
     }
 
     char line[MAXLINELEN];
@@ -44,4 +43,6 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
             tok = strtok(NULL, sep); // read next token
         } //printf("\n");
     }
+
+    return 1;
 }

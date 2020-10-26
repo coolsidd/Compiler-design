@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grammar.h"
+#define MAXLINELEN 2048
 
 char* replace_char(char* str, char find, char replace){
     char *current_pos = strchr(str,find);
@@ -30,12 +31,13 @@ void printGrammar(Grammar* g) {
     }
 }
 
-void readGrammar(char *filename, Grammar* g){
+int readGrammar(char *filename, Grammar* g){
     char* sep = " ";
 	FILE* file = fopen(filename, "r");
 
     if (!file) {
-        printf("File error!"); return;
+        printf("Grammar: File error!\n");
+        return 0;
     }
 
     Rule *rptr = NULL;
@@ -79,4 +81,6 @@ void readGrammar(char *filename, Grammar* g){
 
         free(tmp_line);
     }
+
+    return 1;
 }
