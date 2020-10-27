@@ -269,7 +269,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
             return get_type_expression(txp_table, p->child->tok->token_name);
         }
         if(do_bound_checking(txp_table, p, bounds)){
-            return get_type_expression(txp_table, p->child->tok->token_name)
+            return get_type_expression(txp_table, p->child->tok->token_name);
         }
 
 
@@ -379,26 +379,6 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
                     }
                     break;
                 }
-        }
-    }
-}
-
-
-type_check_assignm_stmts(Parse_tree_node *p)
-{
-    if (p->tok->lexeme.s == decl_stmt)
-    {
-
-        switch (p->tok->lexeme.s)
-        {
-        case primitive_type:
-
-            break;
-        case rect_array:
-            // call your functions
-            break;
-        case jagged_array:
-            break;
         }
     }
 }
