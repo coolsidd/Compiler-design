@@ -110,7 +110,7 @@ int main(int argc, char** argv){
                 break;
 
             default:
-                printf("invalid input\n", option);
+                printf("invalid input\n");
                 break;
         }
 

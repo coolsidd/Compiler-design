@@ -49,6 +49,7 @@ checker(jagged2init, index)
 */
 
 #include "type_exp_table.h"
+#include "print.h"
 #include "type_expression.h"
 #include "assign_helpers.h"
 #include <math.h>
@@ -58,14 +59,15 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     p = p->child;
     p = getNodeFromIndex(p, 4);
+    Parse_tree_node *assign_stmts_node = p->last_child;
     p = p->child;
     Parse_tree_node* decl_stmts_node = p;
     do{
         type_check_decl_stmt(txp_table, decl_stmts_node->child);
+        print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
 
-    Parse_tree_node* assign_stmts_node = p->last_child;
     do{
         type_check_assign_stmt(txp_table, assign_stmts_node->child);
         assign_stmts_node = assign_stmts_node->last_child;
@@ -165,6 +167,7 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
 }
 
 void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
+    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
     bool flag = are_types_equal(lhs, rhs, txp_table, p);
