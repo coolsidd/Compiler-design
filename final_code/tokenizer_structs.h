@@ -5,7 +5,7 @@
 
 typedef struct token{
     int line_no;
-    char * token_name;
+    char *token_name;
     Symbol lexeme;
     struct token *next;
 } Token;
