@@ -42,10 +42,13 @@ void add_entry_to_table(type_exp_table *txp_table, char *variable_name, Variable
 
 void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p);
 
+void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p);
+bool are_types_equal(type_expression *t1, type_expression *t2, type_exp_table *txp_table,
+                     Parse_tree_node *p);
 
-linked_list * get_type_of_index_list(type_exp_table*  txp_table, Parse_tree_node *p);
+linked_list *get_type_of_index_list(type_exp_table *txp_table, Parse_tree_node *p);
 
-bool rect_decl_checks(type_exp_table* t, Parse_tree_node* p);
+bool rect_decl_checks(type_exp_table* t, Parse_tree_node* p, DeclarationType* decl_type);
 
 bool jagged_decl_checks(Parse_tree_node* p);
 

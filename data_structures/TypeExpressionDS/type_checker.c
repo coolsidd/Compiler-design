@@ -67,7 +67,7 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
 
     Parse_tree_node* assign_stmts_node = p->last_child;
     do{
-        type_check_assign_statement(txp_table, assign_stmts_node->child);
+        type_check_assign_stmt(txp_table, assign_stmts_node->child);
         assign_stmts_node = assign_stmts_node->last_child;
     }while(assign_stmts_node->tok->lexeme.s == assign_stmts);
 }
@@ -126,8 +126,9 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
         case rect_array:
         {
             // proceed only if type checks success
+            decl_type = STATIC;
             printf("rect %s\n", toStringSymbol(p->tok->lexeme));
-            bool flag = rect_decl_checks(txp_table, p);
+            bool flag = rect_decl_checks(txp_table, p, &decl_type);
             if(flag){
                 variable_type = RECT_ARRAY;
                 for (int i = 0; i < variables->num_nodes; i++)
@@ -163,14 +164,14 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
     }
 }
 
-void type_check_assign_statement(type_exp_table* txp_table, Parse_tree_node* p){
+void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
-    are_types_equal(lhs, rhs, txp_table, p);
+    bool flag = are_types_equal(lhs, rhs, txp_table, p);
 }
 
 bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* txp_table,
-             Parse_tree_node* p){
+            Parse_tree_node* p){
     char* s1 = str_type(t1);
     char* s2 = str_type(t2);
     char* operator = "EQUALS";
@@ -208,18 +209,20 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     
 }
 
-bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
+bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, DeclarationType* decl_type){
     bool flag = true;
     p = p->child;
     Parse_tree_node* range_list_node = getNodeFromIndex(p,2)->child;
     Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
-    flag = assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
+    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
     do{
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node, 1);
         Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node, 3);
-        type_expression * lower_type = get_type_of_var(txp_table, lower_bound);
-        type_expression * upper_type = get_type_of_var(txp_table, upper_bound);
-        bool flag = true;
+        if(lower_bound->child->tok->lexeme.s != CONST || upper_bound->child->tok->lexeme.s != CONST){
+            *decl_type = DYNAMIC;
+        }
+        type_expression* lower_type = get_type_of_var(txp_table, lower_bound);
+        type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
         flag &= assert_debug(lower_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
         flag &= assert_debug(upper_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
         range_list_node = range_list_node->last_child;
