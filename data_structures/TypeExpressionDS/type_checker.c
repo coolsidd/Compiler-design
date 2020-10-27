@@ -268,11 +268,15 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
             printf("Not Checking Variable Bounds");
             return get_type_expression(txp_table, p->child->tok->token_name);
         }
-        if(do_bound_checking(txp_table, p, bounds)){
-            return get_type_expression(txp_table, p->child->tok->token_name);
+        else
+        {
+            bool flag = do_bound_checking(txp_table, p, bounds);
+            txp = (type_expression *)calloc(1, sizeof(type_expression));
+            set_declare_flag(txp);
+            txp->variable_type = PRIMITIVE_TYPE;
+            txp->union_to_be_named.primitive_data = INTEGER;
+            return txp;
         }
-
-
 
     }
 
