@@ -88,7 +88,7 @@ int main(int argc, char** argv){
                 else printf("parse tree created successfully\n\n");
                 traverse_and_populate(t, p);
                 print_type_exp_table(t);
-                printErrors(err);
+                // printErrors(err);
                 break;
             }
             case 3:
@@ -116,5 +116,5 @@ int main(int argc, char** argv){
 
     } while(option != 0);
 
-    destroy_err(err);
+    // destroy_err(err);
 }

@@ -13,7 +13,7 @@ void assert(bool condition, char *error_string) {
 
 void printErrorsHeader()
 {
-    printf("|%5s|%10s|%10s|%10s|%10s|%10s|%10s|%5s|%20s|\n",
+    printf("|%5s|%10s|%10s|%10s|%10s|%20s|%10s|%5s|%40s|\n",
            "num", "stmt type", "operator", "lexeme 1", "type 1",
            "lexeme 2", "type 2", "depth", "error message");
 }
@@ -22,7 +22,7 @@ void printErrorEntries(ErrorNode* err){
 
     if (err != NULL)
     {
-        printf("|%5d|%10s|%10s|%10s|%10s|%10s|%10s|%5d|%20s|\n",
+        printf("|%5d|%10s|%10s|%10s|%10s|%20s|%10s|%5d|%40s|\n",
                err->line_num, err->stmt_type, err->op, err->lex1, err->type1,
                err->lex2, err->type2, err->depth, err->message);
     }
@@ -53,7 +53,8 @@ bool assert_debug(bool condition, char *error_string, Parse_tree_node *p,
                   char *t1, char *t2, char *operator, char *lex1,
                   char *lex2) {
 
-    ErrorNode *er = (ErrorNode *)malloc(sizeof(ErrorNode));
+    if(!condition){
+        ErrorNode *er = (ErrorNode *)malloc(sizeof(ErrorNode));
     er->depth = p->depth;
     er->message = error_string;
     er->stmt_type = getStmtType(p);
@@ -70,6 +71,7 @@ bool assert_debug(bool condition, char *error_string, Parse_tree_node *p,
     }
     er->line_num = temp1->tok->line_no;
     printErrorEntries(er);
-
-    return condition;
+    return false;
+    }
+    return true;
 }

@@ -49,14 +49,13 @@ checker(jagged2init, index)
 */
 
 #include "type_exp_table.h"
-#include "print.h"
 #include "type_expression.h"
 #include "assign_helpers.h"
 #include <math.h>
 
 void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
 {
-    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     p = p->child;
     p = getNodeFromIndex(p, 4);
     Parse_tree_node *assign_stmts_node = p->last_child;
@@ -64,10 +63,9 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     Parse_tree_node* decl_stmts_node = p;
     do{
         type_check_decl_stmt(txp_table, decl_stmts_node->child);
-        print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
-
+    printErrorsHeader();
     do{
         type_check_assign_stmt(txp_table, assign_stmts_node->child);
         assign_stmts_node = assign_stmts_node->last_child;
@@ -75,14 +73,14 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
 }
 
 void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
-    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     char* variable_name;
     VariableType variable_type;
     DeclarationType decl_type;
     union_to_be_named u;
     // p -> <decl_stmt>
     p = p->child; // p -> <decl_non_jagged> | <decl_jagged>
-    printf("creating ll %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("creating ll %s\n", toStringSymbol(p->tok->lexeme));
     // storing list of identifiers p->child -> DECLARE <list_of_identifier> ...
     linked_list* variables = create_linked_list();
     Parse_tree_node* list_of_id_node = getNodeFromIndex(p->child,1);
@@ -101,10 +99,10 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
     else{
         ll_append(variables, list_of_id_node->tok->token_name);
     }
-    printf("got ll %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("got ll %s\n", toStringSymbol(p->tok->lexeme));
     p = p->child; // p -> DECLARE <list_of_identifier> COLON (<decOLlation_type> | <jagged_array>)
     p = getNodeFromIndex(p, 3);
-    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     if(p->tok->lexeme.s==declaration_type){
         p = p->child;
     }
@@ -113,7 +111,7 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
     {
         case primitive_type:
         {
-            printf("primitive %s\n", toStringSymbol(p->tok->lexeme));
+            // printf("primitive %s\n", toStringSymbol(p->tok->lexeme));
             variable_type = PRIMITIVE_TYPE;
             decl_type = NOT_APPLICABLE;
             for(int i=0;i<variables->num_nodes;i++)
@@ -147,7 +145,7 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
         
         case jagged_array:
         {
-            printf("jagged %s\n", toStringSymbol(p->tok->lexeme));
+            // printf("jagged %s\n", toStringSymbol(p->tok->lexeme));
             // proceed only if type checks success
             Parse_tree_node *pt = (Parse_tree_node *)calloc(1, sizeof(Parse_tree_node));
             pt = p;
@@ -170,18 +168,18 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
 }
 
 void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
-    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
+    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
     // print_type_expression(lhs);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
     // print_type_expression(rhs);
     bool flag = are_types_equal(lhs, rhs, txp_table, p);
-    if(flag){
-        printf("\n******VALID EXP********");
-    }
-    else{
-        printf("\n********NOT VALID*********");
-    }
+    // if(flag){
+    //     // printf("\n******VALID EXP********");
+    // }
+    // else{
+    //     printf("\n********NOT VALID*********");
+    // }
 }
 
 bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* txp_table,
@@ -192,7 +190,7 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     char* operator = "EQUALS";
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
-    printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
+    // printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
     bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
         "Variable used before Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,

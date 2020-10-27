@@ -32,8 +32,8 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 flag &= assert_debug(txp_1->variable_type == PRIMITIVE_TYPE && txp->variable_type == PRIMITIVE_TYPE,
                 "OR can only be applied to boolean terms", p, t1, t2, "OR", lexeme1, lexeme2);
                 if(flag){
-                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN && 
-                    txp->union_to_be_named.primitive_data == BOOLEAN,"OR can only be applied to boolean terms",
+                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == t_BOOLEAN && 
+                    txp->union_to_be_named.primitive_data == t_BOOLEAN,"OR can only be applied to boolean terms",
                     p, t1, t2, "OR", lexeme1, lexeme2);
                 }
                 return get_bool_type();
@@ -58,7 +58,7 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                         flag &= assert_debug(txp_1->union_to_be_named.primitive_data ==
                         txp->union_to_be_named.primitive_data,"Left and Right Operand should be of same Primitive Type",
                         p, t1, t2, operator, lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data!=BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data!=t_BOOLEAN,
                                             "PLUS and MINUS are not for boolean types.",
                                             p, t1, t2, operator, lexeme1, lexeme2);
 
@@ -125,8 +125,8 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                     "AND can only be applied to boolean terms", 
                                     p, t1, t2, "AND", lexeme1, lexeme2);
                 if(flag){
-                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN &&
-                                        txp->union_to_be_named.primitive_data == BOOLEAN,
+                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == t_BOOLEAN &&
+                                        txp->union_to_be_named.primitive_data == t_BOOLEAN,
                                         "AND can only be applied to boolean terms",
                                         p, t1, t2, "AND", lexeme1, lexeme2);
                 }
@@ -147,7 +147,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                             txp->union_to_be_named.primitive_data,
                                             "Left and Right Operand should be of same Primitive Type",
                                             p, t1, t2, "MULT", lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != t_BOOLEAN,
                                             "MULT can not be used for boolean types.",
                                             p, t1, t2, "MULT", lexeme1, lexeme2);
                         if (flag && txp_1->union_to_be_named.primitive_data == t_INTEGER){
@@ -197,7 +197,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                             txp->union_to_be_named.primitive_data,
                                             "Left and Right Operand should be of same Primitive Type",
                                             p, t1, t2, "DIV", lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != t_BOOLEAN,
                                             "DIV can not be applied on boolean types.",
                                             p, t1, t2, "DIV", lexeme1, lexeme2);
                         if (flag && (txp_1->union_to_be_named.primitive_data == t_INTEGER ||
