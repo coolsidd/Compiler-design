@@ -14,10 +14,10 @@ Parse_tree_node* createParseTree(TokenStream *s, Grammar *g, int *maxline){
     Symbol starting_symb;
     starting_symb.s = main_program;
     starting_symb.is_terminal = false;
-    return recursiveParseNonterminal(starting_symb, &(s->head), g, maxline);
+    return recursiveParseNonterminal(starting_symb, &(s->head), g, maxline, 0);
 }
 
-Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *g, int *maxline) {
+Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *g, int *maxline, int depth) {
     //printf("Trying to derive %s:\n", toStringSymbol(symb));
     Parse_tree_node * new_node = NULL;
     for(int i=0; i<g->num_rules; i++){
@@ -38,13 +38,15 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
             tempToken->line_no = -1;
             tempToken->next = NULL;
             Parse_tree_node* new_node = new_parse_tree(tempToken);
+            new_node->depth = depth;
 
 
             for(RuleNode* check_rule = g->rules[i].rhs; check_rule; check_rule = check_rule->next){
                 if(check_rule->s.is_terminal && temp_tstr->lexeme.is_terminal){
                     if(check_rule->s.s == temp_tstr->lexeme.s){
                         //printf("Found %s at line %d next\n", toStringSymbol(check_rule->s), temp_tstr->line_no);
-                        Parse_tree_node *tempChildNode = new_parse_tree(temp_tstr);
+                        Parse_tree_node *tempChildNode = new_parse_tree(temp_tstr);                        
+                        tempChildNode->depth = depth+1;
                         add_parsed_child(new_node, tempChildNode);
                         temp_tstr = temp_tstr->next;
                         continue;
@@ -55,7 +57,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
                         break;
                     }
                 }else if(!(check_rule->s.is_terminal)){
-                    Parse_tree_node *tempChildNode = recursiveParseNonterminal(check_rule->s, &temp_tstr, g, maxline);
+                    Parse_tree_node *tempChildNode = recursiveParseNonterminal(check_rule->s, &temp_tstr, g, maxline, depth+1);
                     if(tempChildNode){
                         add_parsed_child(new_node, tempChildNode);
                     }else{

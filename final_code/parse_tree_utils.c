@@ -1,6 +1,5 @@
 //#include "traverse_parse.h"
 #include "parse_tree.h"
-#include "grammar_structs.h"
 
 void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
     if (t) {
@@ -19,7 +18,11 @@ void printParseTree(Parse_tree_node *p, int d) {
                 p->tok->lexeme.is_terminal,
                 "***",
                 toStringSymbol(p->tok->lexeme),
-                p->tok->line_no, d);
+                p->tok->line_no, p->depth);
+    if(d!=p->depth){
+        printf("ERROR depth mismatch\n");
+        printf("%d vs %d\n", d, p->depth);
+    }
     for (Parse_tree_node *temp_child = p->child; temp_child;
          temp_child = temp_child->next) {
         printParseTree(temp_child, d + 1);

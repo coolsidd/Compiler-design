@@ -2,7 +2,7 @@
 #define LINKED_LIST_H
 
 #include <stdlib.h>
-#include "../util/gen_utils.h"
+#include "../final_code/gen_utils.h"
 typedef struct node {
     void *data;
     struct node *next;

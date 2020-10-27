@@ -1,12 +1,5 @@
-#include<stdlib.h>
+#include "./type_errors.h"
 
-typedef struct en {
-    int index;
-    int line_num, depth;
-    char *stmt_type, *op, *message;
-    char *lex1, *lex2, *type1, *type2;
-    struct en* next;
-} ErrorNode;
 
 void printErrors(ErrorNode* err) {
     printf( "|%5s|%10s|%10s|%10s|%10s|%10s|%10s|%5s|%20s|\n",
@@ -14,9 +7,9 @@ void printErrors(ErrorNode* err) {
             "lexeme 2", "type 2", "depth", "error message");
 
     while (err != NULL) {
-        printf( "|%5d|%10s|%10s|%10s|%10s|%10s|%10s|%5|%20s|\n",
+        printf( "|%5d|%10s|%10s|%10s|%10s|%10s|%10s|%5d|%20s|\n",
                 err->line_num, err->stmt_type, err->op, err->lex1, err->type1,
-                err->lex2, err->type2, err->depth, err->message);
+                err->lex2, err->type2,  err->depth, err->message);
         err = err->next;
     }
 }

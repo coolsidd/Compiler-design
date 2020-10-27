@@ -2,7 +2,7 @@
 #define TYPE_EXP_TABLE_H
 
 #include <stdlib.h>
-#include "../../util/gen_utils.h"
+#include "../../final_code/gen_utils.h"
 #include "type_expression.h"
 
 typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;

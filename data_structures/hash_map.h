@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "../util/gen_utils.h"
+#include "../final_code/gen_utils.h"
 
 typedef struct hmnode {
     char *string;
