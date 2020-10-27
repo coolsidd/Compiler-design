@@ -2,7 +2,7 @@ all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_
 	gcc -g -o driver.exe final_code/driver.c *.o
 
 machine_grammar:
-	python generate_grammar.py -o grammar/machine_grammar.txt --grammar-struct-out final_code/grammar_structs --json_in grammar/symbols.json grammar/grammar.txt
+	python3 generate_grammar.py -o grammar/machine_grammar.txt --grammar-struct-out final_code/grammar_structs --json_in grammar/symbols.json grammar/grammar.txt
 
 grammar_structs.o: machine_grammar
 	gcc -g -c final_code/grammar_structs.c
@@ -33,5 +33,5 @@ clean:
 	rm grammar/machine_grammar.txt
 	rm *.o
 	rm *.exe
-	rm ./data_structures/*.o
-	rm ./data_structures/TypeExpressionDS/*.o
+	# rm ./data_structures/*.o
+	# rm ./data_structures/TypeExpressionDS/*.o
