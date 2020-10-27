@@ -10,6 +10,7 @@ typedef struct parse_tree_node {
     struct parse_tree_node *child;
     struct parse_tree_node *last_child;
     struct parse_tree_node *next;
+    struct parse_tree_node *parent;
     Token *tok;
     int depth;
 } Parse_tree_node;

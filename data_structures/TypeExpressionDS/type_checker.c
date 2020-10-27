@@ -53,7 +53,7 @@ checker(jagged2init, index)
 
 void traverseParseTree(type_exp_table* txp_table, Parse_tree_node *p)
 {
-    printf("%d. At node %s\n", toStringSymbol(p->tok->lexeme));
+    printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     Parse_tree_node *temp = p;
         switch (p->tok->lexeme.s)
     {
@@ -144,7 +144,7 @@ void type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
             {
                 variable_name = (char*)ll_get(variables, i);
                 u = *populate_union(variable_type, p);
-                type_expression *tp = construct_type_expression(variable_name, u);
+                type_expression *tp = construct_type_expression(variable_type, u);
                 add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
             }
             break;
@@ -159,7 +159,7 @@ void type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p) {
                 {
                     variable_name = (char *)ll_get(variables, i);
                     u = *populate_union(variable_type, p);
-                    type_expression *tp = construct_type_expression(variable_name, u);
+                    type_expression *tp = construct_type_expression(variable_type, u);
                     add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
                 }
                 break;
@@ -340,7 +340,7 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
             {
                 int* b = (int*)temp1->data;
                 rect_array_range* r = (rect_array_range*)temp->data;
-                flag &= assert_debug(b>=r->lower_bound && b<=r->upper_bound, "IndexOutOfBoundsError");
+                flag &= assert_debug(*b >= r->lower_bound && *b <= r->upper_bound, "IndexOutOfBoundsError");
                 temp1 = temp1->next;
             }
             return flag;
@@ -383,6 +383,7 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
                     }
                     break;
                 }
+            }
         }
     }
 }

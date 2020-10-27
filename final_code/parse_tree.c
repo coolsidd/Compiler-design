@@ -25,9 +25,9 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
         if(g->rules[i].lhs.s == symb.s){
             ////printf("trying to apply rule no. %d\n", i);
             //printf("Trying \"%s -> ",toStringSymbol(g->rules[i].lhs) );
-            for(RuleNode* check_rule = g->rules[i].rhs; check_rule; check_rule = check_rule->next){
-                //printf("%s ", toStringSymbol(check_rule->s));
-            }
+            /* for(RuleNode* check_rule = g->rules[i].rhs; check_rule; check_rule = check_rule->next){ */
+            /*     //printf("%s ", toStringSymbol(check_rule->s)); */
+            /* } */
             //printf("\"\n");
 
             bool flag_successful = true;
@@ -97,6 +97,7 @@ Parse_tree_node* new_parse_tree(Token *tok){
     new_tree->last_child = NULL;
     new_tree->next = NULL;
     new_tree->tok = tok;
+    new_tree->parent = NULL;
     return new_tree;
 }
 void free_parse_tree(Parse_tree_node *root){
@@ -116,11 +117,13 @@ void free_parse_tree(Parse_tree_node *root){
 void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node){
     //printf("Adding child %s -> %s\n",toStringSymbol(root->tok->lexeme), toStringSymbol(node->tok->lexeme));
     if(!root->child){
+        node->parent = root;
         root->child = node;
         root->last_child = node;
         root->num_children = 1;
         return;
     }
+    node->parent = root;
     root->last_child->next = node;
     root->num_children++;
     root->last_child = root->last_child->next;

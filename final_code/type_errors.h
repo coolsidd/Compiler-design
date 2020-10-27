@@ -3,11 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h>\
 
 
 typedef struct en {
-    int index;
     int line_num, depth;
     char *stmt_type, *op, *message;
     char *lex1, *lex2, *type1, *type2;
