@@ -27,6 +27,8 @@ struct ____TYPE_EXPRESSION____{
 
 /* Function Prototypes */
 
+char *get_str_primitive_type(t_primitive_type primitive_data);
+
 // construct type_expression given the values for reqd fields
 // called only through declarative statements of a variable
 // how would we pass the fields?
