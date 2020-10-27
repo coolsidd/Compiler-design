@@ -5,7 +5,7 @@ type_expression *get_integer_type()
     type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
     set_declare_flag(txp);
     txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = INTEGER;
+    txp->union_to_be_named.primitive_data = t_INTEGER;
     return txp;
 }
 
@@ -14,7 +14,7 @@ type_expression *get_bool_type()
     type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
     set_declare_flag(txp);
     txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = BOOLEAN;
+    txp->union_to_be_named.primitive_data = t_BOOLEAN;
     return txp;
 }
 
@@ -23,7 +23,7 @@ type_expression *get_real_type()
     type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
     set_declare_flag(txp);
     txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = REAL;
+    txp->union_to_be_named.primitive_data = t_REAL;
     return txp;
 }
 
@@ -40,7 +40,7 @@ type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node* p)
     }
 }
 
-// <arithmeticexpr>-><term> PLUS<arithmeticexpr> | <term> MINUS<arithmeticexpr> | <term> OR<arithmeticexpr> | <term>
+// <arithmeticexpr>-><term> PLUS <arithmeticexpr> | <term> MINUS <arithmeticexpr> | <term> OR <arithmeticexpr> | <term>
 type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_node* p){
     type_expression* txp = get_type_of_term(txp_table, p->child);
     if(p->last_child->tok->lexeme.s == term){
@@ -53,14 +53,12 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
             {
                 bool flag = true;
                 flag &= assert_debug(txp_1->variable_type == PRIMITIVE_TYPE && txp->variable_type == PRIMITIVE_TYPE, "OR can only be applied to boolean terms");
-                if(flag)
-                {
+                if(flag){
                     flag &= assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN &&
-                    txp->union_to_be_named.primitive_data == BOOLEAN, 
-                    "OR can only be applied to boolean terms");
-                    if(flag)
-                        return get_bool_type();
+                                     txp->union_to_be_named.primitive_data == BOOLEAN,
+                                     "OR can only be applied to boolean terms");
                 }
+                return get_bool_type();
                 break;
             }
             default:
@@ -77,19 +75,20 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 switch(txp_1->variable_type){
                     case(PRIMITIVE_TYPE):
                     {
-                        assert_debug(txp_1->union_to_be_named.primitive_data ==
-                            txp->union_to_be_named.primitive_data,
-                            "Left and Right Operand should be of same Primitive Type");
-                        assert_debug(txp_1->union_to_be_named.primitive_data==BOOLEAN,
-                        "PLUS and MINUS are not for boolean types.");
-                        if(txp_1->union_to_be_named.primitive_data==INTEGER){
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data ==
+                                             txp->union_to_be_named.primitive_data,
+                                             "Left and Right Operand should be of same Primitive Type");
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data==BOOLEAN,
+                                             "PLUS and MINUS are not for boolean types.");
+
+                        if(flag && txp_1->union_to_be_named.primitive_data==t_INTEGER){
                             return get_integer_type();
                         }
-                        else if(txp_1->union_to_be_named.primitive_data==REAL){
+                        else if(flag && txp_1->union_to_be_named.primitive_data==t_REAL){
                             return get_real_type();
                         }
                         else{
-                            return NULL;
+                            return txp; // TODO Default type is of LHS
                         }
                         break;
                     }
@@ -97,16 +96,16 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                     {
                         bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data,
                             txp_1->union_to_be_named.rect_array_data);
-                        // TODO: Check flag or not
-                        return get_integer_type();
+
+                        return txp; // TODO Default type if of LHS
                         break;
                     }
                     case(JAGGED_ARRAY):
                     {
                         bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data,
                             txp_1->union_to_be_named.jagged_array_data);
-                        // TODO: Check flag or not
-                        return get_integer_type();
+
+                        return txp;  // TODO Default type if of LHS
                         break;
                     }
                 }
@@ -119,6 +118,8 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
     }
 }
 
+
+// TODO Return txp as done above (get_type_of_arithexp)
 type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p){
     type_expression *txp = get_type_of_fact(txp_table, p->child);
     if (p->last_child->tok->lexeme.s == fact)
@@ -164,9 +165,9 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                     "Left and Right Operand should be of same Primitive Type");
                         assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN,
                                     "PLUS and MINUS are not for boolean types.");
-                        if (txp_1->union_to_be_named.primitive_data == INTEGER)
+                        if (txp_1->union_to_be_named.primitive_data == t_INTEGER)
                             return get_integer_type();
-                        else if (txp_1->union_to_be_named.primitive_data == REAL)
+                        else if (txp_1->union_to_be_named.primitive_data == t_REAL)
                             return get_real_type();
                         else
                             return NULL;
@@ -210,8 +211,8 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                     "Left and Right Operand should be of same Primitive Type");
                         assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN,
                                     "PLUS and MINUS are not for boolean types.");
-                        if (txp_1->union_to_be_named.primitive_data == INTEGER ||
-                            txp_1->union_to_be_named.primitive_data == REAL)
+                        if (txp_1->union_to_be_named.primitive_data == t_INTEGER ||
+                            txp_1->union_to_be_named.primitive_data == t_REAL)
                             return get_integer_type();
                         else
                             return NULL;
@@ -219,18 +220,20 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                     }
                     case (RECT_ARRAY):
                     {
-                        bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data,
-                                                        txp_1->union_to_be_named.rect_array_data);
-                        // TODO: Check flag or not
-                        return get_real_type();
+                        /* bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data, */
+                        /*                                 txp_1->union_to_be_named.rect_array_data); */
+                        // TODO: Raise error since division and multiplication of arrays not possible
+                        assert_debug(false, "Multiplication of rect arrays not defined");
+                        return txp;
                         break;
                     }
                     case (JAGGED_ARRAY):
                     {
-                        bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data,
-                                                            txp_1->union_to_be_named.jagged_array_data);
-                        // TODO: Check flag or not
-                        return get_integer_type();
+                        /* bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data, */
+                        /*                                     txp_1->union_to_be_named.jagged_array_data); */
+                        assert_debug(false, "Multiplication of jagged arrays not defined");
+                        // TODO: Raise error since division and multiplication of arrays not possible
+                        return txp;
                         break;
                     }
                 }
@@ -241,6 +244,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
     {
         return NULL;
     }
+    return NULL;
 }
 
 bool check_rect_dimensions(rect_array_type r1, rect_array_type r2){
