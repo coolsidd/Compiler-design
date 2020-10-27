@@ -1,9 +1,9 @@
+#ifndef HASH_MAP_H
+#define HASH_MAP_H
+
 #include <stdlib.h>
 #include <string.h>
 #include "../util/gen_utils.h"
-
-#ifndef HASH_MAP_H
-#define HASH_MAP_H
 
 typedef struct hmnode {
     char *string;

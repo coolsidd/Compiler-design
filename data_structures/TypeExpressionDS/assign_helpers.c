@@ -1,23 +1,20 @@
 #include "assign_helpers.h"
 
-// <fact> -> <var> | LPAREN <arithmeticexpr> RPAREN
-type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node* p){
-    if(p->child->tok->lexeme.s == var){
-        return get_type_of_var(txp_table, p->child);
-    }
-    else if(p->last_child->tok->lexeme.s == RPAREN){
-        return get_type_of_arithm_expr(txp_table, getNodeFromIndex(p->child, 1));
-    }
-    else{
-        return NULL;
-    }
-}
-
-type_expression* get_integer_type(){
-    type_expression* txp = (type_expression *)calloc(1, sizeof(type_expression));
+type_expression *get_integer_type()
+{
+    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
     set_declare_flag(txp);
     txp->variable_type = PRIMITIVE_TYPE;
     txp->union_to_be_named.primitive_data = INTEGER;
+    return txp;
+}
+
+type_expression *get_bool_type()
+{
+    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
+    set_declare_flag(txp);
+    txp->variable_type = PRIMITIVE_TYPE;
+    txp->union_to_be_named.primitive_data = BOOLEAN;
     return txp;
 }
 
@@ -30,13 +27,17 @@ type_expression *get_real_type()
     return txp;
 }
 
-type_expression *get_bool_type()
-{
-    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
-    set_declare_flag(txp);
-    txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = BOOLEAN;
-    return txp;
+// <fact> -> <var> | LPAREN <arithmeticexpr> RPAREN
+type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node* p){
+    if(p->child->tok->lexeme.s == var){
+        return get_type_of_var(txp_table, p->child);
+    }
+    else if(p->last_child->tok->lexeme.s == RPAREN){
+        return get_type_of_arithm_expr(txp_table, getNodeFromIndex(p->child, 1));
+    }
+    else{
+        return NULL;
+    }
 }
 
 // <arithmeticexpr>-><term> PLUS<arithmeticexpr> | <term> MINUS<arithmeticexpr> | <term> OR<arithmeticexpr> | <term>
