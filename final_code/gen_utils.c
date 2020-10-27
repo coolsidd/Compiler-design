@@ -23,7 +23,7 @@ char *getStmtType(Parse_tree_node *p) {
                 return "assgn stmt";
                 break;
             }
-            case main_program{
+            case main_program : {
                 return "UNKNOWN";
                 break;
             }
@@ -46,6 +46,9 @@ bool assert_debug(bool condition, char *error_string, Parse_tree_node *p,
     er->lex1 = lex1;
     er->lex2 = lex2;
     er->op = operator;
+    while(!p->tok->lexeme.is_terminal){
+        p = p->child;
+    }
     er->line_num = p->tok->line_no;
     /* if (!condition) */
     /* { */

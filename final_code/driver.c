@@ -4,6 +4,8 @@
 #include "parse_tree.h"
 #include "parse_tree_utils.c"
 #include "type_errors.c"
+#include "../data_structures/TypeExpressionDS/print.h"
+#include "../data_structures/TypeExpressionDS/type_exp_table.h"
 
 #define MAXLINELEN 2048
 #define MAXRULES 100
@@ -61,6 +63,7 @@ int main(int argc, char** argv){
             case 0:
                 break;
             case 1:
+            {
                 printf("Creating parse tree ...\n");
                 line = 0;
                 p = createParseTree(s,g,&line);
@@ -71,13 +74,25 @@ int main(int argc, char** argv){
                 else printf("parse tree created successfully\n\n");
 
                 break;
-
+            }
             case 2:
-                printf("Type expression table not implemented\n\n");
+            {
+                type_exp_table *t = create_type_expression_table();
+                printf("Creating parse tree ...\n");
+                line = 0;
+                p = createParseTree(s,g,&line);
+                if (!p) {
+                    printf("Syntax error while reading %s\nSuccessfully read till line: %d\n", argv[1], line);
+                    exit(1);
+                }
+                else printf("parse tree created successfully\n\n");
+                traverse_and_populate(t, p);
+                print_type_exp_table(t);
                 printErrors(err);
                 break;
-
+            }
             case 3:
+            {
                 printf("Creating parse tree ...\n");
                 line = 0;
                 p = createParseTree(s,g,&line);
@@ -89,7 +104,7 @@ int main(int argc, char** argv){
                 printParseTree(p,0);
                 printf("\n");
                 break;
-
+            }
             case 4:
                 printf("Type expression table not implemented\n\n");
                 break;

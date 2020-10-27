@@ -315,15 +315,15 @@ bool check_jagged_dimensions(jagged_array_type j1, jagged_array_type j2, Parse_t
             ll_node *j1_sizes = temp.row_sizes->head;
             for (ll_node *j2_sizes = temp.row_sizes->head; j2_sizes; j2_sizes = j2_sizes->next)
             {
-                ll_node* t1 = ((linked_list*)j2_sizes->data)->head;
-                for (ll_node *t2 = ((linked_list *)j2_sizes->data)->head; t2; t2=t2->next)
+                ll_node* ll_t1 = ((linked_list*)j2_sizes->data)->head;
+                for (ll_node *ll_t2 = ((linked_list *)j2_sizes->data)->head; ll_t2; ll_t2=ll_t2->next)
                 {
-                    flag &= assert_debug(*((int *)(t1->data)) == *((int *)(t2->data)),
+                    flag &= assert_debug(*((int *)(ll_t1->data)) == *((int *)(ll_t2->data)),
                                         "Jagged Array Dimensions Mismatch",
                                         p, t1, t2, operator, lexeme1, lexeme2);
                     if (!flag)
                         break;
-                    t1 = t1->next;
+                    ll_t1 = ll_t1->next;
                 }
                 if(!flag)
                     break;

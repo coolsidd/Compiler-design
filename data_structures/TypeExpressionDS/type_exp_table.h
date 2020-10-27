@@ -24,6 +24,8 @@ struct ____TYPE_EXPRESSION_TABLE____{
 
 /* Function Prototypes */
 
+void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p);
+
 // initialise the type expression table
 type_exp_table* create_type_expression_table();
 
@@ -38,7 +40,7 @@ void add_entry_to_table(type_exp_table *txp_table, char *variable_name, Variable
                         DeclarationType decl_type, type_expression* t);
 
 
-void type_check_decl_stmts(type_exp_table* txp_table,Parse_tree_node* p);
+void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p);
 
 
 linked_list * get_type_of_index_list(type_exp_table*  txp_table, Parse_tree_node *p);
