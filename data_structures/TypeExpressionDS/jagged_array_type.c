@@ -19,7 +19,9 @@ r2_dimension* create_r2_dimension(){
 }
 
 void append_size(linked_list *ll, int size){
-    ll_append(ll, size);
+    int *data = (int*)calloc(1, sizeof(int));
+    *data = size;
+    ll_append(ll, data);
 }
 
 void populate_row_sizes_2d(linked_list* ll, Parse_tree_node* p){
@@ -31,7 +33,7 @@ void populate_row_sizes_2d(linked_list* ll, Parse_tree_node* p){
     //     append_size(jat->array_type.j2d.row_sizes.sizes, value);
     // }
     append_size(ll, row_size);
-    Parse_tree_node *last_child_1 = (row_size_node, 6);
+    Parse_tree_node *last_child_1 = getNodeFromIndex(row_size_node, 6);
     if (last_child_1 && last_child_1->tok->lexeme.s == jagged2init)
     {
         populate_row_sizes_2d(ll, last_child_1);
@@ -74,7 +76,7 @@ void populate_row_sizes_3d(linked_list *ll, Parse_tree_node *p)
     populate_j3list(r->sizes, row_node);
     ll_append(ll, r);
 
-    Parse_tree_node *last_child_1 = (row_node, 2);
+    Parse_tree_node *last_child_1 = getNodeFromIndex(row_node, 2);
     if (last_child_1 && last_child_1->tok->lexeme.s == jagged3init)
     {
         populate_row_sizes_3d(ll, last_child_1);

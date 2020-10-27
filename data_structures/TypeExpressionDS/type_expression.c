@@ -67,10 +67,10 @@ char* get_string_representation(type_expression* tp){
                 r2_dimension r2d = jagg_2d.row_sizes;
                 int i, *data;
                 for(i = 0; i < (u_bound-l_bound); i++){
-                    data = (int *)get_ll(r2d, i);
+                    data = (int *)ll_get(r2d.sizes, i);
                     snprintf(result, MAX_BUFFER_SIZE, "%s%d, ", result, *data);
                 }
-                data = (int *)get_ll(r2d, i);
+                data = (int *)ll_get(r2d.sizes, i);
                 snprintf(result, MAX_BUFFER_SIZE, "%s%d)", result, *data);
             }
 
