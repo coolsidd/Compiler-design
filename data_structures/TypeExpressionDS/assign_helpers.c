@@ -58,7 +58,7 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                         flag &= assert_debug(txp_1->union_to_be_named.primitive_data ==
                         txp->union_to_be_named.primitive_data,"Left and Right Operand should be of same Primitive Type",
                         p, t1, t2, operator, lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data==BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data!=BOOLEAN,
                                             "PLUS and MINUS are not for boolean types.",
                                             p, t1, t2, operator, lexeme1, lexeme2);
 
@@ -147,7 +147,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                             txp->union_to_be_named.primitive_data,
                                             "Left and Right Operand should be of same Primitive Type",
                                             p, t1, t2, "MULT", lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != BOOLEAN,
                                             "MULT can not be used for boolean types.",
                                             p, t1, t2, "MULT", lexeme1, lexeme2);
                         if (flag && txp_1->union_to_be_named.primitive_data == t_INTEGER){
@@ -197,7 +197,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                             txp->union_to_be_named.primitive_data,
                                             "Left and Right Operand should be of same Primitive Type",
                                             p, t1, t2, "DIV", lexeme1, lexeme2);
-                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data == BOOLEAN,
+                        flag &= assert_debug(txp_1->union_to_be_named.primitive_data != BOOLEAN,
                                             "DIV can not be applied on boolean types.",
                                             p, t1, t2, "DIV", lexeme1, lexeme2);
                         if (flag && (txp_1->union_to_be_named.primitive_data == t_INTEGER ||

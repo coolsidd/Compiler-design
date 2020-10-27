@@ -129,8 +129,9 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
         {
             // proceed only if type checks success
             decl_type = STATIC;
-            printf("rect %s\n", toStringSymbol(p->tok->lexeme));
-            bool flag = rect_decl_checks(txp_table, p, &decl_type);
+            Parse_tree_node* pt = (Parse_tree_node*)calloc(1, sizeof(Parse_tree_node));
+            pt = p;
+            bool flag = rect_decl_checks(txp_table, pt, &decl_type);
             if(flag){
                 variable_type = RECT_ARRAY;
                 for (int i = 0; i < variables->num_nodes; i++)
@@ -148,7 +149,9 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
         {
             printf("jagged %s\n", toStringSymbol(p->tok->lexeme));
             // proceed only if type checks success
-            bool flag = jagged_decl_checks(p);
+            Parse_tree_node *pt = (Parse_tree_node *)calloc(1, sizeof(Parse_tree_node));
+            pt = p;
+            bool flag = jagged_decl_checks(pt);
             if (flag)
             {
                 variable_type = JAGGED_ARRAY;
@@ -223,14 +226,15 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
 }
 
 bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, DeclarationType* decl_type){
+    int i = 0;
     bool flag = true;
     p = p->child;
-    Parse_tree_node* range_list_node = getNodeFromIndex(p,2)->child;
+    Parse_tree_node* range_list_node = getNodeFromIndex(p,1);
     Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
     flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
     do{
-        Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node, 1);
-        Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node, 3);
+        Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node->child, 1);
+        Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node->child, 3);
         if(lower_bound->child->tok->lexeme.s != CONST || upper_bound->child->tok->lexeme.s != CONST){
             *decl_type = DYNAMIC;
         }
@@ -239,8 +243,7 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
         flag &= assert_debug(lower_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
         flag &= assert_debug(upper_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
         range_list_node = range_list_node->last_child;
-    }while(range_list_node->last_child->tok->lexeme.s==range_list);
-    
+    }while(range_list_node->tok->lexeme.s==range_list);
     return flag;
 }
 
@@ -277,6 +280,7 @@ bool jagged_decl_checks(Parse_tree_node* p){
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
     // printf("At GET_VAR: %s", toStringSymbol(p->tok->lexeme));
     type_expression* txp = (type_expression*) calloc(1, sizeof(type_expression));
+
 
     if(p->last_child->tok->lexeme.s == CONST){
         // print_type_expression(get_integer_type());
