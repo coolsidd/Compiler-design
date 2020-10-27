@@ -238,6 +238,32 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
     return NULL;
 }
 
+type_expression* get_type_exp_of_expr(type_exp_table* txp_table, Parse_tree_node* p){
+    return get_type_of_arithm_expr(txp_table, p->child);
+}
+
+type_expression* get_type_of_var_lhs(type_exp_table* txp_table, Parse_tree_node* p){
+    type_expression *txp;
+
+    if (p->last_child->tok->lexeme.s == SQBC)
+    {
+
+        linked_list *bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
+        if (bounds)
+        {
+            bool flag = do_bound_checking(txp_table, p, bounds);
+        }
+        return get_integer_type();
+    }
+
+    else if (p->last_child->tok->lexeme.s == ID)
+    {
+        txp = get_type_expression(txp_table, p->last_child->tok->token_name);
+        bool flag = assert_debug(txp != NULL, "Variable used before declaration", p, "***", "***", "***", "***", "***");
+        return txp;
+    }
+}
+
 bool check_rect_dimensions(rect_array_type r1, rect_array_type r2, Parse_tree_node* p,
                         char *t1, char *t2, char *operator, char *lexeme1, char *lexeme2)
 {

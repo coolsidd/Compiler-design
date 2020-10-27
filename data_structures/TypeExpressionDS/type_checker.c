@@ -50,6 +50,7 @@ checker(jagged2init, index)
 
 #include "type_exp_table.h"
 #include "type_expression.h"
+#include "assign_helpers.h"
 #include <math.h>
 
 void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
@@ -64,10 +65,11 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
 
-    /* Parse_tree_node* assign_stmts_node = p->last_child; */
-    /* do{ */
-    /*     // TODO call assign_stmt func */
-    /* }while(decl_stmts_node->last_child->tok->lexeme.s == decl_stmts); */
+    Parse_tree_node* assign_stmts_node = p->last_child;
+    do{
+        type_check_assign_statement(txp_table, assign_stmts_node->child);
+        assign_stmts_node = assign_stmts_node->last_child;
+    }while(assign_stmts_node->tok->lexeme.s == assign_stmts);
 }
 
 void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
@@ -159,6 +161,51 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
             }
         }
     }
+}
+
+void type_check_assign_statement(type_exp_table* txp_table, Parse_tree_node* p){
+    type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
+    type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
+    are_types_equal(lhs, rhs, txp_table, p);
+}
+
+bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* txp_table,
+             Parse_tree_node* p){
+    char* s1 = str_type(t1);
+    char* s2 = str_type(t2);
+    char* operator = "EQUALS";
+    char* lexeme1 = "var_lhs";
+    char* lexeme2 = "expr";
+    bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
+        "Variable used before Declaration",p, s1, s2, operator, lexeme1, lexeme2);
+    flag &= assert_debug(t1->variable_type == t2->variable_type,
+                            "Variable used before Declaration", p,
+                            s1, s2, operator, lexeme1, lexeme2);
+    if(!flag) 
+        return false;
+    switch(t1->variable_type){
+        case(PRIMITIVE_TYPE):{
+            flag&=assert_debug(t1->union_to_be_named.primitive_data == t2->union_to_be_named.primitive_data,
+            "Different Primitive types",p, s1, s2, operator, lexeme1, lexeme2);
+            return flag;
+            break;
+        }
+        case(RECT_ARRAY):{
+            flag &= check_rect_dimensions(t1->union_to_be_named.rect_array_data,
+                        t2->union_to_be_named.rect_array_data, p, s1, s2, operator,
+                        lexeme1, lexeme2);
+            return flag;
+            break;
+        }
+        case(JAGGED_ARRAY):{
+            flag &= check_jagged_dimensions(t1->union_to_be_named.jagged_array_data,
+                        t2->union_to_be_named.jagged_array_data, p, s1, s2, operator,
+                        lexeme1, lexeme2);
+            return flag;
+            break;
+        }
+    }
+    
 }
 
 bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
