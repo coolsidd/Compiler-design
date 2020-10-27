@@ -38,6 +38,8 @@ type_expression *get_bool_type();
 
 char *get_str_primitive_type(t_primitive_type primitive_data);
 
+void print_type_expression(type_expression *tp);
+
 // get Printable type for assert_debug
 char *str_type(type_expression *txp);
 

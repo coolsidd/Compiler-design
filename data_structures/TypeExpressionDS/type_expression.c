@@ -43,6 +43,15 @@ char *get_str_primitive_type(t_primitive_type primitive_data)
     }
 }
 
+void print_type_expression(type_expression *tp)
+{
+    if(!tp)
+        printf("NULL");
+    char buffer[30];
+    strcpy(buffer, get_string_representation(tp));
+    printf("%s\n", buffer);
+}
+
 char *str_type(type_expression *txp)
 {
     switch (txp->variable_type)
@@ -61,7 +70,6 @@ char *str_type(type_expression *txp)
 
 // get the desired String Representation of TypeExpression
 char* get_string_representation(type_expression* tp){
-
     union_to_be_named union_ds = tp->union_to_be_named;
     char result_buffer[MAX_BUFFER_SIZE];
     char* result = result_buffer;

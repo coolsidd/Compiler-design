@@ -169,17 +169,27 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
 void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
     printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
+    // print_type_expression(lhs);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
+    // print_type_expression(rhs);
     bool flag = are_types_equal(lhs, rhs, txp_table, p);
+    if(flag){
+        printf("\n******VALID EXP********");
+    }
+    else{
+        printf("\n********NOT VALID*********");
+    }
 }
 
 bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* txp_table,
             Parse_tree_node* p){
+    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     char* s1 = str_type(t1);
     char* s2 = str_type(t2);
     char* operator = "EQUALS";
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
+    printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
     bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
         "Variable used before Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
@@ -265,9 +275,11 @@ bool jagged_decl_checks(Parse_tree_node* p){
 
 
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
-    type_expression* txp;
+    // printf("At GET_VAR: %s", toStringSymbol(p->tok->lexeme));
+    type_expression* txp = (type_expression*) calloc(1, sizeof(type_expression));
 
-    if(p->tok->lexeme.s == CONST){
+    if(p->last_child->tok->lexeme.s == CONST){
+        // print_type_expression(get_integer_type());
         return get_integer_type();
     }
     else if(p->last_child->tok->lexeme.s == SQBC){
@@ -277,19 +289,21 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         {
             bool flag = do_bound_checking(txp_table, p, bounds);
         }
+        // print_type_expression(get_integer_type());
         return get_integer_type();
     }
 
     else if(p->last_child->tok->lexeme.s == ID){
         txp = get_type_expression(txp_table, p->last_child->tok->token_name);
         bool flag = assert_debug(txp!=NULL, "Variable used before declaration",p, "***", "***", "***", "***", "***");
+        // print_type_expression(txp);
         return txp;
     }
 
 }
 
 linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* p){
-    
+    // printf("\n At GET_INDEX_LIST: %s", p->tok->token_name);
     linked_list* ll = create_linked_list();
 
     type_expression* txp = get_type_of_var(txp_table ,p->child);
@@ -322,6 +336,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
 }
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll){
+    // printf("\n At DO_BOUND_CHECKING: %s", p->tok->token_name);
     type_expression* txp = get_type_expression(txp_table, p->tok->token_name);
     switch(txp->variable_type){
         case(PRIMITIVE_TYPE):
