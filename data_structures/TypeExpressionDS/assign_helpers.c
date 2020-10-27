@@ -1,46 +1,5 @@
 #include "assign_helpers.h"
 
-type_expression *get_integer_type()
-{
-    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
-    set_declare_flag(txp);
-    txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = t_INTEGER;
-    return txp;
-}
-
-type_expression *get_bool_type()
-{
-    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
-    set_declare_flag(txp);
-    txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = t_BOOLEAN;
-    return txp;
-}
-
-type_expression *get_real_type()
-{
-    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
-    set_declare_flag(txp);
-    txp->variable_type = PRIMITIVE_TYPE;
-    txp->union_to_be_named.primitive_data = t_REAL;
-    return txp;
-}
-
-char* str_type(type_expression* txp){
-    switch(txp->variable_type){
-        case (PRIMITIVE_TYPE):
-            return get_str_primitive_type(txp->union_to_be_named.primitive_data);
-            break;
-        case (RECT_ARRAY):
-            return "Rectangular Array";
-            break;
-        case (JAGGED_ARRAY):
-            return "Jagged Array";
-            break;
-    }
-}
-
 // <fact> -> <var> | LPAREN <arithmeticexpr> RPAREN
 type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node* p){
     if(p->child->tok->lexeme.s == var){

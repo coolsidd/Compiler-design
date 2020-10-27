@@ -1,6 +1,33 @@
 #include "type_expression.h"
 #define MAX_BUFFER_SIZE 200
 
+type_expression *get_integer_type()
+{
+    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
+    set_declare_flag(txp);
+    txp->variable_type = PRIMITIVE_TYPE;
+    txp->union_to_be_named.primitive_data = t_INTEGER;
+    return txp;
+}
+
+type_expression *get_bool_type()
+{
+    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
+    set_declare_flag(txp);
+    txp->variable_type = PRIMITIVE_TYPE;
+    txp->union_to_be_named.primitive_data = t_BOOLEAN;
+    return txp;
+}
+
+type_expression *get_real_type()
+{
+    type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));
+    set_declare_flag(txp);
+    txp->variable_type = PRIMITIVE_TYPE;
+    txp->union_to_be_named.primitive_data = t_REAL;
+    return txp;
+}
+
 char *get_str_primitive_type(t_primitive_type primitive_data)
 {
     switch(primitive_data){
@@ -13,6 +40,22 @@ char *get_str_primitive_type(t_primitive_type primitive_data)
         case(t_REAL):
             return "real";
             break;
+    }
+}
+
+char *str_type(type_expression *txp)
+{
+    switch (txp->variable_type)
+    {
+    case (PRIMITIVE_TYPE):
+        return get_str_primitive_type(txp->union_to_be_named.primitive_data);
+        break;
+    case (RECT_ARRAY):
+        return "Rectangular Array";
+        break;
+    case (JAGGED_ARRAY):
+        return "Jagged Array";
+        break;
     }
 }
 

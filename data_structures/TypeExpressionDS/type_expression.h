@@ -27,7 +27,19 @@ struct ____TYPE_EXPRESSION____{
 
 /* Function Prototypes */
 
+//Return sample type expression for integer type
+type_expression *get_integer_type();
+
+//Return sample type expression for real type
+type_expression *get_real_type();
+
+//Return sample type expression for bool type
+type_expression *get_bool_type();
+
 char *get_str_primitive_type(t_primitive_type primitive_data);
+
+// get Printable type for assert_debug
+char *str_type(type_expression *txp);
 
 // construct type_expression given the values for reqd fields
 // called only through declarative statements of a variable

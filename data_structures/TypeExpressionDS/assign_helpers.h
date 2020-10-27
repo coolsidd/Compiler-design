@@ -2,19 +2,8 @@
 #define ASSIGN_HELPERS_H
 
 #include "type_exp_table.h"
+#include "type_expression.h"
 #include "../../final_code/parse_tree.h"
-
-//Return sample type expression for integer type
-type_expression *get_integer_type();
-
-//Return sample type expression for real type
-type_expression *get_real_type();
-
-//Return sample type expression for bool type
-type_expression *get_bool_type();
-
-// get Printable type for assert_debug
-char *str_type(type_expression *txp);
 
 //Return type expression for fact non-terminal
 type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node *p);
