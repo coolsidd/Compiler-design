@@ -11,7 +11,7 @@ Group 36
 
 #include <stdio.h>
 #include "parse_tree.h"
-#include "./type_errors.h"
+/* #include "./type_errors.h" */
 #include "grammar_structs.h"
 #include "../data_structures/linked_list.h"
 #include <stdlib.h>
