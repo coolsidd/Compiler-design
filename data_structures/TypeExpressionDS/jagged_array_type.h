@@ -3,7 +3,7 @@ Group 36
 2017B4A70495P Manan Soni
 2017B4A70549P Siddharth Singh
 2017B4A70636P Nayan Khanna
-2017B4A70636P Aditya Tulsyan
+2017B4A70740P Aditya Tulsyan
 */
 
 #ifndef JAGGED_ARRAY_TYPE_H
@@ -46,6 +46,8 @@ struct ____JAGGED_ARRAY_TYPE____{
     }array_type;
 };
 
+jagged_2d* create_jagged_2d();
+jagged_3d* create_jagged_3d();
 r2_dimension* create_r2_dimension();
 void append_size(linked_list *ll, int size);
 jagged_array_type* create_jagged_array_type(Parse_tree_node *p);
