@@ -3,7 +3,6 @@
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
 #include "parse_tree_utils.c"
-#include "type_errors.c"
 #include "../data_structures/TypeExpressionDS/print.h"
 #include "../data_structures/TypeExpressionDS/type_exp_table.h"
 
@@ -43,7 +42,6 @@ int main(int argc, char** argv){
 
     int option, line=0;
     Parse_tree_node * p;
-    ErrorNode* err = NULL;
 
     do {
 
@@ -87,8 +85,6 @@ int main(int argc, char** argv){
                 }
                 else printf("parse tree created successfully\n\n");
                 traverse_and_populate(t, p);
-                print_type_exp_table(t);//not required here, its option 4
-                // printErrors(err);
                 break;
             }
             case 3:
@@ -119,8 +115,8 @@ int main(int argc, char** argv){
                 else
                     printf("parse tree created successfully\n\n");
                 traverse_and_populate(t, p);
+                printf("Populated Type expression table successfully\n");
                 print_type_exp_table(t);
-                // printErrors(err);
                 break;
             }
             default:
@@ -129,6 +125,4 @@ int main(int argc, char** argv){
         }
 
     } while(option != 0);
-
-    // destroy_err(err);
 }

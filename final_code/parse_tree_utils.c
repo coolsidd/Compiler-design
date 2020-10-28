@@ -10,10 +10,11 @@ void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
 }
 
 void printParseTree(Parse_tree_node *p, int d) {
-    if (d == 0)
+    if (d == 0) {
+        printf("\n%45s","|Parse tree|\n\n");
         printf("|%20s|%20s|%20s|%20s|%5s|%5s|\n",
         "Symbol", "term / non-term", "Type", "Name", "num", "Depth");
-
+    }
     printLine(  p->tok->token_name,
                 p->tok->lexeme.is_terminal,
                 "***",

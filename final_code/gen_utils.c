@@ -13,19 +13,19 @@ void assert(bool condition, char *error_string) {
 
 void printErrorsHeader()
 {
-    printf("\n%45s","|Error Statements Table|");
-    printf("\n|%5s|%10s|%10s|%10s|%10s|%20s|%10s|%5s|%40s|\n",
-           "num", "stmt type", "operator", "lexeme 1", "type 1",
-           "lexeme 2", "type 2", "depth", "error message");
+    printf("\n%45s","|Type errors|\n\n");
+    printf("\n|%5s|%10s|%10s|%15s|%20s|%15s|%20s|%5s|\n|%19s--- %60s ----%19s|\n\n",
+           "line", "stmt type", "operator", "lexeme 1", "type 1",
+           "lexeme 2", "type 2", "depth", "", "Error message", "");
 }
 
 void printErrorEntries(ErrorNode* err){
 
     if (err != NULL)
     {
-        printf("|%5d|%10s|%10s|%10s|%10s|%20s|%10s|%5d|%40s|\n",
+        printf("|%5d|%10s|%10s|%15s|%20s|%15s|%20s|%5d|\n|%19s--- %60s ----%19s|\n\n",
                err->line_num, err->stmt_type, err->op, err->lex1, err->type1,
-               err->lex2, err->type2, err->depth, err->message);
+               err->lex2, err->type2, err->depth, "", err->message, "");
     }
 }
 
