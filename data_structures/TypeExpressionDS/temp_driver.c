@@ -1,41 +1,41 @@
-/*
-Group 36
-2017B4A70495P Manan Soni
-2017B4A70549P Siddharth Singh
-2017B4A70636P Nayan Khanna
-2017B4A70740P Aditya Tulsyan
-*/
+// /*
+// Group 36
+// 2017B4A70495P Manan Soni
+// 2017B4A70549P Siddharth Singh
+// 2017B4A70636P Nayan Khanna
+// 2017B4A70740P Aditya Tulsyan
+// */
 
-#include<stdlib.h>
-#include "type_exp_table.h"
-#include "print.h"
-// gcc *.c ../linked_list.c ../hash_map.c ../../final_code/grammar_structs.c ../../final_code/parse_tree.c ../../util/gen_utils.c -o exe
+// #include<stdlib.h>
+// #include "type_exp_table.h"
+// #include "print.h"
+// // gcc *.c ../linked_list.c ../hash_map.c ../../final_code/grammar_structs.c ../../final_code/parse_tree.c ../../util/gen_utils.c -o exe
 
-int main(){ 
-    jagged_array_type* jat = (jagged_array_type*)calloc(1, sizeof(jagged_array_type));
-    jat->dimensions = 2;
-    jat->array_type.j2d = *create_jagged_2d();
-    jat->array_type.j2d.lower_bound = 2;
-    jat->array_type.j2d.upper_bound = 5;
-    int a, b, c, d;
-    a = 3;
-    b = 4;
-    c = 5;
-    d = 2;
-    printf("sdf\n");
-    append_size(jat->array_type.j2d.row_sizes.sizes, a);
-    append_size(jat->array_type.j2d.row_sizes.sizes, b);
-    append_size(jat->array_type.j2d.row_sizes.sizes, c);
-    append_size(jat->array_type.j2d.row_sizes.sizes, d);
-    union_to_be_named *u = (union_to_be_named *)calloc(1, sizeof(union_to_be_named));
-    printf("sdf\n");
-    u->jagged_array_data = *jat;
-    VariableType var = 2;
-    printf("%d\n", *((int*)(u->jagged_array_data.array_type.j2d.row_sizes.sizes->head->next->data)));
-    type_expression* tp = construct_type_expression(var, *u);
-    char* str = get_string_representation(tp);
-    printf("%s", str);
-    return 0;
+// int main(){ 
+//     jagged_array_type* jat = (jagged_array_type*)calloc(1, sizeof(jagged_array_type));
+//     jat->dimensions = 2;
+//     jat->array_type.j2d = *create_jagged_2d();
+//     jat->array_type.j2d.lower_bound = 2;
+//     jat->array_type.j2d.upper_bound = 5;
+//     int a, b, c, d;
+//     a = 3;
+//     b = 4;
+//     c = 5;
+//     d = 2;
+//     printf("sdf\n");
+//     append_size(jat->array_type.j2d.row_sizes.sizes, a);
+//     append_size(jat->array_type.j2d.row_sizes.sizes, b);
+//     append_size(jat->array_type.j2d.row_sizes.sizes, c);
+//     append_size(jat->array_type.j2d.row_sizes.sizes, d);
+//     union_to_be_named *u = (union_to_be_named *)calloc(1, sizeof(union_to_be_named));
+//     printf("sdf\n");
+//     u->jagged_array_data = *jat;
+//     VariableType var = 2;
+//     printf("%d\n", *((int*)(u->jagged_array_data.array_type.j2d.row_sizes.sizes->head->next->data)));
+//     type_expression* tp = construct_type_expression(var, *u);
+//     char* str = get_string_representation(tp);
+//     printf("%s", str);
+//     return 0;
 
     /*     rect_array_type *r = (rect_array_type *)calloc(1, sizeof(rect_array_type)); */
     /*     r->dimensions = 2; */
@@ -87,4 +87,4 @@ int main(){
     /*     printf("%d\n", t->root->num_nodes); */
 
     /*     print_type_exp_table(t); */
-}
+// }

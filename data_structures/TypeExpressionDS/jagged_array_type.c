@@ -33,13 +33,8 @@ void append_size(linked_list *ll, int size){
 }
 
 void populate_row_sizes_2d(linked_list* ll, Parse_tree_node* p){
-    Parse_tree_node *row_size_node = getNodeFromIndex(p, 6);
-    int row_size = atoi(row_size_node->tok->token_name);
-    // Parse_tree_node *row = row_size_node->next->next->next->next;
-    // for(int i=0;i<row_size;i++){
-    //     int value = atoi(row->child->child->tok->token_name);
-    //     append_size(jat->array_type.j2d.row_sizes.sizes, value);
-    // }
+    Parse_tree_node *row_size_node = getNodeFromIndex(p->child, 6);
+    int row_size = atoi(row_size_node->child->tok->token_name);
     append_size(ll, row_size);
     Parse_tree_node *last_child_1 = getNodeFromIndex(row_size_node, 6);
     if (last_child_1 && last_child_1->tok->lexeme.s == jagged2init)
@@ -94,15 +89,6 @@ void populate_row_sizes_3d(linked_list *ll, Parse_tree_node *p)
 }
 
 jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
-    /*
-        This function is called only if:
-            there are no type errors(listed below) in the jagged_array
-            - Index out of bounds for jaggedXinit. X=2,3
-            - No of instances of jaggedXinit should be = UB-LB+1
-            - For each row, size should be equal to be number of semicolon
-                separated values.
-            - For 2d, value_list cannot have last child as value_list
-    */
     jagged_array_type* jat = (jagged_array_type*)calloc(1, sizeof(jagged_array_type));
     // p = jagged_array
     Parse_tree_node* third_child = getNodeFromIndex(p->child,2);

@@ -24,7 +24,6 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     do{
         type_expression * temp =type_check_decl_stmt(txp_table, decl_stmts_node->child);
         decl_stmts_node->child->txp = temp;
-        print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
 
@@ -112,6 +111,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
             pt = p;
             decl_type = NOT_APPLICABLE;
             bool flag = jagged_decl_checks(txp_table,  pt);
+            // printf("FLAG: %d", flag);
             if (flag)
             {
                 variable_type = JAGGED_ARRAY;
@@ -210,11 +210,10 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
 
 bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     bool flag = true;
-
-    p = p->child;
-    Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
+    Parse_tree_node* temp = p->child;
+    Parse_tree_node* primitive_type_node = getNodeFromIndex(temp, 4);
     flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "JaggedArrayType has to be int", p, "***", "***", "***", "***", "***");
-    Parse_tree_node* dimen = getNodeFromIndex(p, 2);
+    Parse_tree_node *dimen = getNodeFromIndex(temp, 2);
     Parse_tree_node* bounds = dimen->child->child;
     Parse_tree_node* lower_bound = getNodeFromIndex(bounds, 1);
     Parse_tree_node* upper_bound = getNodeFromIndex(bounds, 3);
@@ -222,6 +221,8 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
 
     if (lower_type && upper_type) {
+        lower_bound = lower_bound->last_child;
+        upper_bound = upper_bound->last_child;
         flag &= assert_debug(lower_bound->tok->lexeme.s == CONST,
                             "JgdArr Lower Bound variable", p, "***",
                             "***", "***", "***", "***");
@@ -230,7 +231,7 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
                             "***", "***", "***", "***");
         int upper_int = atoi(upper_bound->tok->token_name);
         int lower_int = atoi(lower_bound->tok->token_name);
-        int n_rows = upper_int - lower_int;
+        int n_rows = upper_int - lower_int + 1;
         flag &= assert_debug(n_rows > 0, "JaggedArray bounds <=0", p, "***", "***",
                             "***", "***", "***");
         if(!flag)
@@ -239,17 +240,20 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
         BaseSymbol b = p->last_child->tok->lexeme.s;
         if(b!=jagged2init && b!=jagged3init)
             return false;
+        p = p->last_child;
         for(int i = lower_int; i<=upper_int; i++){
             // TODO Call function
-            flag &= jagged_init_checker(txp_table, p->last_child, i);
+            // printf("\n ****** DRIVER: Got %d", i);
+            flag &= jagged_init_checker(txp_table, p, i);
             if (i < upper_int )
-            {
-                flag &= assert_debug(p->last_child->tok->lexeme.s == b, "Less initalisations than rowNo", p, "***", "***", "***", "***", "***");
+            { flag &= assert_debug(p->last_child->tok->lexeme.s == b, "Less initalisations than rowNo", p, "***", "***", "***", "***", "***");
                 if (!flag)
                     return false;
+                p = p->last_child;
             }
-            p = p->last_child;
+            // printf("\n ******* DRIVER:  %d: %d", i, flag);
         }
+        flag &= assert_debug(p->last_child->tok->lexeme.s != b, "More initials than rowNo", p, "***", "***", "***", "***", "***");
         return flag;
     }
     else{
@@ -260,29 +264,27 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
 
 bool jagged_init_checker(type_exp_table * txp_table, Parse_tree_node* p, int idx){
     char *lex = toStringSymbol(p->tok->lexeme);
-    Parse_tree_node *r1_idx = getNodeFromIndex(p, 2)->child;
+    Parse_tree_node *r1_idx = getNodeFromIndex(p->child, 2);
     bool flag = assert_debug(r1_idx->child->tok->lexeme.s == CONST, "R1[variable] not allowed", p, "***", "***", "***", lex, "***");
-    if(flag){
-        int r1_idx_int = atoi(r1_idx->tok->token_name);
-        flag &= assert_debug(r1_idx_int == idx, "R1[idx] not ascending", p, "***", "***", "***", lex, "***");
-        Parse_tree_node* row_size_node = getNodeFromIndex(r1_idx, 4);
-        type_expression *rsize_type = get_type_of_var(txp_table, row_size_node);
-        if(rsize_type){
-            flag &= assert_debug(row_size_node->tok->lexeme.s == CONST,
-                                 "JgdArr Row Size variable", p, "***",
-                                 "***", "***", "***", "***");
-            int row_size = atoi(row_size_node->tok->token_name);
-            char *errStr = (char *)malloc(sizeof("JaggedArray row size <=0")+5);
-            sprintf(errStr, "JaggedArray row %d size <=0", idx);
-            flag &= assert_debug(row_size > 0, errStr, p, "***", "***",
-                                     "***", "***", "***");
-            if(!flag) return false;
-            flag &= jagged_list_checker(txp_table, p->last_child, row_size);
-        }
-        else{
-            return false;
-        }
-    }
+    if(!flag) return false;
+    
+    int r1_idx_int = atoi(r1_idx->child->tok->token_name);
+    flag &= assert_debug(r1_idx_int == idx, "R1[idx] not ascending", p, "***", "***", "***", lex, "***");
+    Parse_tree_node* row_size_node = getNodeFromIndex(r1_idx, 4);
+    type_expression *rsize_type = get_type_of_var(txp_table, row_size_node);
+    if(!rsize_type) return false;
+
+    flag &= assert_debug(row_size_node->child->tok->lexeme.s == CONST,
+                            "JgdArr Row Size variable", p, "***",
+                            "***", "***", "***", "***");
+    int row_size = atoi(row_size_node->child->tok->token_name);
+    char *errStr = (char *)malloc(sizeof("JaggedArray row size <=0")+5);
+    sprintf(errStr, "JaggedArray row %d size <=0", idx);
+    flag &= assert_debug(row_size > 0, errStr, p, "***", "***",
+                                "***", "***", "***");
+    if(!flag) return false;
+    flag &= jagged_list_checker(txp_table, getNodeFromIndex(row_size_node,4), row_size);
+    // printf(" INIT_C %d %d", idx, flag);
     return flag;
 }
 
@@ -320,6 +322,7 @@ bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row
             p = p->last_child;
         }
         flag&=assert_debug(p->tok->lexeme.s != j2list, "More values than row size", p, "***", "***", "***", "***", "***");
+        // printf("\n LIST_CHECKER: %d %d", row_size, flag);
         return flag;
     }
     else if(p->tok->lexeme.s == j3list){
@@ -357,8 +360,6 @@ bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row
         flag &= assert_debug(p->tok->lexeme.s != j3list, "More values than row size", p, "***", "***", "***", "***", "***");
         return flag;
     }
-    bool flag = true;
-    return flag;
 }
 
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){

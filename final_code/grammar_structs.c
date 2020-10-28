@@ -5,7 +5,6 @@ Group 36
 2017B4A70636P Nayan Khanna
 2017B4A70740P Aditya Tulsyan
 */
-
 #include "grammar_structs.h"
 #include <stdio.h>
 #include <string.h>
