@@ -1,5 +1,10 @@
-// #include <stdbool.h>
-
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
 
 #ifndef GEN_UTILS_H
 #define GEN_UTILS_H
@@ -25,5 +30,3 @@ void printErrorEntries(ErrorNode *err);
 void assert(bool condition, char *error_string);
 bool assert_debug(bool condition, char* error_string, Parse_tree_node * p, char* t1, char* t2, char* operator, char* lex1, char* lex2);
 #endif
-
-

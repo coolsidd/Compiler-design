@@ -1,4 +1,12 @@
 /*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
+/*
     Given parse_tree_node* p;
     check p->tok->lexeme
 
@@ -22,7 +30,7 @@
                     to check for typedef errors
                     rows = count on number of rows
                         for each row:
-                           2d: 
+                           2d:
                             checker(jagged2init, index)
                             jagged_2init: 3rd child(var: index/RowNumber) should be in bounds
                             7th child: size
@@ -117,7 +125,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
     }
 
     type_expression* tp;
-    
+
     switch (p->tok->lexeme.s)
     {
         case primitive_type:
@@ -155,7 +163,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
             return tp;
             break;
         }
-        
+
         case jagged_array:
         {
             // printf("jagged %s\n", toStringSymbol(p->tok->lexeme));
@@ -207,12 +215,12 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
     // printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
-    bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
+    bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared,
         "Var Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
                             "Var used before Declaration", p,
                             s1, s2, operator, lexeme1, lexeme2);
-    if(!flag) 
+    if(!flag)
         return false;
     switch(t1->variable_type){
         case(PRIMITIVE_TYPE):{
@@ -236,7 +244,7 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
             break;
         }
     }
-    
+
 }
 
 bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, DeclarationType* decl_type){
@@ -267,7 +275,7 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     /*
         - Index out of bounds for jaggedXinit. X=2,3
         - No of instances of jaggedXinit should be = UB-LB+1
-        - For each row, size should be equal to be number of semicolon 
+        - For each row, size should be equal to be number of semicolon
             separated values.
         - For 2d, value_list cannot have last child as value_list
     */
@@ -347,7 +355,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child,2)->child);
         if (!assert_debug(txp!=NULL, "Var used before Declaration", p, "***", "***", "***", "***", "***"))
             return NULL;
-        
+
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         bool flag = do_bound_checking(txp_table, p->child, bounds);
         // print_type_expression(get_integer_type());
