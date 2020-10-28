@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "rect_array_type.h"
 
 rect_array_range* create_rect_array_node(int lower_bound, int upper_bound){
@@ -30,4 +38,3 @@ rect_array_type* create_rect_array_type(Parse_tree_node* p){
 int get_dimension(rect_array_type* r_type){
     return r_type->dimensions;
 }
-

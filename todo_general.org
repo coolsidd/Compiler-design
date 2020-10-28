@@ -1,0 +1,9 @@
+#+TITLE: Todo General
+
+* Things left [2/6]
+- [X] Change error messages to 30 char
+- [ ] Rect and jagged multiplication and division allowed
+- [ ] declaration of jagged
+- [ ] move files from data structure to code
+- [X] error messages in red
+- [ ] ll and hash map (remove unused functions)

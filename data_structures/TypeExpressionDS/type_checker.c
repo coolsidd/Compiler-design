@@ -1,31 +1,3 @@
-/*
-jagged:
-    to check for typedef errors
-    rows = count on number of rows
-        for each row:
-            2d: 
-            checker(jagged2init, index)
-            jagged_2init: 3rd child(var: index/RowNumber) should be in bounds
-            7th child: size
-            no of j2list instances should be equal to size
-            j2list:
-                value_list:
-                    last_child shouldnot be value_list
-            number of jagged_2init instances should be equal to rows
-Conventions:
-    jagged2_list: stores LB-UBs
-    (UB-LB+1) * jagged2_init: initialisation of a row
-    j2_list: columns of jagged2_init(numbers separated by semicolons)
-
-checker(jagged2init, index)
-    3rd child should be equal to index
-    if not:
-        throw error
-
-    jaggedXinits X=2,3
-    jXlist
-*/
-
 #include "type_exp_table.h"
 #include "type_checker.h"
 #include "print.h"
@@ -88,7 +60,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
     }
 
     type_expression* tp;
-    
+
     switch (p->tok->lexeme.s)
     {
         case primitive_type:
@@ -124,7 +96,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
             return tp;
             break;
         }
-        
+
         case jagged_array:
         {
             // proceed only if type checks success
@@ -164,12 +136,12 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     char* operator = "EQUALS";
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
-    bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
+    bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared,
         "Var Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
                             "Var used before Declaration", p,
                             s1, s2, operator, lexeme1, lexeme2);
-    if(!flag) 
+    if(!flag)
         return false;
     switch(t1->variable_type){
         case(PRIMITIVE_TYPE):{
@@ -193,7 +165,7 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
             break;
         }
     }
-    
+
 }
 
 bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, DeclarationType* decl_type){
@@ -208,7 +180,16 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node->child, 1);
         Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node->child, 3);
         if(lower_bound->child->tok->lexeme.s != CONST || upper_bound->child->tok->lexeme.s != CONST){
-            *decl_type = DYNAMIC;
+            type_expression * type_lower = get_type_of_var(txp_table, lower_bound);
+            type_expression * type_upper = get_type_of_var(txp_table, upper_bound);
+            flag &= assert_debug(type_lower && type_upper,"RectArray undeclared bounds", range_list_node, "***", "***", "***", "***", "***");
+            if(flag){
+                assert_debug(type_lower->variable_type==PRIMITIVE_TYPE && type_lower->union_to_be_named.primitive_data == t_INTEGER && type_upper->variable_type==PRIMITIVE_TYPE && type_upper->union_to_be_named.primitive_data == t_INTEGER,"RectArray with non int bounds", range_list_node, str_type(type_lower), str_type(type_upper), "***", "***", "***");
+                *decl_type = DYNAMIC;
+            }else{
+                return flag;
+            }
+
         }
         type_expression* lower_type = get_type_of_var(txp_table, lower_bound);
         type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
@@ -383,7 +364,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child,2)->child);
         if (!assert_debug(txp!=NULL, "Var used before Declaration", p, "***", "***", "***", "***", "***"))
             return NULL;
-        
+
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         bool flag = do_bound_checking(txp_table, p->child, bounds);
         return get_integer_type();

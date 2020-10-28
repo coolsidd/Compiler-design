@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "type_exp_table.h"
 
 #define DEFAULT_TXP_TABLE_SIZE 60
@@ -11,7 +19,7 @@ type_exp_table* create_type_expression_table(){
 }
 
 /* If key not found: this returns NULL
-    So, while traversing parse tree we will raise error in this case. 
+    So, while traversing parse tree we will raise error in this case.
     To get, string representation of this type_expression(say txp), we can call
     get_string_representation(txp); */
 type_expression* get_type_expression(type_exp_table* txp_table, char* variable_name){
@@ -28,7 +36,7 @@ void add_to_symbol_table(hash_map* symbol_table, char* variable_name, type_expre
 }
 
 /*
-    On encountering a decl statement in parse tree, 
+    On encountering a decl statement in parse tree,
     var_type would be decided based on lexeme(category of token)
     decl_type would be decided based on var_type
     we would call construct_type_expression(*args) to get type_expression of variable.
