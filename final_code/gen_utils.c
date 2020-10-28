@@ -13,7 +13,8 @@ void assert(bool condition, char *error_string) {
 
 void printErrorsHeader()
 {
-    printf("|%5s|%10s|%10s|%10s|%10s|%20s|%10s|%5s|%40s|\n",
+    printf("\n%45s","|Error Statements Table|");
+    printf("\n|%5s|%10s|%10s|%10s|%10s|%20s|%10s|%5s|%40s|\n",
            "num", "stmt type", "operator", "lexeme 1", "type 1",
            "lexeme 2", "type 2", "depth", "error message");
 }
