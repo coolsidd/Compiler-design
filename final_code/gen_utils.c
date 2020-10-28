@@ -1,3 +1,14 @@
+#include <stdio.h>
+
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+#define RESET   "\033[0m"
 
 #include "gen_utils.h"
 #include "grammar_structs.h"
@@ -13,19 +24,19 @@ void assert(bool condition, char *error_string) {
 
 void printErrorsHeader()
 {
-    printf("\n%45s","|Type errors|\n\n");
-    printf("\n|%5s|%10s|%10s|%15s|%20s|%15s|%20s|%5s|\n|%19s--- %60s ----%19s|\n\n",
-           "line", "stmt type", "operator", "lexeme 1", "type 1",
-           "lexeme 2", "type 2", "depth", "", "Error message", "");
+    printf("\n%45s","|Error Statements Table|");
+    printf("\n|%5s|%10s|%10s|%10s|%10s|%20s|%10s|%5s|%40s|\n",
+           "num", "stmt type", "operator", "lexeme 1", "type 1",
+           "lexeme 2", "type 2", "depth", "error message");
 }
 
 void printErrorEntries(ErrorNode* err){
 
     if (err != NULL)
     {
-        printf("|%5d|%10s|%10s|%15s|%20s|%15s|%20s|%5d|\n|%19s--- %60s ----%19s|\n\n",
+        printf("|"KCYN"%5d"RESET"|%10s|%10s|%10s|"KRED"%10s"RESET"|%20s|"KRED"%10s"RESET"|%5d|"KRED"%40s"RESET"|\n",
                err->line_num, err->stmt_type, err->op, err->lex1, err->type1,
-               err->lex2, err->type2, err->depth, "", err->message, "");
+               err->lex2, err->type2, err->depth, err->message);
     }
 }
 
