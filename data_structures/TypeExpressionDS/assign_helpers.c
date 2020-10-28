@@ -25,6 +25,8 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
         char* t2 = str_type(txp_1);
         char* lexeme1 = "term";
         char* lexeme2 = "arithmeticexpr";
+        if (!(txp && txp_1))
+            return NULL;
         switch(getNodeFromIndex(p->child, 1)->tok->lexeme.s){
             case (OR):
             {
@@ -116,6 +118,8 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
         char *t2 = str_type(txp_1);
         char *lexeme1 = "fact";
         char *lexeme2 = "term";
+        if(!(txp && txp_1))
+            return NULL;
         switch (getNodeFromIndex(p->child, 1)->tok->lexeme.s)
         {
             case (AND):
@@ -247,6 +251,9 @@ type_expression* get_type_of_var_lhs(type_exp_table* txp_table, Parse_tree_node*
 
     if (p->last_child->tok->lexeme.s == SQBC)
     {
+        type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child, 2)->child);
+        if(!assert_debug(txp!=NULL, "Variable used before declaration", p, "***", "***", "***", "***", "***"))
+            return NULL;
         linked_list *bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
         if (bounds)
         {
