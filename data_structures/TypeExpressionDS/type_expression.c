@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "type_expression.h"
 #define MAX_BUFFER_SIZE 400
 
@@ -103,13 +111,14 @@ char* get_string_representation(type_expression* tp){
             return result;
             break;
         }
-        
+
         case(JAGGED_ARRAY):
         {
             char result_buffer[50];
             char *str = result_buffer;
             int j = 0;
             //3d : <type = jaggedArray, dimensions = 3, range_R1 = (4, 7), range_R2 = (3 [5, 3, 5], 2 [3, 5], 3 [5, 4, 3], 4 [2, 5, 4, 4]), basicElementType = integer> 
+            //3d : <type = jaggedArray, dimensions = 3, range_R1 = (4, 7), range_R2 = (3 [5, 3, 5], 2 [3, 5], 3 [5, 4, 3], 4 [2, 5, 4, 4]), basicElementType = integer>
             //2d : <type = jaggedArray, dimensions = 2, range_R1 = (3, 8), range_R2 = (3, 6, 2, 4, 1, 5), basicElementType = integer>
             int dimen = tp->union_to_be_named.jagged_array_data.dimensions;
             snprintf(result, MAX_BUFFER_SIZE, "<type = jaggedArray, dimensions = %d,",
@@ -192,7 +201,7 @@ union_to_be_named* populate_union(VariableType variable_type, Parse_tree_node* p
         switch(variable_type){
             case(PRIMITIVE_TYPE):
             {
-                u->primitive_data = *get_primitive_type(p);   
+                u->primitive_data = *get_primitive_type(p);
                 break;
             }
             case(RECT_ARRAY):

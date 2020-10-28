@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #ifndef JAGGED_ARRAY_TYPE_H
 #define JAGGED_ARRAY_TYPE_H
 
@@ -13,7 +21,7 @@ struct ____R2_DIMENSION____{
 typedef struct ____JAGGED_2D____ jagged_2d;
 
 struct ____JAGGED_2D____
-{   
+{
     int lower_bound;
     int upper_bound;
     r2_dimension row_sizes;

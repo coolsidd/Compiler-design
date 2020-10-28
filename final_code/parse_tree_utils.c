@@ -1,4 +1,11 @@
-//#include "traverse_parse.h"
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "parse_tree.h"
 
 void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
@@ -15,9 +22,28 @@ void printParseTree(Parse_tree_node *p, int d) {
         printf("|%20s|%20s|%20s|%20s|%5s|%5s|\n",
         "Symbol", "term / non-term", "Type", "Name", "num", "Depth");
     }
+    type_expression* txp = NULL;
+    Parse_tree_node *tempP = p;
+    while(tempP->parent){
+        switch(tempP->tok->lexeme.s){
+            case main_program:{
+                break;
+            }
+            case decl_stmt:{
+                txp = tempP->txp;
+                break;
+            }
+            case assign_stmt:{
+                txp = tempP->txp;
+                break;
+            }
+        }
+        tempP = tempP->parent;
+    }
+
     printLine(  p->tok->token_name,
                 p->tok->lexeme.is_terminal,
-                "***",
+                txp?get_string_representation(txp):"***",
                 toStringSymbol(p->tok->lexeme),
                 p->tok->line_no, p->depth);
     if(d!=p->depth){

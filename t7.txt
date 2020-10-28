@@ -7,9 +7,10 @@ program ( )
 	R1 [ 6 ]  : size 3 : values { 17 61 928 785 875 ; ; 32 465 123 }
 	R1 [ 7 ]  : size 4 : values { 210 71 ; 90 47 32 10 93 ; 332 453  12 634 ; ; }
     declare list of variables q21 q22 q23 :  jagged array [ 4 .. 7 ] [ ]  of integer ;
-	R1 [ 4 ]  : size 3 : values { 21 ; 54 221 43 ; 287 }
+	R1 [ 4 ]  : size 3 : values { 21 ; 54 221 43 ; }
 	R1 [ 5 ]  : size 2 : values { 12 ; 76 ; 29 ; 67 }
 	R1 [ 6 ]  : size 3 : values { 17 ; ; 32 }
 	R1 [ 7 ]  : size 4 : values { 210 ; 90 ; 332 ; ; ; ; }
+
 	q1 = q2 + q3 ;
 }

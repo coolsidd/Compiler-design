@@ -1,9 +1,18 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #ifndef TYPE_EXP_TABLE_H
 #define TYPE_EXP_TABLE_H
 
 #include <stdlib.h>
 #include "../../final_code/gen_utils.h"
 #include "type_expression.h"
+
 
 typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 
@@ -50,7 +59,7 @@ linked_list *get_type_of_index_list(type_exp_table *txp_table, Parse_tree_node *
 
 bool rect_decl_checks(type_exp_table* t, Parse_tree_node* p, DeclarationType* decl_type);
 
-bool jagged_decl_checks(Parse_tree_node* p);
+bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p);
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll);
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p);

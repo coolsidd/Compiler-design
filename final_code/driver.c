@@ -1,8 +1,15 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include <stdlib.h>
 #include "grammar.h"
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
-#include "parse_tree_utils.c"
 #include "../data_structures/TypeExpressionDS/print.h"
 #include "../data_structures/TypeExpressionDS/type_exp_table.h"
 
@@ -117,6 +124,7 @@ int main(int argc, char** argv){
                 traverse_and_populate(t, p);
                 printf("Populated Type expression table successfully\n");
                 print_type_exp_table(t);
+                printParseTree(p, 0);
                 break;
             }
             default:
