@@ -44,9 +44,11 @@ void populate_value_list(linked_list* ll, Parse_tree_node* p){
     // <value_list> -> <var> <value_list> | <var>
     int count = 1;
     Parse_tree_node* first_child = p->child; 
-    Parse_tree_node* last_child = getNodeFromIndex(first_child, 1);
-    while(last_child){
-        last_child = last_child->child->next;
+    //Parse_tree_node* last_child = p->last_child;
+    int num_child = p->num_children;
+    while(num_child == 2){
+        p = p->child->next;
+        num_child = p->num_children;
         count++;
     }
     append_size(ll, count);
@@ -56,22 +58,22 @@ void populate_j3list(linked_list* ll, Parse_tree_node* p){
 
     // <j3list> -> <value_list> SEMICOLON <j3list> | <value_list>
     Parse_tree_node *first_child = p->child;
+    // first_child = value_list
     populate_value_list(ll, first_child);
 
     if (first_child->next)
     {
         Parse_tree_node *last_child = getNodeFromIndex(first_child, 2);
-        if (last_child && last_child->tok->lexeme.s == j3list)
-        {
-            populate_j3list(ll, last_child);
-        }
+        populate_j3list(ll, last_child);
     }
-
 }
 
 void populate_row_sizes_3d(linked_list *ll, Parse_tree_node *p)
 {
-    Parse_tree_node *row_node = getNodeFromIndex(p, 10);
+    // p = jagged3init
+    int size = atoi(getNodeFromIndex(p->child, 6)->child->tok->token_name);
+    Parse_tree_node *row_node = getNodeFromIndex(p->child, 10);
+    // row_node = j3list
     r2_dimension* r = create_r2_dimension();
     populate_j3list(r->sizes, row_node);
     ll_append(ll, r);
@@ -94,14 +96,17 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
             - For 2d, value_list cannot have last child as value_list
     */
     jagged_array_type* jat = (jagged_array_type*)calloc(1, sizeof(jagged_array_type));
-    
+    // p = jagged_array
     Parse_tree_node* third_child = getNodeFromIndex(p->child,2);
+    // third_child = jagged2list or jagged3list
     Parse_tree_node *lower_bound = third_child->child->child->next;
+    // lower_bound = var
     Parse_tree_node *upper_bound = getNodeFromIndex(lower_bound,2);
+    // upper_bound = var
     Parse_tree_node* last_child = getNodeFromIndex(third_child,4);
-
-    int l_bound = atoi(lower_bound->tok->token_name);
-    int u_bound = atoi(upper_bound->tok->token_name);
+    // last_child = jagged2init / jagged3init
+    int l_bound = atoi(lower_bound->child->tok->token_name);
+    int u_bound = atoi(upper_bound->child->tok->token_name);
 
     if(third_child->tok->lexeme.s == jagged2list){
         jat->dimensions = 2;
