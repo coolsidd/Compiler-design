@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "assign_helpers.h"
 
 // <fact> -> <var> | LPAREN <arithmeticexpr> RPAREN
@@ -34,7 +42,7 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 flag &= assert_debug(txp_1->variable_type == PRIMITIVE_TYPE && txp->variable_type == PRIMITIVE_TYPE,
                 "OR with Non-Boolean Operands", p, t1, t2, "OR", lexeme1, lexeme2);
                 if(flag){
-                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == t_BOOLEAN && 
+                    flag &= assert_debug(txp_1->union_to_be_named.primitive_data == t_BOOLEAN &&
                     txp->union_to_be_named.primitive_data == t_BOOLEAN,"OR with Non-Boolean Operands",
                     p, t1, t2, "OR", lexeme1, lexeme2);
                 }
@@ -42,12 +50,12 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 break;
             }
             default:
-            { 
+            {
                 /*
                     done: Both should be of same variable type
                     Array_Types-> check dimensions
                     done: Boolean-> type-error
-                    done: primitive-> integer, integer or real,real 
+                    done: primitive-> integer, integer or real,real
                 */
                 char *operator= toStringSymbol(getNodeFromIndex(p->child, 1)->tok->lexeme);
                 bool flag = true;
@@ -96,7 +104,7 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 }
             }
         }
-        
+
     }
     else{
         return NULL;

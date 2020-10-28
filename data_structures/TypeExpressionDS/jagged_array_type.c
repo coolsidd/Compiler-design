@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "jagged_array_type.h"
 
 jagged_2d* create_jagged_2d(){
@@ -43,7 +51,7 @@ void populate_row_sizes_2d(linked_list* ll, Parse_tree_node* p){
 void populate_value_list(linked_list* ll, Parse_tree_node* p){
     // <value_list> -> <var> <value_list> | <var>
     int count = 1;
-    Parse_tree_node* first_child = p->child; 
+    Parse_tree_node* first_child = p->child;
     //Parse_tree_node* last_child = p->last_child;
     int num_child = p->num_children;
     while(num_child == 2){
@@ -91,7 +99,7 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
             there are no type errors(listed below) in the jagged_array
             - Index out of bounds for jaggedXinit. X=2,3
             - No of instances of jaggedXinit should be = UB-LB+1
-            - For each row, size should be equal to be number of semicolon 
+            - For each row, size should be equal to be number of semicolon
                 separated values.
             - For 2d, value_list cannot have last child as value_list
     */
@@ -115,7 +123,7 @@ jagged_array_type *create_jagged_array_type(Parse_tree_node *p){
         jat->array_type.j2d.upper_bound = u_bound;
         populate_row_sizes_2d(jat->array_type.j2d.row_sizes.sizes, last_child);
     }
-    
+
     else{
         jat->dimensions = 3;
         jat->array_type.j3d = *create_jagged_3d();

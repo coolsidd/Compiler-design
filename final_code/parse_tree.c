@@ -1,3 +1,11 @@
+/*
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70636P Aditya Tulsyan
+*/
+
 #include "parse_tree.h"
 #include <stdio.h>
 #define MAXRULES 100
@@ -45,7 +53,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
                 if(check_rule->s.is_terminal && temp_tstr->lexeme.is_terminal){
                     if(check_rule->s.s == temp_tstr->lexeme.s){
                         //printf("Found %s at line %d next\n", toStringSymbol(check_rule->s), temp_tstr->line_no);
-                        Parse_tree_node *tempChildNode = new_parse_tree(temp_tstr);                        
+                        Parse_tree_node *tempChildNode = new_parse_tree(temp_tstr);
                         tempChildNode->depth = depth+1;
                         add_parsed_child(new_node, tempChildNode);
                         temp_tstr = temp_tstr->next;
