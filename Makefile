@@ -5,8 +5,8 @@
 # 2017B4A70636P Aditya Tulsyan
 
 
-all:  type_expression_checker.o machine_grammar
-	gcc -o driver.exe *.o
+all:  all_dependencies machine_grammar
+	gcc -g -o driver.exe *.o
 
 machine_grammar:
 	python3 generate_grammar.py -o grammar/machine_grammar.txt --grammar-struct-out final_code/grammar_structs --json_in grammar/symbols.json grammar/grammar.txt
@@ -32,8 +32,8 @@ parse_tree.o: final_code/parse_tree.c
 parse_tree_traverse: parse_tree.o tokenizer_structs.o grammar_structs.o read_grammar.o tokenizer.o machine_grammar
 		gcc -o parse_tree.exe final_code/traverse_parse.c parse_tree.o read_grammar.o tokenizer_structs.o grammar_structs.o
 
-type_expression_checker.o:
-	gcc -c ./data_structures/*.c ./data_structures/TypeExpressionDS/*.c final_code/*.c
+all_dependencies:
+	gcc -g -c ./data_structures/*.c ./data_structures/TypeExpressionDS/*.c final_code/*.c
 
 .PHONY: clean
 clean:

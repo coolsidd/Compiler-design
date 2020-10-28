@@ -259,7 +259,16 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node->child, 1);
         Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node->child, 3);
         if(lower_bound->child->tok->lexeme.s != CONST || upper_bound->child->tok->lexeme.s != CONST){
-            *decl_type = DYNAMIC;
+            type_expression * type_lower = get_type_of_var(txp_table, lower_bound);
+            type_expression * type_upper = get_type_of_var(txp_table, upper_bound);
+            flag &= assert_debug(type_lower && type_upper,"RectArray undeclared bounds", range_list_node, "***", "***", "***", "***", "***");
+            if(flag){
+                assert_debug(type_lower && type_lower->variable_type == t_INTEGER && type_upper && type_upper->variable_type == t_INTEGER,"RectArray with non int bounds", range_list_node, "***", "***", "***", "***", "***");
+                *decl_type = DYNAMIC;
+            }else{
+                return flag;
+            }
+
         }
         type_expression* lower_type = get_type_of_var(txp_table, lower_bound);
         type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
