@@ -98,6 +98,7 @@ Parse_tree_node* new_parse_tree(Token *tok){
     new_tree->next = NULL;
     new_tree->tok = tok;
     new_tree->parent = NULL;
+    new_tree->txp = NULL;
     return new_tree;
 }
 void free_parse_tree(Parse_tree_node *root){

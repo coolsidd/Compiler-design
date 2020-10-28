@@ -5,6 +5,7 @@
 #include "../../final_code/gen_utils.h"
 #include "type_expression.h"
 
+
 typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 
 typedef enum {NOT_APPLICABLE, STATIC, DYNAMIC} DeclarationType;
@@ -50,7 +51,7 @@ linked_list *get_type_of_index_list(type_exp_table *txp_table, Parse_tree_node *
 
 bool rect_decl_checks(type_exp_table* t, Parse_tree_node* p, DeclarationType* decl_type);
 
-bool jagged_decl_checks(Parse_tree_node* p);
+bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p);
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll);
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p);

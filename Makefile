@@ -1,5 +1,5 @@
-all: read_grammar.o tokenizer.o tokenizer_structs.o grammar_structs.o tokenizer_structs.o parse_tree.o machine_grammar type_expression_checker.o
-	gcc -o driver.exe final_code/driver.c *.o
+all:  type_expression_checker.o machine_grammar
+	gcc -o driver.exe *.o
 
 machine_grammar:
 	python3 generate_grammar.py -o grammar/machine_grammar.txt --grammar-struct-out final_code/grammar_structs --json_in grammar/symbols.json grammar/grammar.txt
@@ -25,11 +25,11 @@ parse_tree.o: final_code/parse_tree.c
 parse_tree_traverse: parse_tree.o tokenizer_structs.o grammar_structs.o read_grammar.o tokenizer.o machine_grammar
 		gcc -o parse_tree.exe final_code/traverse_parse.c parse_tree.o read_grammar.o tokenizer_structs.o grammar_structs.o
 
-type_expression_checker.o: parse_tree.o grammar_structs.o
-	gcc -c ./data_structures/*.c ./data_structures/TypeExpressionDS/*.c final_code/gen_utils.c
+type_expression_checker.o:
+	gcc -c ./data_structures/*.c ./data_structures/TypeExpressionDS/*.c final_code/*.c
 
 .PHONY: clean
 clean:
-	rm grammar/machine_grammar.txt
 	rm *.o
 	rm *.exe
+	rm grammar/machine_grammar.txt

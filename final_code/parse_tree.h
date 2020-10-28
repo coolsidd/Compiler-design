@@ -5,12 +5,16 @@
 #include "grammar.h"
 #include "tokenizer_structs.h"
 
+typedef struct ____TYPE_EXPRESSION____ type_expression;
+char * get_string_representation(type_expression * txp);
+
 typedef struct parse_tree_node {
     int num_children;
     struct parse_tree_node *child;
     struct parse_tree_node *last_child;
     struct parse_tree_node *next;
     struct parse_tree_node *parent;
+    type_expression* txp;
     Token *tok;
     int depth;
 } Parse_tree_node;
@@ -21,5 +25,8 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
 Parse_tree_node *new_parse_tree();
 void free_parse_tree(Parse_tree_node *root);
 void add_parsed_child(Parse_tree_node *root, Parse_tree_node *node);
+void printLine(char* symb, bool t, char* typ, char* name, int line, int depth);
+void printParseTree(Parse_tree_node *p, int d);
+void traverseParseTree(Parse_tree_node *p, int height);
 
 #endif

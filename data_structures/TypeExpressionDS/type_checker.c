@@ -52,6 +52,7 @@ checker(jagged2init, index)
 */
 
 #include "type_exp_table.h"
+#include "type_checker.h"
 #include "print.h"
 #include "type_expression.h"
 #include "assign_helpers.h"
@@ -67,13 +68,15 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     Parse_tree_node* decl_stmts_node = p;
     printErrorsHeader();
     do{
-        type_check_decl_stmt(txp_table, decl_stmts_node->child);
+        type_expression * temp =type_check_decl_stmt(txp_table, decl_stmts_node->child);
+        decl_stmts_node->child->txp = temp;
         // print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
 
     do{
-        type_check_assign_stmt(txp_table, assign_stmts_node->child);
+        type_expression * temp = type_check_assign_stmt(txp_table, assign_stmts_node->child);
+        assign_stmts_node->child->txp = temp;
         assign_stmts_node = assign_stmts_node->last_child;
     }while(assign_stmts_node->tok->lexeme.s == assign_stmts);
 }
@@ -159,7 +162,7 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
             // proceed only if type checks success
             Parse_tree_node *pt = (Parse_tree_node *)calloc(1, sizeof(Parse_tree_node));
             pt = p;
-            bool flag = jagged_decl_checks(pt);
+            bool flag = jagged_decl_checks(txp_table,  pt);
             if (flag)
             {
                 variable_type = JAGGED_ARRAY;
@@ -259,7 +262,7 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
     return flag;
 }
 
-bool jagged_decl_checks(Parse_tree_node* p){
+bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     bool flag = true;
     /*
         - Index out of bounds for jaggedXinit. X=2,3
@@ -268,26 +271,67 @@ bool jagged_decl_checks(Parse_tree_node* p){
             separated values.
         - For 2d, value_list cannot have last child as value_list
     */
+
     p = p->child;
+    Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
+    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
     Parse_tree_node* dimen = getNodeFromIndex(p, 2);
     Parse_tree_node* bounds = dimen->child->child;
     Parse_tree_node* lower_bound = getNodeFromIndex(bounds, 1);
     Parse_tree_node* upper_bound = getNodeFromIndex(bounds, 3);
-    flag = assert_debug(lower_bound->tok->lexeme.s == INTEGER ||
-                        lower_bound->tok->lexeme.s == CONST, 
-                        "JaggedArray Lower Bound has to be Integer", p, "***", "***", "***", "***", "***");
-    flag = assert_debug(upper_bound->tok->lexeme.s == INTEGER, "JaggedArray Upper Bound has to be Integer",p, "***", "***", "***", "***", "***");
-    int n_rows = atoi(upper_bound->tok->token_name)-atoi(lower_bound->tok->token_name);
-    if(dimen->tok->lexeme.s == jagged2list){
+    type_expression* lower_type = get_type_of_var(txp_table, lower_bound);
+    type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
 
+    if (lower_type && upper_type) {
+        flag = assert_debug(lower_bound->tok->lexeme.s == CONST,
+                            "JgdArr Lower Bound variable", p, "***",
+                            "***", "***", "***", "***");
+        flag = assert_debug(upper_bound->tok->lexeme.s == CONST,
+                            "JgdArr Upper Bound variable", p, "***",
+                            "***", "***", "***", "***");
+        int upper_int = atoi(upper_bound->tok->token_name);
+        int lower_int = atoi(lower_bound->tok->token_name);
+        int n_rows = upper_int - lower_int;
+        flag = assert_debug(n_rows > 0, "JaggedArray bounds <=0", p, "***", "***",
+                            "***", "***", "***");
+        if(!flag)
+            return false;
+        for(int i = lower_int; i<=upper_int; i++){
+            // TODO Call function
+            flag &= jagged_init_checker(txp_table, p->last_child, i);
+
+        }
+        return flag;
     }
     else{
-
+        return false;
     }
 
+}
+
+bool jagged_init_checker(type_exp_table * txp_table, Parse_tree_node* p, int idx){
+    char *lex = toStringSymbol(p->tok->lexeme);
+    Parse_tree_node *R1Idx = getNodeFromIndex(p, 2)->child;
+    bool flag = assert_debug(R1Idx->child->tok->lexeme.s == CONST, "R1[variable] not allowed", p, "***", "***", "***", lex, "***");
+    if(flag){
+        int R1Idx_int = atoi(R1Idx->tok->token_name);
+        flag &= assert_debug(R1Idx_int == idx, "R1[idx] not ascending", p, "***", "***", "***", lex, "***");
+        jagged_list_checker(txp_table, p->last_child);
+    }
     return flag;
 }
 
+bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p){
+    //
+    if(p->tok->lexeme.s == j2list){
+
+    }
+    if(p->tok->lexeme.s == j3list){
+
+    }
+    bool flag = true;
+    return flag;
+}
 
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
     // printf("At GET_VAR: %s", toStringSymbol(p->tok->lexeme));
