@@ -204,9 +204,9 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     char* lexeme2 = "expr";
     // printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
     bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
-        "Variable used before Declaration",p, s1, s2, operator, lexeme1, lexeme2);
+        "Var Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
-                            "Variable used before Declaration", p,
+                            "Var used before Declaration", p,
                             s1, s2, operator, lexeme1, lexeme2);
     if(!flag) 
         return false;
@@ -241,7 +241,7 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
     p = p->child;
     Parse_tree_node* range_list_node = getNodeFromIndex(p,1);
     Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
-    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
+    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArray of Non-Int Type", p, "***", "***", "***", "***", "***");
     if(!flag) return flag;
     do{
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node->child, 1);
@@ -251,8 +251,8 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
         }
         type_expression* lower_type = get_type_of_var(txp_table, lower_bound);
         type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
-        flag &= assert_debug(lower_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
-        flag &= assert_debug(upper_type->variable_type==PRIMITIVE_TYPE, "Rect Array decl indices cannot be arrays", p, "***", "***", "***", "***", "***");
+        flag &= assert_debug(lower_type->variable_type == PRIMITIVE_TYPE, "RectArray index of array type", p, "***", "***", "***", "***", "***");
+        flag &= assert_debug(upper_type->variable_type == PRIMITIVE_TYPE, "RectArray index of array type", p, "***", "***", "***", "***", "***");
         range_list_node = range_list_node->last_child;
     }while(range_list_node->tok->lexeme.s==range_list);
     return flag;
@@ -273,9 +273,9 @@ bool jagged_decl_checks(Parse_tree_node* p){
     Parse_tree_node* lower_bound = getNodeFromIndex(bounds, 1);
     Parse_tree_node* upper_bound = getNodeFromIndex(bounds, 3);
     flag = assert_debug(lower_bound->tok->lexeme.s == INTEGER ||
-                        lower_bound->tok->lexeme.s == CONST, 
-                        "JaggedArray Lower Bound has to be Integer", p, "***", "***", "***", "***", "***");
-    flag = assert_debug(upper_bound->tok->lexeme.s == INTEGER, "JaggedArray Upper Bound has to be Integer",p, "***", "***", "***", "***", "***");
+                            lower_bound->tok->lexeme.s == CONST,
+                        "JgdArr Lower Bound Not Int", p, "***", "***", "***", "***", "***");
+    flag = assert_debug(upper_bound->tok->lexeme.s == INTEGER, "JgdArr Upper Bound Not Int", p, "***", "***", "***", "***", "***");
     int n_rows = atoi(upper_bound->tok->token_name)-atoi(lower_bound->tok->token_name);
     if(dimen->tok->lexeme.s == jagged2list){
 
@@ -299,7 +299,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
     }
     else if(p->last_child->tok->lexeme.s == SQBC){
         type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child,2)->child);
-        if (!assert_debug(txp!=NULL, "Variable used before declaration", p, "***", "***", "***", "***", "***"))
+        if (!assert_debug(txp!=NULL, "Var used before Declaration", p, "***", "***", "***", "***", "***"))
             return NULL;
         
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
@@ -313,7 +313,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
 
     else if(p->last_child->tok->lexeme.s == ID){
         txp = get_type_expression(txp_table, p->last_child->tok->token_name);
-        bool flag = assert_debug(txp!=NULL, "Variable used before declaration",p, "***", "***", "***", "***", "***");
+        bool flag = assert_debug(txp!=NULL, "Var used before Declaration",p, "***", "***", "***", "***", "***");
         // print_type_expression(txp);
         return txp;
     }
@@ -350,7 +350,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
         }
     }
     else{
-        bool flag = assert_debug(false, "Type of Index should be Integer or Constant.",p, "***", "***", "***", "***", "***");
+        bool flag = assert_debug(false, "Invalid Indexing",p, "***", "***", "***", "***", "***");
         return NULL;
     }
 }
@@ -370,7 +370,7 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
             linked_list* rect_bounds = txp->union_to_be_named.rect_array_data.array_ranges;
             int n_nodes = ll->num_nodes;
             bool flag = true;
-            assert_debug(n_nodes==rect_bounds->num_nodes, "Dimension Number Mismatch", p, "***", "***", "***", "***", "***");
+            assert_debug(n_nodes==rect_bounds->num_nodes, "Dimensions Mismatch", p, "***", "***", "***", "***", "***");
             ll_node *temp1 = ll->head;
             for(ll_node *temp = rect_bounds->head; temp && temp1; temp = temp->next)
             {
@@ -388,7 +388,7 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
             switch(txp->union_to_be_named.jagged_array_data.dimensions){
                 case 2:{
                     jagged_2d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j2d;
-                    flag &= assert_debug(ll->num_nodes==2, "Dimension Number Mismatch",p, "***", "***", "***", "***", "***");
+                    flag &= assert_debug(ll->num_nodes==2, "Dimensions Mismatch",p, "***", "***", "***", "***", "***");
                     int first = *((int*)ll->head->data);
                     flag &= assert_debug(jagged_bounds.lower_bound<= first && jagged_bounds.upper_bound>=first
                                  , "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
@@ -400,14 +400,14 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
                 case 3:{
                     // TODO Crosscheck
                     jagged_3d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j3d;
-                    flag &= assert_debug(ll->num_nodes==3, "Dimension Number Mismatch",p, "***", "***", "***", "***", "***");
+                    flag &= assert_debug(ll->num_nodes==3, "Dimensions Mismatch",p, "***", "***", "***", "***", "***");
                     if(flag){
                         int first = *((int *)ll->head->data);
                         flag &= assert_debug(jagged_bounds.lower_bound <= first && jagged_bounds.upper_bound>= first, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
                         int second = *((int *)ll->head->next->data);
                         int third = *((int *)ll->head->next->next->data);
                         linked_list * ll_temp = jagged_bounds.row_sizes;
-                        flag &= assert_debug(second <= ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->num_nodes, "IndexOutOfBounds",p, "***", "***", "***", "***", "***");
+                        flag &= assert_debug(second <= ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->num_nodes, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
                         linked_list * third_dim = ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound));
                         flag &= assert_debug(*((int*)ll_get(third_dim,second))<=third, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
                         return flag;
