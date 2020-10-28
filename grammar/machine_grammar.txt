@@ -1,0 +1,59 @@
+main_program program ( ) { stmts }
+stmts decl_stmts assign_stmts
+decl_stmts decl_stmt decl_stmts
+decl_stmts decl_stmt
+assign_stmts assign_stmt assign_stmts
+assign_stmts assign_stmt
+decl_stmt decl_non_jagged
+decl_stmt decl_jagged
+decl_non_jagged declare list_of_identifiers : declaration_type
+decl_jagged declare list_of_identifiers : jagged_array
+list_of_identifiers list of variables id_list
+list_of_identifiers ID
+id_list ID id_list
+id_list ID ID
+declaration_type primitive_type ;
+declaration_type rect_array ;
+primitive_type integer
+primitive_type real
+primitive_type boolean
+rect_array array range_list of primitive_type
+range_list [ var .. var ] range_list
+range_list [ var .. var ]
+jagged_array jagged array jagged2list of primitive_type ; jagged2init
+jagged_array jagged array jagged3list of primitive_type ; jagged3init
+jagged2list range_list [ ]
+jagged3list range_list [ ] [ ]
+jagged2init R1 [ var ] : size var : values { j2list } jagged2init
+jagged2init R1 [ var ] : size var : values { j2list }
+j2list value_list ; j2list
+j2list value_list
+j2list ; j2list
+j2list ;
+jagged3init R1 [ var ] : size var : values { j3list } jagged3init
+jagged3init R1 [ var ] : size var : values { j3list }
+j3list value_list ; j3list
+j3list value_list
+j3list ; j2list
+j3list ;
+value_list var value_list
+value_list var
+index_list var index_list
+index_list var
+var ID [ index_list ]
+var CONST
+var ID
+assign_stmt var_lhs = expr
+var_lhs ID [ index_list ]
+var_lhs ID
+expr arithmeticexpr ;
+arithmeticexpr term + arithmeticexpr
+arithmeticexpr term - arithmeticexpr
+arithmeticexpr term ||| arithmeticexpr
+arithmeticexpr term
+term fact * term
+term fact / term
+term fact &&& term
+term fact
+fact var
+fact ( arithmeticexpr )
