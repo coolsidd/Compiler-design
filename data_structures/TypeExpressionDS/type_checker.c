@@ -263,7 +263,7 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
             type_expression * type_upper = get_type_of_var(txp_table, upper_bound);
             flag &= assert_debug(type_lower && type_upper,"RectArray undeclared bounds", range_list_node, "***", "***", "***", "***", "***");
             if(flag){
-                assert_debug(type_lower && type_lower->variable_type == t_INTEGER && type_upper && type_upper->variable_type == t_INTEGER,"RectArray with non int bounds", range_list_node, "***", "***", "***", "***", "***");
+                assert_debug(type_lower->variable_type==PRIMITIVE_TYPE && type_lower->union_to_be_named.primitive_data == t_INTEGER && type_upper->variable_type==PRIMITIVE_TYPE && type_upper->union_to_be_named.primitive_data == t_INTEGER,"RectArray with non int bounds", range_list_node, str_type(type_lower), str_type(type_upper), "***", "***", "***");
                 *decl_type = DYNAMIC;
             }else{
                 return flag;

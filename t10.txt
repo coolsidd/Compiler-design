@@ -7,7 +7,7 @@ program ( )
 	declare list of variables c1 c2 : real ;
 	declare list of variables m1 m2 m3 : real ;
     declare list of variables u v : array [ 2 .. 5 ] [ b1 .. b2 ] of  integer ;
-    declare list of variables u2 v2 : array [ c1 .. c2 ] [ 3 .. b2 ] [ 5 .. 3 ] [ 10 .. 13 ] of  integer ;
+    declare list of variables u2 v2 : array [ a1 .. a2 ] [ 3 .. 10 ] [ 5 .. 3 ] [ 10 .. 13 ] of  integer ;
 	new = d * e2 + w - 76875 ;
 	v1 = a1 - a2 * d ;
 	b1 = b2 &&& b3 ||| b1 ;
