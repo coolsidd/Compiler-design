@@ -301,6 +301,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child,2)->child);
         if (!assert_debug(txp!=NULL, "Variable used before declaration", p, "***", "***", "***", "***", "***"))
             return NULL;
+        
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         if(bounds)
         {
