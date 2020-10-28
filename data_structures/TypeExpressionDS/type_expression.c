@@ -32,7 +32,7 @@ char *get_str_primitive_type(t_primitive_type primitive_data)
 {
     switch(primitive_data){
         case(t_BOOLEAN):
-            return "Boolean";
+            return "bool";
             break;
         case(t_INTEGER):
             return "integer";
@@ -61,10 +61,10 @@ char *str_type(type_expression *txp)
         return get_str_primitive_type(txp->union_to_be_named.primitive_data);
         break;
     case (RECT_ARRAY):
-        return "Rectangular Array";
+        return "rect arr";
         break;
     case (JAGGED_ARRAY):
-        return "Jagged Array";
+        return "jagged arr";
         break;
     }
 }

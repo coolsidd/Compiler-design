@@ -65,12 +65,13 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     Parse_tree_node *assign_stmts_node = p->last_child;
     p = p->child;
     Parse_tree_node* decl_stmts_node = p;
+    printErrorsHeader();
     do{
         type_check_decl_stmt(txp_table, decl_stmts_node->child);
         // print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
-    printErrorsHeader();
+
     do{
         type_check_assign_stmt(txp_table, assign_stmts_node->child);
         assign_stmts_node = assign_stmts_node->last_child;
@@ -303,10 +304,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
             return NULL;
         
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
-        if(bounds)
-        {
-            bool flag = do_bound_checking(txp_table, p->child, bounds);
-        }
+        bool flag = do_bound_checking(txp_table, p->child, bounds);
         // print_type_expression(get_integer_type());
         return get_integer_type();
     }
@@ -317,7 +315,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         // print_type_expression(txp);
         return txp;
     }
-
+    return NULL;
 }
 
 linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* p){
@@ -325,34 +323,31 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
     linked_list* ll = create_linked_list();
     p = p->child;
     type_expression* txp = get_type_of_var(txp_table ,p);
-    if(!txp) return NULL;
-    if(txp->union_to_be_named.primitive_data == t_INTEGER){
+    if(txp){
+        bool flag = assert_debug(txp->union_to_be_named.primitive_data==t_INTEGER, "Type of Index should be Integer or Constant.",p, "***", "***", "***", "***", "***");
         if(p->child->tok->lexeme.s == CONST){
             int* temp = (int*)calloc(1, sizeof(int));
             *temp = atoi(p->child->tok->token_name);
             ll_append(ll, temp);
-            return ll;
         }
         else if(p->last_child->tok->lexeme.s == SQBC){
-            linked_list* temp = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
-            if(!temp){
-                return NULL;
-            }
-            else{
-                // bool flag = do_bound_checking(txp_table, p->child, temp);
-                ll->tail->next = temp->head;
-                ll->num_nodes += temp->num_nodes;
-                return ll;
-            }
+            ll_append(ll, NULL);
         }
         else if(p->child->tok->lexeme.s == ID){
-            return NULL; // WHY?
+            ll_append(ll, NULL); // Cannot do bound checking if variable index
         }
     }
     else{
-        bool flag = assert_debug(false, "Type of Index should be Integer or Constant.",p, "***", "***", "***", "***", "***");
-        return NULL;
+        ll_append(ll, NULL);
     }
+    if(p->next && p->next->tok->lexeme.s == index_list){
+        linked_list* temp = get_type_of_index_list(txp_table, p->next);
+        ll->tail->next = temp->head;
+        ll->tail = temp->tail;
+        ll->num_nodes+= temp->num_nodes;
+    }
+
+    return ll;
 }
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll){
@@ -370,10 +365,15 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
             linked_list* rect_bounds = txp->union_to_be_named.rect_array_data.array_ranges;
             int n_nodes = ll->num_nodes;
             bool flag = true;
-            assert_debug(n_nodes==rect_bounds->num_nodes, "Dimension Number Mismatch", p, "***", "***", "***", "***", "***");
+            char *err_str = (char *)malloc(strlen("Dimension Mismatch %d vs %d")+10);
+            sprintf(err_str,"Dimension Mismatch %d vs %d", n_nodes, rect_bounds->num_nodes);
+            assert_debug(n_nodes==rect_bounds->num_nodes, err_str , p, "***", "***", "***", "***", "***");
             ll_node *temp1 = ll->head;
             for(ll_node *temp = rect_bounds->head; temp && temp1; temp = temp->next)
             {
+                if(!temp1->data){
+                    continue;
+                }
                 int* b = (int*)temp1->data;
                 rect_array_range* r = (rect_array_range*)temp->data;
                 flag &= assert_debug(*b >= r->lower_bound && *b <= r->upper_bound, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
@@ -389,25 +389,41 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
                 case 2:{
                     jagged_2d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j2d;
                     flag &= assert_debug(ll->num_nodes==2, "Dimension Number Mismatch",p, "***", "***", "***", "***", "***");
+                    if(!ll->head->data || !flag){
+                        return flag;
+                    }
                     int first = *((int*)ll->head->data);
                     flag &= assert_debug(jagged_bounds.lower_bound<= first && jagged_bounds.upper_bound>=first
-                                 , "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
+                                         , "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
+
+                    if(!ll->head->next->data || !flag){
+                        return flag;
+                    }
                     int second = *((int*)ll->head->next->data);
                     flag &= assert_debug(second<=*((int*)ll_get(jagged_bounds.row_sizes.sizes, first - jagged_bounds.lower_bound)), "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
                     return flag;
                     break;
                 }
                 case 3:{
-                    // TODO Crosscheck
                     jagged_3d jagged_bounds = txp->union_to_be_named.jagged_array_data.array_type.j3d;
                     flag &= assert_debug(ll->num_nodes==3, "Dimension Number Mismatch",p, "***", "***", "***", "***", "***");
                     if(flag){
+                        if(!ll->head->data || !flag){
+                            return flag;
+                        }
                         int first = *((int *)ll->head->data);
                         flag &= assert_debug(jagged_bounds.lower_bound <= first && jagged_bounds.upper_bound>= first, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
+
+                        if(!ll->head->next->data || !flag){
+                            return flag;
+                        }
                         int second = *((int *)ll->head->next->data);
-                        int third = *((int *)ll->head->next->next->data);
                         linked_list * ll_temp = jagged_bounds.row_sizes;
                         flag &= assert_debug(second <= ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->num_nodes, "IndexOutOfBounds",p, "***", "***", "***", "***", "***");
+                        if(!ll->head->next->next->data || !flag){
+                            return flag;
+                        }
+                        int third = *((int *)ll->head->next->next->data);
                         linked_list * third_dim = ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound));
                         flag &= assert_debug(*((int*)ll_get(third_dim,second))<=third, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
                         return flag;

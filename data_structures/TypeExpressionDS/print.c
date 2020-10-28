@@ -33,12 +33,12 @@ char *get_str_variable_type(VariableType variable_type)
     }
     case (RECT_ARRAY):
     {
-        return "Rectangular Array";
+        return "Rectangular Arr";
         break;
     }
     case (JAGGED_ARRAY):
     {
-        return "Jagged Array";
+        return "Jagged Arr";
         break;
     }
     }
@@ -49,8 +49,8 @@ void print_type_exp_table(type_exp_table *t)
     printf("\n%45s","|Type Expression Table|\n\n");
     printf("\n%-15s| %-17s| %-15s| %-40s|\n",
            "Variable Name", "Variable Type", "Static/Dynamic", "Type Expression");
-    //printf("%-15s| %-17s| %-15s| %-40s\n",
-    //       "=============", "=============", "==============", "===============");
+    printf("%-15s| %-17s| %-15s| %-40s\n",
+          "=============", "=============", "==============", "===============");
 
     linked_list *ll = t->root;
     hash_map *hm = t->symbol_table;
