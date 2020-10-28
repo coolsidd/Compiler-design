@@ -46,6 +46,9 @@ checker(jagged2init, index)
     if not:
         throw error
 
+    jaggedXinits X=2,3
+    jXlist
+
 */
 
 #include "type_exp_table.h"
@@ -74,7 +77,7 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     }while(assign_stmts_node->tok->lexeme.s == assign_stmts);
 }
 
-void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
+type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
     // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     char* variable_name;
     VariableType variable_type;
@@ -108,6 +111,8 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
     if(p->tok->lexeme.s==declaration_type){
         p = p->child;
     }
+
+    type_expression* tp;
     
     switch (p->tok->lexeme.s)
     {
@@ -120,9 +125,10 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
             {
                 variable_name = (char*)ll_get(variables, i);
                 u = *populate_union(variable_type, p);
-                type_expression *tp = construct_type_expression(variable_type, u);
+                tp = construct_type_expression(variable_type, u);
                 add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
             }
+            return tp;
             break;
         }
         case rect_array:
@@ -138,11 +144,12 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
                 {
                     variable_name = (char *)ll_get(variables, i);
                     u = *populate_union(variable_type, p);
-                    type_expression *tp = construct_type_expression(variable_type, u);
+                    tp = construct_type_expression(variable_type, u);
                     add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
                 }
-                break;
             }
+            return tp;
+            break;
         }
         
         case jagged_array:
@@ -160,22 +167,25 @@ void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
                 {
                     variable_name = (char *)ll_get(variables, i);
                     u = *populate_union(variable_type, p);
-                    type_expression *tp = construct_type_expression(variable_type, u);
+                    tp = construct_type_expression(variable_type, u);
                     add_entry_to_table(txp_table, variable_name, variable_type, decl_type, tp);
                 }
-                break;
             }
+            return tp;
+            break;
         }
     }
 }
 
-void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
+type_expression* type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
     // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
     // print_type_expression(lhs);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
     // print_type_expression(rhs);
-    bool flag = are_types_equal(lhs, rhs, txp_table, p);
+    if(rhs)
+        are_types_equal(lhs, rhs, txp_table, p);
+    return lhs;
     // if(flag){
     //     // printf("\n******VALID EXP********");
     // }
@@ -232,6 +242,7 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
     Parse_tree_node* range_list_node = getNodeFromIndex(p,1);
     Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
     flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
+    if(!flag) return flag;
     do{
         Parse_tree_node* lower_bound = getNodeFromIndex(range_list_node->child, 1);
         Parse_tree_node* upper_bound = getNodeFromIndex(range_list_node->child, 3);
@@ -287,7 +298,10 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         return get_integer_type();
     }
     else if(p->last_child->tok->lexeme.s == SQBC){
-
+        type_expression *txp = get_type_of_var(txp_table, getNodeFromIndex(p->child,2)->child);
+        if (!assert_debug(txp!=NULL, "Variable used before declaration", p, "***", "***", "***", "***", "***"))
+            return NULL;
+        
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         if(bounds)
         {
@@ -311,6 +325,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
     linked_list* ll = create_linked_list();
     p = p->child;
     type_expression* txp = get_type_of_var(txp_table ,p);
+    if(!txp) return NULL;
     if(txp->union_to_be_named.primitive_data == t_INTEGER){
         if(p->child->tok->lexeme.s == CONST){
             int* temp = (int*)calloc(1, sizeof(int));
@@ -343,6 +358,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll){
     // printf("\n At DO_BOUND_CHECKING: %s", p->tok->token_name);
     type_expression* txp = get_type_expression(txp_table, p->tok->token_name);
+    if(!txp) return false;
     switch(txp->variable_type){
         case(PRIMITIVE_TYPE):
         {

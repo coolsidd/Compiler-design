@@ -40,9 +40,9 @@ void add_entry_to_table(type_exp_table *txp_table, char *variable_name, Variable
                         DeclarationType decl_type, type_expression* t);
 
 
-void type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p);
+type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p);
 
-void type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p);
+type_expression* type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p);
 bool are_types_equal(type_expression *t1, type_expression *t2, type_exp_table *txp_table,
                      Parse_tree_node *p);
 
