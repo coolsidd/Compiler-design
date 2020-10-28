@@ -46,6 +46,7 @@ char *get_str_variable_type(VariableType variable_type)
 
 void print_type_exp_table(type_exp_table *t)
 {
+    
     printf("\n\n%-15s| %-17s| %-15s| %-40s\n",
            "Variable Name", "Variable Type", "Static/Dynamic", "Type Expression");
     printf("%-15s| %-17s| %-15s| %-40s\n",

@@ -243,15 +243,14 @@ type_expression* get_type_exp_of_expr(type_exp_table* txp_table, Parse_tree_node
 }
 
 type_expression* get_type_of_var_lhs(type_exp_table* txp_table, Parse_tree_node* p){
-    type_expression *txp;
+    type_expression *txp = (type_expression*) calloc(1, sizeof(type_expression));
 
     if (p->last_child->tok->lexeme.s == SQBC)
     {
-
         linked_list *bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
         if (bounds)
         {
-            bool flag = do_bound_checking(txp_table, p, bounds);
+            bool flag = do_bound_checking(txp_table, p->child, bounds);
         }
         return get_integer_type();
     }

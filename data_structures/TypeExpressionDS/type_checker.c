@@ -49,6 +49,7 @@ checker(jagged2init, index)
 */
 
 #include "type_exp_table.h"
+#include "print.h"
 #include "type_expression.h"
 #include "assign_helpers.h"
 #include <math.h>
@@ -63,6 +64,7 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     Parse_tree_node* decl_stmts_node = p;
     do{
         type_check_decl_stmt(txp_table, decl_stmts_node->child);
+        // print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
     printErrorsHeader();
@@ -289,7 +291,7 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         if(bounds)
         {
-            bool flag = do_bound_checking(txp_table, p, bounds);
+            bool flag = do_bound_checking(txp_table, p->child, bounds);
         }
         // print_type_expression(get_integer_type());
         return get_integer_type();
@@ -307,14 +309,14 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
 linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* p){
     // printf("\n At GET_INDEX_LIST: %s", p->tok->token_name);
     linked_list* ll = create_linked_list();
-
-    type_expression* txp = get_type_of_var(txp_table ,p->child);
-
+    p = p->child;
+    type_expression* txp = get_type_of_var(txp_table ,p);
     if(txp->union_to_be_named.primitive_data == t_INTEGER){
         if(p->child->tok->lexeme.s == CONST){
-            void* temp = (void*)calloc(1, sizeof(int));
-            *(int*)temp = atoi(p->child->tok->token_name);
+            int* temp = (int*)calloc(1, sizeof(int));
+            *temp = atoi(p->child->tok->token_name);
             ll_append(ll, temp);
+            return ll;
         }
         else if(p->last_child->tok->lexeme.s == SQBC){
             linked_list* temp = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
@@ -322,13 +324,14 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
                 return NULL;
             }
             else{
+                // bool flag = do_bound_checking(txp_table, p->child, temp);
                 ll->tail->next = temp->head;
                 ll->num_nodes += temp->num_nodes;
                 return ll;
             }
         }
         else if(p->child->tok->lexeme.s == ID){
-            return NULL;
+            return NULL; // WHY?
         }
     }
     else{
