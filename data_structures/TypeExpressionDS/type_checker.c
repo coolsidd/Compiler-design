@@ -1,45 +1,21 @@
 /*
-    Given parse_tree_node* p;
-    check p->tok->lexeme
-
-    stmts:
-
-        INDEXES SHOULD BE INTEGER and within bounds
-
-        decl_stmt:
-            call add_entry_to_type_exp_table
-                non_jagged:
-                    2nd child: list_of_identifiers:
-                        f(){
-                            check 1st child:
-                                if ID:
-                                    call add_entry_to_type_exp_table
-                                if last_child is id_list:
-                                    recurse on the last child(call f())
-                        }
-
-                jagged:
-                    to check for typedef errors
-                    rows = count on number of rows
-                        for each row:
-                           2d: 
-                            checker(jagged2init, index)
-                            jagged_2init: 3rd child(var: index/RowNumber) should be in bounds
-                            7th child: size
-                            no of j2list instances should be equal to size
-                            j2list:
-                                value_list:
-                                    last_child shouldnot be value_list
-                            number of jagged_2init instances should be equal to rows
-
-
-*/
-
-/*
-    Conventions:
-        jagged2_list: stores LB-UBs
-        (UB-LB+1) * jagged2_init: initialisation of a row
-        j2_list: columns of jagged2_init(numbers separated by semicolons)
+jagged:
+    to check for typedef errors
+    rows = count on number of rows
+        for each row:
+            2d: 
+            checker(jagged2init, index)
+            jagged_2init: 3rd child(var: index/RowNumber) should be in bounds
+            7th child: size
+            no of j2list instances should be equal to size
+            j2list:
+                value_list:
+                    last_child shouldnot be value_list
+            number of jagged_2init instances should be equal to rows
+Conventions:
+    jagged2_list: stores LB-UBs
+    (UB-LB+1) * jagged2_init: initialisation of a row
+    j2_list: columns of jagged2_init(numbers separated by semicolons)
 
 checker(jagged2init, index)
     3rd child should be equal to index
@@ -48,7 +24,6 @@ checker(jagged2init, index)
 
     jaggedXinits X=2,3
     jXlist
-
 */
 
 #include "type_exp_table.h"
@@ -60,7 +35,6 @@ checker(jagged2init, index)
 
 void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
 {
-    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     p = p->child;
     p = getNodeFromIndex(p, 4);
     Parse_tree_node *assign_stmts_node = p->last_child;
@@ -70,7 +44,7 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     do{
         type_expression * temp =type_check_decl_stmt(txp_table, decl_stmts_node->child);
         decl_stmts_node->child->txp = temp;
-        // print_type_exp_table(txp_table);
+        print_type_exp_table(txp_table);
         decl_stmts_node = decl_stmts_node->last_child;
     }while(decl_stmts_node->tok->lexeme.s == decl_stmts);
 
@@ -82,7 +56,6 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
 }
 
 type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p) {
-    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     char* variable_name;
     VariableType variable_type;
     DeclarationType decl_type;
@@ -108,10 +81,8 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
     else{
         ll_append(variables, list_of_id_node->tok->token_name);
     }
-    // printf("got ll %s\n", toStringSymbol(p->tok->lexeme));
     p = p->child; // p -> DECLARE <list_of_identifier> COLON (<decOLlation_type> | <jagged_array>)
     p = getNodeFromIndex(p, 3);
-    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     if(p->tok->lexeme.s==declaration_type){
         p = p->child;
     }
@@ -122,7 +93,6 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
     {
         case primitive_type:
         {
-            // printf("primitive %s\n", toStringSymbol(p->tok->lexeme));
             variable_type = PRIMITIVE_TYPE;
             decl_type = NOT_APPLICABLE;
             for(int i=0;i<variables->num_nodes;i++)
@@ -137,7 +107,6 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
         }
         case rect_array:
         {
-            // proceed only if type checks success
             decl_type = STATIC;
             Parse_tree_node* pt = (Parse_tree_node*)calloc(1, sizeof(Parse_tree_node));
             pt = p;
@@ -158,15 +127,14 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
         
         case jagged_array:
         {
-            // printf("jagged %s\n", toStringSymbol(p->tok->lexeme));
             // proceed only if type checks success
             Parse_tree_node *pt = (Parse_tree_node *)calloc(1, sizeof(Parse_tree_node));
             pt = p;
+            decl_type = NOT_APPLICABLE;
             bool flag = jagged_decl_checks(txp_table,  pt);
             if (flag)
             {
                 variable_type = JAGGED_ARRAY;
-                decl_type = NOT_APPLICABLE;
                 for (int i = 0; i < variables->num_nodes; i++)
                 {
                     variable_name = (char *)ll_get(variables, i);
@@ -182,31 +150,20 @@ type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node*
 }
 
 type_expression* type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p){
-    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     type_expression* lhs = get_type_of_var_lhs(txp_table, p->child);
-    // print_type_expression(lhs);
     type_expression* rhs = get_type_exp_of_expr(txp_table, p->last_child);
-    // print_type_expression(rhs);
     if(rhs)
         are_types_equal(lhs, rhs, txp_table, p);
     return lhs;
-    // if(flag){
-    //     // printf("\n******VALID EXP********");
-    // }
-    // else{
-    //     printf("\n********NOT VALID*********");
-    // }
 }
 
 bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* txp_table,
             Parse_tree_node* p){
-    // printf("At node %s\n", toStringSymbol(p->tok->lexeme));
     char* s1 = str_type(t1);
     char* s2 = str_type(t2);
     char* operator = "EQUALS";
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
-    // printf("\n LHS: (%s %s), RHS: (%s, %s) \n", s1, lexeme1, s2, lexeme2);
     bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared, 
         "Var Declaration",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
@@ -264,17 +221,10 @@ bool rect_decl_checks(type_exp_table* txp_table, Parse_tree_node* p, Declaration
 
 bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     bool flag = true;
-    /*
-        - Index out of bounds for jaggedXinit. X=2,3
-        - No of instances of jaggedXinit should be = UB-LB+1
-        - For each row, size should be equal to be number of semicolon 
-            separated values.
-        - For 2d, value_list cannot have last child as value_list
-    */
 
     p = p->child;
     Parse_tree_node* primitive_type_node = getNodeFromIndex(p, 3);
-    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "RectArrayType has to be int", p, "***", "***", "***", "***", "***");
+    flag &= assert_debug(primitive_type_node->child->tok->lexeme.s == INTEGER, "JaggedArrayType has to be int", p, "***", "***", "***", "***", "***");
     Parse_tree_node* dimen = getNodeFromIndex(p, 2);
     Parse_tree_node* bounds = dimen->child->child;
     Parse_tree_node* lower_bound = getNodeFromIndex(bounds, 1);
@@ -283,24 +233,33 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
     type_expression* upper_type = get_type_of_var(txp_table, upper_bound);
 
     if (lower_type && upper_type) {
-        flag = assert_debug(lower_bound->tok->lexeme.s == CONST,
+        flag &= assert_debug(lower_bound->tok->lexeme.s == CONST,
                             "JgdArr Lower Bound variable", p, "***",
                             "***", "***", "***", "***");
-        flag = assert_debug(upper_bound->tok->lexeme.s == CONST,
+        flag &= assert_debug(upper_bound->tok->lexeme.s == CONST,
                             "JgdArr Upper Bound variable", p, "***",
                             "***", "***", "***", "***");
         int upper_int = atoi(upper_bound->tok->token_name);
         int lower_int = atoi(lower_bound->tok->token_name);
         int n_rows = upper_int - lower_int;
-        flag = assert_debug(n_rows > 0, "JaggedArray bounds <=0", p, "***", "***",
+        flag &= assert_debug(n_rows > 0, "JaggedArray bounds <=0", p, "***", "***",
                             "***", "***", "***");
         if(!flag)
+            return false;
+        // here p is jagged array
+        BaseSymbol b = p->last_child->tok->lexeme.s;
+        if(b!=jagged2init && b!=jagged3init)
             return false;
         for(int i = lower_int; i<=upper_int; i++){
             // TODO Call function
             flag &= jagged_init_checker(txp_table, p->last_child, i);
-
-
+            if (i < upper_int )
+            {
+                flag &= assert_debug(p->last_child->tok->lexeme.s == b, "Less initalisations than rowNo", p, "***", "***", "***", "***", "***");
+                if (!flag)
+                    return false;
+            }
+            p = p->last_child;
         }
         return flag;
     }
@@ -312,35 +271,112 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
 
 bool jagged_init_checker(type_exp_table * txp_table, Parse_tree_node* p, int idx){
     char *lex = toStringSymbol(p->tok->lexeme);
-    Parse_tree_node *R1Idx = getNodeFromIndex(p, 2)->child;
-    bool flag = assert_debug(R1Idx->child->tok->lexeme.s == CONST, "R1[variable] not allowed", p, "***", "***", "***", lex, "***");
+    Parse_tree_node *r1_idx = getNodeFromIndex(p, 2)->child;
+    bool flag = assert_debug(r1_idx->child->tok->lexeme.s == CONST, "R1[variable] not allowed", p, "***", "***", "***", lex, "***");
     if(flag){
-        int R1Idx_int = atoi(R1Idx->tok->token_name);
-        flag &= assert_debug(R1Idx_int == idx, "R1[idx] not ascending", p, "***", "***", "***", lex, "***");
-        jagged_list_checker(txp_table, p->last_child);
+        int r1_idx_int = atoi(r1_idx->tok->token_name);
+        flag &= assert_debug(r1_idx_int == idx, "R1[idx] not ascending", p, "***", "***", "***", lex, "***");
+        Parse_tree_node* row_size_node = getNodeFromIndex(r1_idx, 4);
+        type_expression *rsize_type = get_type_of_var(txp_table, row_size_node);
+        if(rsize_type){
+            flag &= assert_debug(row_size_node->tok->lexeme.s == CONST,
+                                 "JgdArr Row Size variable", p, "***",
+                                 "***", "***", "***", "***");
+            int row_size = atoi(row_size_node->tok->token_name);
+            char *errStr = (char *)malloc(sizeof("JaggedArray row size <=0")+5);
+            sprintf(errStr, "JaggedArray row %d size <=0", idx);
+            flag &= assert_debug(row_size > 0, errStr, p, "***", "***",
+                                     "***", "***", "***");
+            if(!flag) return false;
+            flag &= jagged_list_checker(txp_table, p->last_child, row_size);
+        }
+        else{
+            return false;
+        }
     }
     return flag;
 }
 
-bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p){
-    //
+bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row_size){
+    // 2 semicolons together
+    if(p->child->tok->lexeme.s == SEMICOLON) 
+        return false;
     if(p->tok->lexeme.s == j2list){
-
+        Parse_tree_node* val_list_node;
+        type_expression* txp;
+        bool flag = true;
+        for(int i=0;i<row_size;i++){
+            val_list_node = p->child; // value_list
+            txp = get_type_of_var(txp_table, val_list_node->child);
+            if(txp){
+                flag &= assert_debug(txp->variable_type == PRIMITIVE_TYPE, "Values in row not integer", p, "***", "***", "***", "***", "***");
+                if(!flag)
+                    return false;
+                flag &= assert_debug(txp->union_to_be_named.primitive_data == t_INTEGER, "Values in row not integer", p, "***", "***", "***", "***", "***");
+                if (!flag)
+                    return false;
+            }
+            else{
+                // undeclared variable as entry in row
+                return false;
+            }
+            if(val_list_node->last_child->tok->lexeme.s == value_list){
+                return false;
+            }
+            if(i<row_size-1){
+                flag &= assert_debug(p->last_child->tok->lexeme.s == j2list, "Fewer values than row size.", p, "***", "***", "***", "***", "***");
+                if(!flag)
+                    return false;
+            }
+            p = p->last_child;
+        }
+        flag&=assert_debug(p->tok->lexeme.s != j2list, "More values than row size", p, "***", "***", "***", "***", "***");
+        return flag;
     }
-    if(p->tok->lexeme.s == j3list){
-
+    else if(p->tok->lexeme.s == j3list){
+        Parse_tree_node *val_list_node;
+        type_expression *txp;
+        bool flag = true;
+        for (int i = 0; i < row_size; i++)
+        {
+            val_list_node = p->child; // value_list
+            do{
+                txp = get_type_of_var(txp_table, val_list_node->child);
+                if (txp)
+                {
+                    flag &= assert_debug(txp->variable_type == PRIMITIVE_TYPE, "Values in row not integer", p, "***", "***", "***", "***", "***");
+                    if (!flag)
+                        return false;
+                    flag &= assert_debug(txp->union_to_be_named.primitive_data == t_INTEGER, "Values in row not integer", p, "***", "***", "***", "***", "***");
+                    if (!flag)
+                        return false;
+                }
+                else
+                {
+                    // undeclared variable as entry in row
+                    return false;
+                }
+                if (i < row_size - 1)
+                {
+                    flag &= assert_debug(p->last_child->tok->lexeme.s == j3list, "Fewer values than row size.", p, "***", "***", "***", "***", "***");
+                    if (!flag)
+                        return false;
+                }
+                p = p->last_child;
+            }while(p->tok->lexeme.s == value_list);
+        }
+        flag &= assert_debug(p->tok->lexeme.s != j3list, "More values than row size", p, "***", "***", "***", "***", "***");
+        return flag;
     }
     bool flag = true;
     return flag;
 }
 
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
-    // printf("At GET_VAR: %s", toStringSymbol(p->tok->lexeme));
     type_expression* txp = (type_expression*) calloc(1, sizeof(type_expression));
 
 
     if(p->last_child->tok->lexeme.s == CONST){
-        // print_type_expression(get_integer_type());
         return get_integer_type();
     }
     else if(p->last_child->tok->lexeme.s == SQBC){
@@ -350,21 +386,18 @@ type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p){
         
         linked_list* bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child,2));
         bool flag = do_bound_checking(txp_table, p->child, bounds);
-        // print_type_expression(get_integer_type());
         return get_integer_type();
     }
 
     else if(p->last_child->tok->lexeme.s == ID){
         txp = get_type_expression(txp_table, p->last_child->tok->token_name);
         bool flag = assert_debug(txp!=NULL, "Var used before Declaration",p, "***", "***", "***", "***", "***");
-        // print_type_expression(txp);
         return txp;
     }
     return NULL;
 }
 
 linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* p){
-    // printf("\n At GET_INDEX_LIST: %s", p->tok->token_name);
     linked_list* ll = create_linked_list();
     p = p->child;
     type_expression* txp = get_type_of_var(txp_table ,p);
@@ -379,7 +412,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
             ll_append(ll, NULL);
         }
         else if(p->child->tok->lexeme.s == ID){
-            ll_append(ll, NULL); // Cannot do bound checking if variable index
+            ll_append(ll, NULL);
         }
     }
     else{
@@ -397,7 +430,6 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
 }
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll){
-    // printf("\n At DO_BOUND_CHECKING: %s", p->tok->token_name);
     type_expression* txp = get_type_expression(txp_table, p->tok->token_name);
     if(!txp) return false;
     switch(txp->variable_type){
