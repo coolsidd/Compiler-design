@@ -54,6 +54,7 @@ void print_type_expression(type_expression *tp)
 
 char *str_type(type_expression *txp)
 {
+    if(txp==NULL) return "NULL";
     switch (txp->variable_type)
     {
     case (PRIMITIVE_TYPE):
