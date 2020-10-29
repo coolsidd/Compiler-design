@@ -392,7 +392,7 @@ linked_list* get_type_of_index_list(type_exp_table* txp_table, Parse_tree_node* 
     p = p->child;
     type_expression* txp = get_type_of_var(txp_table ,p);
     if(txp){
-        bool flag = assert_debug(txp->union_to_be_named.primitive_data==t_INTEGER, "Type of Index should be Integer or Constant.",p, "***", "***", "***", "***", "***");
+        bool flag = assert_debug(txp->variable_type==PRIMITIVE_TYPE && txp->union_to_be_named.primitive_data==t_INTEGER, "Type of Index should be Integer or Constant.",p, "***", "***", "***", "***", "***");
         if(p->child->tok->lexeme.s == CONST){
             int* temp = (int*)calloc(1, sizeof(int));
             *temp = atoi(p->child->tok->token_name);

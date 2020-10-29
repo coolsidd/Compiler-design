@@ -10,17 +10,17 @@ Group 36
 
 void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
     if (t) {
-        printf("|%20s|%20s|%20s|%20s|%5d|%5d|\n", symb, "terminal", typ, name, line, depth);
+        printf("|%20s|%20s|%5d|%20s|%5d|%30s|\n", symb, "terminal", depth, name, line, typ);
     } else {
-        printf("|%20s|%20s|%20s|%20s|%5d|%5d|\n", symb, "non-terminal", typ, name, line, depth);
+        printf("|%20s|%20s|%5d|%20s|%5d|%30s|\n", symb, "non-terminal", depth, name, line, typ);
     }
 }
 
 void printParseTree(Parse_tree_node *p, int d) {
     if (d == 0) {
         printf("\n%45s","|Parse tree|\n\n");
-        printf("|%20s|%20s|%20s|%20s|%5s|%5s|\n",
-        "Symbol", "term / non-term", "Type", "Name", "num", "Depth");
+        printf("|%20s|%20s|%5s|%20s|%5s|%30s|\n",
+        "Symbol", "term / non-term", "Depth", "Name", "num", "Type");
     }
     type_expression* txp = NULL;
     Parse_tree_node *tempP = p;
