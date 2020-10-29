@@ -2,6 +2,15 @@
 """
 generate_grammar.py --- This module converts the grammar written in easy to read format (BNF) to a more parsable format
 """
+
+"""
+Group 36
+2017B4A70495P Manan Soni
+2017B4A70549P Siddharth Singh
+2017B4A70636P Nayan Khanna
+2017B4A70740P Aditya Tulsyan
+"""
+
 import argparse
 import os
 import re
@@ -92,10 +101,8 @@ def parse_file(
     terminals.add("UNKNOWN")
     terminals = sorted(terminals)
     non_terminals = sorted(non_terminals)
-    #print("Terminals :")
-    #print(sorted(terminals))
-    #print("Non_Terminals :")
-    #print(sorted(non_terminals))
+    print("Terminals :", len(terminals))
+    print("Non_Terminals :", len(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location + ".h", "w")
         output_file_structs.write(

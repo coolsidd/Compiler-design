@@ -1,0 +1,40 @@
+<main_program>        -> PROGRAM LPAREN RPAREN CURLYOPEN <stmts> CURLYCLOSE
+
+<stmts>               -> <decl_stmts> <assign_stmts>
+<decl_stmts>          -> <decl_stmt> <decl_stmts> | <decl_stmt> // don’t want to derive epsilon explicitly as it is difficult to parse
+<assign_stmts>        -> <assign_stmt> <assign_stmts> | <assign_stmt>
+
+<decl_stmt>           -> <decl_non_jagged> | <decl_jagged> // separate declarations as non jagged have semicolon at the end while jagged arrays don’t
+<decl_non_jagged>     -> DECLARE <list_of_identifiers> COLON <declaration_type>
+<decl_jagged>         -> DECLARE <list_of_identifiers> COLON <jagged_array>
+<list_of_identifiers> -> LIST OF VARIABLES <id_list> | ID
+<id_list>             -> ID <id_list> | ID ID
+
+<declaration_type>    -> <primitive_type> SEMICOLON  | <rect_array> SEMICOLON
+<primitive_type>      -> INTEGER | REAL | BOOLEAN
+
+<rect_array>          -> ARRAY <range_list> OF <primitive_type>
+<range_list>          -> SQBO <var> ELIPSIS <var> SQBC <range_list> | SQBO <var> ELIPSIS <var> SQBC
+
+<jagged_array>        -> JAGGED ARRAY <jagged2list> OF <primitive_type> SEMICOLON <jagged2init> |  JAGGED ARRAY <jagged3list> OF <primitive_type> SEMICOLON <jagged3init>
+<jagged2list>         -> <range_list> SQBO SQBC
+<jagged3list>         -> <range_list> SQBO SQBC SQBO SQBC
+
+<jagged2init>         -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE <jagged2init> | R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j2list> CURLYCLOSE
+<j2list>              -> <value_list> SEMICOLON <j2list> | <value_list> | SEMICOLON <j2list> | SEMICOLON
+
+<jagged3init>         -> R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE <jagged3init> | R1 SQBO <var> SQBC COLON SIZE <var> COLON VALUES CURLYOPEN <j3list> CURLYCLOSE
+<j3list>              -> <value_list> SEMICOLON <j3list> | <value_list> | SEMICOLON <j3list> | SEMICOLON
+<value_list>          -> <var> <value_list> | <var>
+
+<index_list>          -> <var> <index_list> | <var>
+
+<var>                 -> ID SQBO <index_list> SQBC | CONST | ID
+<assign_stmt>         -> <var_lhs> EQUALS <expr>
+<var_lhs>             -> ID SQBO <index_list> SQBC | ID
+<expr>                -> <arithmeticexpr> SEMICOLON
+
+<arithmeticexpr>      -> <term> PLUS <arithmeticexpr> | <term> MINUS <arithmeticexpr> | <term> OR <arithmeticexpr> | <term>
+<term>                -> <fact> MULT <term> | <fact> DIV <term> | <fact> AND <term> | <fact>
+<fact>                -> <var> | LPAREN <arithmeticexpr> RPAREN
+
