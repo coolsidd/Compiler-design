@@ -56,6 +56,8 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                 flag &= assert_debug(txp_1->variable_type == txp->variable_type,
                                     "Different Left & Right operand",
                                     p, t1, t2, operator, lexeme1, lexeme2);
+                if (!flag)
+                    return NULL;
                 switch(txp_1->variable_type){
                     case(PRIMITIVE_TYPE):
                     {
@@ -145,6 +147,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                 flag &= assert_debug(txp_1->variable_type == txp->variable_type,
                                     "Different Left & Right Operand", p,
                                     t1, t2, "MULT", lexeme1, lexeme2);
+                if(!flag) return NULL;
                 switch (txp_1->variable_type)
                 {
                     case (PRIMITIVE_TYPE):
@@ -191,6 +194,8 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                 flag &= assert_debug(txp_1->variable_type == txp->variable_type,
                                      "Different Left & Right Operand",
                                      p, t1, t2, "DIV", lexeme1, lexeme2);
+                if (!flag)
+                    return NULL;
                 switch (txp_1->variable_type)
                 {
                     case (PRIMITIVE_TYPE):
@@ -249,10 +254,8 @@ type_expression* get_type_of_var_lhs(type_exp_table* txp_table, Parse_tree_node*
         if(!assert_debug(txp!=NULL, "Var used before Declaration", p, "***", "***", "***", "***", "***"))
             return NULL;
         linked_list *bounds = get_type_of_index_list(txp_table, getNodeFromIndex(p->child, 2));
-        if (bounds)
-        {
-            bool flag = do_bound_checking(txp_table, p->child, bounds);
-        }
+        bool flag = do_bound_checking(txp_table, p->child, bounds);
+        
         return get_integer_type();
     }
 
@@ -262,6 +265,7 @@ type_expression* get_type_of_var_lhs(type_exp_table* txp_table, Parse_tree_node*
         bool flag = assert_debug(txp != NULL, "Var used before Declaration", p, "***", "***", "***", "***", "***");
         return txp;
     }
+    return NULL;
 }
 
 bool check_rect_dimensions(rect_array_type r1, rect_array_type r2, Parse_tree_node* p,
@@ -275,15 +279,15 @@ bool check_rect_dimensions(rect_array_type r1, rect_array_type r2, Parse_tree_no
     else{
         ll_node* temp_1 = r2.array_ranges->head;
         for (ll_node *temp = r1.array_ranges->head;temp;temp=temp->next){
-            rect_array_range* r1 = (rect_array_range*) temp->data;
-            rect_array_range* r2 = (rect_array_range*) temp_1->data;
-            flag &= assert_debug(r1->upper_bound - r1->lower_bound ==
-                                r2->upper_bound - r2->lower_bound,
+            rect_array_range range1 = *(rect_array_range*)(temp->data);
+            rect_array_range range2 = *(rect_array_range*)(temp_1->data);
+            flag &= assert_debug(range1.upper_bound - range1.lower_bound ==
+                                range2.upper_bound - range2.lower_bound,
                                 "RectArray Dimensions Mismatch",
                                 p, t1, t2, operator, lexeme1, lexeme2);
+            temp_1 = temp_1->next;
             if(!flag)
                 break;
-            temp_1 = temp_1->next;
         }
     }
     return flag;
