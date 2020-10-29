@@ -77,7 +77,7 @@ int main(int argc, char** argv){
                     exit(1);
                 }
                 else printf("parse tree created successfully\n\n");
-
+                printParseTree(p,0);
                 break;
             }
             case 2:
@@ -104,6 +104,8 @@ int main(int argc, char** argv){
                     exit(1);
                 }
                 else printf("parse tree created successfully\n\n");
+                type_exp_table *t = create_type_expression_table();
+                traverse_and_populate(t, p);
                 printParseTree(p,0);
                 printf("\n");
                 break;
@@ -124,7 +126,7 @@ int main(int argc, char** argv){
                 traverse_and_populate(t, p);
                 printf("Populated Type expression table successfully\n");
                 print_type_exp_table(t);
-                printParseTree(p, 0);
+                /* printParseTree(p, 0); */
                 break;
             }
             default:

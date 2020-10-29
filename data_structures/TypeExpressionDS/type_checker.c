@@ -145,9 +145,9 @@ bool are_types_equal(type_expression* t1, type_expression* t2, type_exp_table* t
     char* lexeme1 = "var_lhs";
     char* lexeme2 = "expr";
     bool flag = assert_debug(t1 && t2 && t1->is_declared && t2->is_declared,
-        "Var Declaration",p, s1, s2, operator, lexeme1, lexeme2);
+        "Undeclared var",p, s1, s2, operator, lexeme1, lexeme2);
     flag &= assert_debug(t1->variable_type == t2->variable_type,
-                            "Var used before Declaration", p,
+                            "Type mismatch error", p,
                             s1, s2, operator, lexeme1, lexeme2);
     if(!flag)
         return false;
