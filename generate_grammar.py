@@ -65,6 +65,9 @@ def parse_file(
     output_file = open(output_file_location, "w")
     non_terminals = set()
     terminals = set()
+    json_input_file = open(json_in)
+    terminals_json = json.load(json_input_file)
+    json_input_file.close()
     for line in input_file:
         line = line.strip()
         line_wo_comment = line.split("//")[0].strip()
@@ -76,25 +79,30 @@ def parse_file(
         non_term = line_split[0].strip()
         non_terminals.add(non_term)
         rhs = line_split[1].strip()
+
         terminals = terminals.union(rhs.split())
         for rhs_tok in rhs.split("|"):
+            rhs_tok = " ".join([terminals_json.get(x, x) for x in rhs_tok.split()])
             rhs_tok.strip()
             output_file.writelines("{}{}{}\n".format(non_term, delim, rhs_tok))
     input_file.close()
     output_file.close()
     terminals = terminals.difference(non_terminals)
     terminals.remove("|")
-    print("Terminals :")
-    print(sorted(terminals))
-    print("Non_Terminals :")
-    print(sorted(non_terminals))
+    terminals.add("UNKNOWN")
+    terminals = sorted(terminals)
+    non_terminals = sorted(non_terminals)
+    #print("Terminals :")
+    #print(sorted(terminals))
+    #print("Non_Terminals :")
+    #print(sorted(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location + ".h", "w")
         output_file_structs.write(
-            """/* Header guard */\n#ifndef GRAMMAR_H\n#define GRAMMAR_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n\nSymbol toSymbol(char *enustr);\nvoid printSymbol(Symbol symb);\n\n#endif\n""".format(
+            """/* Header guard */\n#ifndef GRAMMAR_STRUCT_H\n#define GRAMMAR_STRUCT_H\n/***************/\n#include <stdio.h>\n#include <string.h>\ntypedef enum {{ false, true }} bool;\n\ntypedef enum {{ // list all the non terminals or terminals\n{}\n}} BaseSymbol;\n\ntypedef struct symbol {{ // symbol with info if it is terminal or not\n    bool is_terminal;\n    BaseSymbol s;\n}} Symbol;\n\nSymbol toSymbol(char *enustr);\nchar *toStringSymbol(Symbol symb);\nvoid printSymbol(Symbol symb);\n\n#endif\n""".format(
                 "\n".join(
-                    ["    " + x + "," for x in sorted(non_terminals)]
-                    + ["    " + x + "," for x in sorted(terminals)]
+                    ["    " + x + "," for x in non_terminals]
+                    + ["    " + x + "," for x in terminals]
                 )
             )
         )
@@ -109,14 +117,19 @@ def parse_file(
                 for x in terminals
             ] + [template_str_toSymbol.format(x, "false", x) for x in non_terminals]
             template_str_print = (
-                """    case ({0}):\n        printf("{0}\\n");\n        break;"""
+                """    case ({0}):\n        return "{0}";\n        break;"""
             )
             template_filled_print = [
                 template_str_print.format(x)
-                for x in list(sorted(terminals)) + list(sorted(non_terminals))
+                for x in terminals + non_terminals
             ]
             output_file_structs.write(
-                """#include "./output_file_structs.h"\n#include "./other_structs.h"\n#include <stdio.h>\n#include <string.h>\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n{}\n    return ans;\n}}\nvoid printSymbol(Symbol symb) {{\n    printf("Symbol variable : ");\n    switch (symb.s) {{\n{}\n    }}\n    printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");\n}}\n""".format(
+                """#include "grammar_structs.h"\n#include <stdio.h>\n#include <string.h>\n\nSymbol toSymbol(char *enustr) {{\n    Symbol ans;\n    ans.is_terminal = false;\n    ans.s = UNKNOWN;\n{}\n    return ans;\n}}\n
+char *toStringSymbol(Symbol symb) {{
+    switch (symb.s) {{
+{}
+    }}
+}}\nvoid printSymbol(Symbol symb) {{\n    printf("Symbol variable : ");\n    printf("%s", toStringSymbol(symb));\n    printf("    is_terminal : %s\\n", symb.is_terminal ? "true" : "false");\n}}\n""".format(
                     "\n".join(template_filled_toSymbol),
                     "\n".join(template_filled_print),
                 )

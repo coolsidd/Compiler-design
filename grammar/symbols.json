@@ -21,14 +21,16 @@
     "OF": "of",
     "OR": "|||",
     "PLUS": "+",
+    "PROGRAM":"program",
     "R1": "R1",
     "REAL": "real",
-    "RPAREN": "(",
+    "RPAREN": ")",
     "SEMICOLON": ";",
     "SIZE": "size",
     "SQBC": "]",
     "SQBO": "[",
     "TRUE": "true",
-    "VALUES": "VALUES",
-    "VARIABLES": "VARIABLES"
+    "UNKNOWN": "UNKNOWN",
+    "VALUES": "values",
+    "VARIABLES": "variables"
 }

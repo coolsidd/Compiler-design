@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "grammar.h"
-#include "symb_conv.h"
-#define MAXLINELEN 2048
-#define MAXTOKLEN 50
-#define MAXRULES 100
 
 char* replace_char(char* str, char find, char replace){
     char *current_pos = strchr(str,find);
@@ -20,13 +16,13 @@ void printGrammar(Grammar* g) {
     printf("Rules(%d): \n", g->num_rules);
     printf("-------------\n");
     for (int i=0;i<g->num_rules;i++) {
-        printf("%s -> ",getSymbol((g->rules)[i].lhs));
+        printf("%s -> ",toStringSymbol((g->rules)[i].lhs));
         RuleNode* rnptr = (g->rules)[i].rhs;
         while (rnptr != NULL) {
             if ( (rnptr->s).is_terminal ) {
-                printf("T<%s> ", getSymbol(rnptr->s));
+                printf("T<%s> ", toStringSymbol(rnptr->s));
             } else {
-                printf("NT<%s> ", getSymbol(rnptr->s));
+                printf("NT<%s> ", toStringSymbol(rnptr->s));
             }
             rnptr = rnptr->next;
         }
@@ -74,22 +70,13 @@ void readGrammar(char *filename, Grammar* g){
                     rn_ptr = rn_ptr->next;
                 }
             }
-            //printf("%s | ", tok);
+            /* printf("%s|", tok); */
             tok = strtok(NULL, sep);
-        } //printf("\n");
+        } /* printf("\n"); */
 
         rule_new.rhs = rn_head;
         (g->rules)[(g->num_rules)++] = rule_new;
 
         free(tmp_line);
     }
-}
-
-int main() {
-    Grammar* g = (Grammar*)malloc(sizeof(Grammar));
-    g->num_rules = 0;
-    g->start_symb = toSymbol("program");
-    g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    readGrammar("machine_grammar.txt", g);
-    printGrammar(g);
 }
