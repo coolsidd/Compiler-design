@@ -5,4 +5,8 @@
 int main(){
     Symbol sym = toSymbol("fact");
     printSymbol(sym);
+    sym = toSymbol("{");
+    printSymbol(sym);
+    sym = toSymbol("}");
+    printSymbol(sym);
 }
