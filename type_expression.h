@@ -12,7 +12,7 @@ Group 36
 #include "primitive_type.h"
 #include "rect_array_type.h"
 #include "jagged_array_type.h"
-#include "../../data_structures/hash_map.h"
+#include "hash_map.h"
 
 // typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;

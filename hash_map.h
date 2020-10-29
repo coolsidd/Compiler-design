@@ -11,7 +11,7 @@ Group 36
 
 #include <stdlib.h>
 #include <string.h>
-#include "../final_code/gen_utils.h"
+#include "gen_utils.h"
 
 typedef struct hmnode {
     char *string;

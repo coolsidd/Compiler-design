@@ -101,10 +101,8 @@ def parse_file(
     terminals.add("UNKNOWN")
     terminals = sorted(terminals)
     non_terminals = sorted(non_terminals)
-    print("Terminals :")
-    print(len(terminals))
-    print("Non_Terminals :")
-    print(len(non_terminals))
+    print("Terminals :", len(terminals))
+    print("Non_Terminals :", len(non_terminals))
     if generate_c_structs:
         output_file_structs = open(c_structs_location + ".h", "w")
         output_file_structs.write(

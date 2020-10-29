@@ -11,7 +11,6 @@ Group 36
 
 #include "tokenizer_structs.h"
 #include "read_grammar.h"
-#include "util/output_file_structs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

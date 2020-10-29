@@ -10,7 +10,7 @@ Group 36
 #define LINKED_LIST_H
 
 #include <stdlib.h>
-#include "../final_code/gen_utils.h"
+#include "gen_utils.h"
 typedef struct node {
     void *data;
     struct node *next;

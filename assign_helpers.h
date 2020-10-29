@@ -11,7 +11,7 @@ Group 36
 
 #include "type_exp_table.h"
 #include "type_expression.h"
-#include "../../final_code/parse_tree.h"
+#include "parse_tree.h"
 
 //Return type expression for fact non-terminal
 type_expression *get_type_of_fact(type_exp_table *txp_table, Parse_tree_node *p);

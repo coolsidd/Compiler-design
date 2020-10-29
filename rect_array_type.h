@@ -9,8 +9,8 @@ Group 36
 #ifndef RECT_ARRAY_TYPE_H
 #define RECT_ARRAY_TYPE_H
 
-#include "../../data_structures/linked_list.h"
-#include "../../final_code/parse_tree.h"
+#include "linked_list.h"
+#include "parse_tree.h"
 
 typedef struct ____RECT_ARRAY_RANGE____ rect_array_range;
 

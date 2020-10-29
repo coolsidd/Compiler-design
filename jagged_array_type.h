@@ -9,8 +9,8 @@ Group 36
 #ifndef JAGGED_ARRAY_TYPE_H
 #define JAGGED_ARRAY_TYPE_H
 
-#include "../../data_structures/linked_list.h"
-#include "../../final_code/parse_tree.h"
+#include "linked_list.h"
+#include "parse_tree.h"
 
 typedef struct ____R2_DIMENSION____ r2_dimension;
 

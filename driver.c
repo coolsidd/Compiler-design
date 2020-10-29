@@ -10,8 +10,8 @@ Group 36
 #include "grammar.h"
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
-#include "../data_structures/TypeExpressionDS/print.h"
-#include "../data_structures/TypeExpressionDS/type_exp_table.h"
+#include "print.h"
+#include "type_exp_table.h"
 
 #define MAXLINELEN 2048
 #define MAXRULES 100
@@ -24,12 +24,12 @@ int main(int argc, char** argv){
         exit(1);
     }
 
-    printf("Reading grammar from grammar/machine_grammar.txt ...\n");
+    printf("Reading grammar from machine_grammar.txt ...\n");
     Grammar* g = (Grammar*)malloc(sizeof(Grammar));
     g->num_rules = 0;
     g->start_symb = toSymbol("main_program");
     g->rules = (Rule*)malloc(MAXRULES*sizeof(Rule));
-    int gflag = readGrammar("grammar/machine_grammar.txt", g);
+    int gflag = readGrammar("machine_grammar.txt", g);
     #ifdef DEBUG
         printGrammar(g);
     #endif
