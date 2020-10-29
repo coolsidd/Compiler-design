@@ -1,34 +1,27 @@
-#include <stdlib.h>
-#include <string.h>
-#include "../util/gen_utils.h"
-
 #ifndef HASH_MAP_H
 #define HASH_MAP_H
 
-typedef struct ____HASH_MAP_NODE____ hm_node;
+#include <stdlib.h>
+#include <string.h>
+#include "../final_code/gen_utils.h"
 
-struct ____HASH_MAP_NODE____
-{
+typedef struct hmnode {
     char *string;
     void *data;
-    hm_node *next;
-};
+    struct hmnode *next;
+} hm_node;
 
-struct ____HASH_MAP_BUCKET____
+typedef struct hmb
 {
     hm_node *first;
     int num_nodes;
-};
+} hm_bucket;
 
-typedef struct ____HASH_MAP_BUCKET____ hm_bucket;
 
-struct ____HASH_MAP____
-{
+typedef struct hm {
     hm_bucket **buckets;
     int num_buckets;
-};
-
-typedef struct ____HASH_MAP____ hash_map;
+} hash_map;
 
 hash_map *create_hash_map(int num_buckets);
 

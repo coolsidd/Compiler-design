@@ -1,25 +1,19 @@
-#include <stdlib.h>
-#include "../util/gen_utils.h"
-
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
-typedef struct ____LINKED_LIST_NODE____ ll_node;
 
-struct ____LINKED_LIST_NODE____
-{
+#include <stdlib.h>
+#include "../final_code/gen_utils.h"
+typedef struct node {
     void *data;
-    ll_node *next;
-    ll_node *prev;
-};
+    struct node *next;
+    struct node *prev;
+} ll_node;
 
-typedef struct ____LINKED_LIST____ linked_list;
-
-struct ____LINKED_LIST____
-{
+typedef struct ll {
     ll_node *head;
     ll_node *tail;
     int num_nodes;
-};
+} linked_list;
 
 linked_list *create_linked_list();
 

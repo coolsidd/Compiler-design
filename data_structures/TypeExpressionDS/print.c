@@ -79,7 +79,7 @@ void print_type_exp_table(type_exp_table *t)
         txp = get_type_expression(t, var_name);
         strcpy(txp_str, get_string_representation(txp));
 
-        printf("\n%-15s| %-17s| %-15s| %-40s\n",
+        printf("%-15s| %-17s| %-15s| %-40s\n",
                var_name,
                var_type,
                decl_name,

@@ -1,18 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "tokenizer_structs.h"
 #define MAXLINELEN 2048
-#define MAXTOKLEN 50
 
-void tokenizeSourceCode(char *filename, TokenStream *s) {
+char *trim(char *s) {
+    while(isspace(*s)) s++;
+
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return strdup(s);
+}
+
+int tokenizeSourceCode(char *filename, TokenStream *s) {
     char *sep = " ";
     FILE *file = fopen(filename, "r");
     int line_num = 0;
 
     if (!file) {
-        printf("File error!");
-        return;
+        printf("Tokenizer: File error!\n");
+        return 0;
     }
 
     char line[MAXLINELEN];
@@ -25,9 +34,15 @@ void tokenizeSourceCode(char *filename, TokenStream *s) {
         //printf("%d: ", line_num);
         char *tok = strtok(tmp_line, sep); // read first token from the line
         while (tok) {
-            // /printf("%s|", tok);
-            insertIntoStream(s, line_num, tok);
+            char* new_tok = strdup(tok);
+            //printf("`%s` | ", trim(new_tok));
+            char * next_tok = trim(new_tok);
+            if (*next_tok) insertIntoStream(s, line_num, strdup(next_tok));
+            free(new_tok);
+            free(next_tok);
             tok = strtok(NULL, sep); // read next token
         } //printf("\n");
     }
+
+    return 1;
 }

@@ -1,8 +1,8 @@
-#include "../../data_structures/linked_list.h"
-#include "../../final_code/parse_tree.h"
-
 #ifndef RECT_ARRAY_TYPE_H
 #define RECT_ARRAY_TYPE_H
+
+#include "../../data_structures/linked_list.h"
+#include "../../final_code/parse_tree.h"
 
 typedef struct ____RECT_ARRAY_RANGE____ rect_array_range;
 
@@ -23,7 +23,7 @@ struct ____RECT_ARRAY_TYPE____{
 // initialise rect array range node
 rect_array_range* create_rect_array_node();
 
-linked_list *get_type_from_rangelist(Parse_tree_node *p, linked_list *ll);
+void get_type_from_rangelist(Parse_tree_node *p, linked_list *ll);
 
 // initialise rect_array_type
 rect_array_type* create_rect_array_type(Parse_tree_node* p);

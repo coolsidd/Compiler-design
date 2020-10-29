@@ -216,12 +216,6 @@ Symbol toSymbol(char *enustr) {
         return ans;
     }
 
-    if (strcmp(enustr, "boolexpr") == 0) {
-        ans.is_terminal = false;
-        ans.s = boolexpr;
-        return ans;
-    }
-
     if (strcmp(enustr, "decl_jagged") == 0) {
         ans.is_terminal = false;
         ans.s = decl_jagged;
@@ -321,18 +315,6 @@ Symbol toSymbol(char *enustr) {
     if (strcmp(enustr, "list_of_identifiers") == 0) {
         ans.is_terminal = false;
         ans.s = list_of_identifiers;
-        return ans;
-    }
-
-    if (strcmp(enustr, "logfactor") == 0) {
-        ans.is_terminal = false;
-        ans.s = logfactor;
-        return ans;
-    }
-
-    if (strcmp(enustr, "logterm") == 0) {
-        ans.is_terminal = false;
-        ans.s = logterm;
         return ans;
     }
 
@@ -500,9 +482,6 @@ char *toStringSymbol(Symbol symb) {
     case (assign_stmts):
         return "assign_stmts";
         break;
-    case (boolexpr):
-        return "boolexpr";
-        break;
     case (decl_jagged):
         return "decl_jagged";
         break;
@@ -553,12 +532,6 @@ char *toStringSymbol(Symbol symb) {
         break;
     case (list_of_identifiers):
         return "list_of_identifiers";
-        break;
-    case (logfactor):
-        return "logfactor";
-        break;
-    case (logterm):
-        return "logterm";
         break;
     case (main_program):
         return "main_program";

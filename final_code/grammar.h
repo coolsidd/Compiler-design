@@ -4,9 +4,6 @@
 /***************/
 
 #include "grammar_structs.h"
-#define MAXLINELEN 2048
-#define MAXTOKLEN 50
-#define MAXRULES 100
 
 typedef struct rule_node { // node for linkedlist of symbols (for LHS of rule list)
     Symbol s;
@@ -25,7 +22,7 @@ typedef struct grammar { // Final data structure for
 } Grammar;
 
 void printGrammar(Grammar* g);
-void readGrammar(char *filename, Grammar* g);
+int readGrammar(char *filename, Grammar* g);
 char* replace_char(char* str, char find, char replace);
 
 #endif
