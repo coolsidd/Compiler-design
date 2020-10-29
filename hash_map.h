@@ -39,4 +39,6 @@ void *fetch_from_hash_map(hash_map *hm, char *string);
 
 void destroy_hash_map(hash_map *hm);
 
+void free_hash_map(hash_map *new_hm );
+
 #endif

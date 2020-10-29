@@ -37,6 +37,26 @@ hash_map *create_hash_map(int num_buckets)
     return new_hm;
 }
 
+void free_hash_map(hash_map *new_hm )
+{
+    if(!new_hm){
+        return;
+    }
+    for (int i = 0; i < new_hm->num_buckets; i++)
+    {
+        hm_node *temp =  new_hm->buckets[i]->first;
+        while(temp){
+            new_hm->buckets[i]->first = new_hm->buckets[i]->first->next;
+            free(temp);
+            temp =  new_hm->buckets[i]->first;
+        }
+        free(new_hm->buckets[i]);
+    }
+    free(new_hm->buckets);
+    free(new_hm);
+}
+
+
 void add_to_bucket(hm_bucket *b, char *string, void *data)
 {
     hm_node *new_hm_node = (hm_node *)calloc(1, sizeof(hm_node));

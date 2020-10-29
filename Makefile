@@ -6,13 +6,13 @@
 
 
 all:  all_dependencies machine_grammar
-	gcc -o driver.exe *.o
+	gcc -g -o driver.exe *.o # please don't remove -g
 
 machine_grammar:
 	python3 generate_grammar.py -o machine_grammar.txt --grammar-struct-out grammar_structs --json_in symbols.json grammar.txt
 
 all_dependencies: machine_grammar
-	gcc -c *.c
+	gcc -g -c *.c
 
 .PHONY: clean
 clean:

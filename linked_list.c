@@ -17,6 +17,16 @@ linked_list *create_linked_list()
     return ll;
 }
 
+void ll_free(linked_list *ll){
+    ll_node *temp = ll->head;
+    while( temp ){
+        ll->head = ll->head->next;
+        free(temp);
+        temp = ll->head;
+    }
+    free(ll);
+}
+
 void ll_add_at(linked_list *ll, void *data, int idx)
 {
     assert(idx <= ll->num_nodes && idx >= 0, "linked list insertion index valid");

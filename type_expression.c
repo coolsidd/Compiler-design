@@ -9,6 +9,8 @@ Group 36
 #include "type_expression.h"
 #define MAX_BUFFER_SIZE 400
 
+extern linked_list*  all_errors;
+
 type_expression *get_integer_type()
 {
     type_expression *txp = (type_expression *)calloc(1, sizeof(type_expression));

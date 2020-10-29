@@ -11,6 +11,16 @@ Group 36
 #include <stdlib.h>
 #include <string.h>
 
+void freeTokenStream(TokenStream *s){
+    Token * temp = s->head;
+    while(s->head){
+        s->head = s->head->next;
+        free(temp);
+        temp= s->head;
+    }
+    free(s);
+}
+
 TokenStream *insertIntoStream(TokenStream *s, int line_num, char *token_str) {
     // printf("inserting \"%s\"\n", token_str);
     Token *newToken = (Token *)malloc(sizeof(Token));
@@ -65,13 +75,7 @@ TokenStream *newTokenStream() {
     s->length = 0;
     return s;
 }
-void freeTokenStream(TokenStream *s) {
-    while (s->head) {
-        Token *temp = s->head->next;
-        free(s->head);
-        s->head = temp;
-    }
-}
+
 void deleteHead(TokenStream *s) {
     if (!s->head) {
         printf("ERROR DELETING HEAD OF SIZE 0");

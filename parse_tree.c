@@ -20,7 +20,7 @@ Parse_tree_node *getNodeFromIndex(Parse_tree_node *p, int index)
 
 Parse_tree_node* createParseTree(TokenStream *s, Grammar *g, int *maxline){
     Symbol starting_symb;
-    starting_symb.s = main_program;
+    starting_symb.s = g->start_symb.s;
     starting_symb.is_terminal = false;
     return recursiveParseNonterminal(starting_symb, &(s->head), g, maxline, 0);
 }
@@ -95,7 +95,7 @@ Parse_tree_node *recursiveParseNonterminal(Symbol symb, Token ** tstr, Grammar *
         }
     }
     //printf("Failed to derive %s\n", toStringSymbol(symb));
-    return new_node;
+    return NULL;
 }
 
 Parse_tree_node* new_parse_tree(Token *tok){
@@ -111,15 +111,22 @@ Parse_tree_node* new_parse_tree(Token *tok){
 }
 void free_parse_tree(Parse_tree_node *root){
 
-    Parse_tree_node* temp =  root->child;
 
+    Parse_tree_node* temp =  root->child;
     while(temp){
         root->child = root->child->next;
         free_parse_tree(temp);
         temp = root->child;
-        root->num_children--;
     }
-    //free(root->tok);
+    /* while(temp){ */
+    /*     root->child = root->child->next; */
+    /*     free_parse_tree(temp); */
+    /*     temp = root->child; */
+    /*     //root->num_children--; */
+    /* } */
+    /* if(root->tok) */
+    /*     free(root->tok); */
+    //root->tok = NULL;
     free (root);
     return ;
 }

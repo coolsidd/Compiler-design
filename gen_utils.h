@@ -17,6 +17,8 @@ Group 36
 #include <stdlib.h>
 #include <math.h>
 
+extern linked_list * all_errors;
+
 typedef struct en
 {
     int line_num, depth;
@@ -26,7 +28,8 @@ typedef struct en
 
 void printErrorsHeader();
 void printErrorEntries(ErrorNode *err);
-
+void init_errors();
+void print_all_errors();
 void assert(bool condition, char *error_string);
 bool assert_debug(bool condition, char* error_string, Parse_tree_node * p, char* t1, char* t2, char* operator, char* lex1, char* lex2);
 #endif

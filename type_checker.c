@@ -20,7 +20,6 @@ void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p)
     Parse_tree_node *assign_stmts_node = p->last_child;
     p = p->child;
     Parse_tree_node* decl_stmts_node = p;
-    printErrorsHeader();
     do{
         type_expression * temp =type_check_decl_stmt(txp_table, decl_stmts_node->child);
         decl_stmts_node->child->txp = temp;

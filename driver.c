@@ -7,6 +7,7 @@ Group 36
 */
 
 #include <stdlib.h>
+#include "gen_utils.h"
 #include "grammar.h"
 #include "tokenizer_structs.h"
 #include "parse_tree.h"
@@ -55,9 +56,9 @@ int main(int argc, char** argv){
         printf("\n\nMenu: \n");
         printf("--------------------------------------------------------\n");
         printf("0 - Exit\n");
-        printf("1 - Create parse tree\n");
+        printf("1 - print parse tree (without types syntax only)\n");
         printf("2 - Traverse parse tree, create Type expression table, display type errors\n");
-        printf("3 - print parse tree\n");
+        printf("3 - print parse tree (with types computed)\n");
         printf("4 - print type expression table\n");
         printf("--------------------------------------------------------\n");
 
@@ -66,6 +67,8 @@ int main(int argc, char** argv){
 
         switch(option){
             case 0:
+                freeTokenStream(s);
+                //              freeGrammar(g);
                 break;
             case 1:
             {
@@ -78,6 +81,7 @@ int main(int argc, char** argv){
                 }
                 else printf("parse tree created successfully\n\n");
                 printParseTree(p,0);
+                free_parse_tree(p);
                 break;
             }
             case 2:
@@ -91,7 +95,11 @@ int main(int argc, char** argv){
                     exit(1);
                 }
                 else printf("parse tree created successfully\n\n");
+                init_errors();
                 traverse_and_populate(t, p);
+                print_all_errors();
+                free_parse_tree(p);
+                free_type_expression_table(t);
                 break;
             }
             case 3:
@@ -105,9 +113,12 @@ int main(int argc, char** argv){
                 }
                 else printf("parse tree created successfully\n\n");
                 type_exp_table *t = create_type_expression_table();
+                init_errors();
                 traverse_and_populate(t, p);
                 printParseTree(p,0);
                 printf("\n");
+                free_parse_tree(p);
+                free_type_expression_table(t);
                 break;
             }
             case 4:
@@ -123,9 +134,14 @@ int main(int argc, char** argv){
                 }
                 else
                     printf("parse tree created successfully\n\n");
+
+                init_errors();
                 traverse_and_populate(t, p);
+                print_all_errors();
                 printf("Populated Type expression table successfully\n");
                 print_type_exp_table(t);
+                free_parse_tree(p);
+                free_type_expression_table(t);
                 /* printParseTree(p, 0); */
                 break;
             }

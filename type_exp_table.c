@@ -7,6 +7,7 @@ Group 36
 */
 
 #include "type_exp_table.h"
+#include "hash_map.h"
 
 #define DEFAULT_TXP_TABLE_SIZE 60
 
@@ -16,6 +17,13 @@ type_exp_table* create_type_expression_table(){
     txp_table->symbol_table = create_hash_map(DEFAULT_TXP_TABLE_SIZE);
 
     return txp_table;
+}
+
+
+void free_type_expression_table(type_exp_table* txp_table){
+    ll_free(txp_table->root);
+    free_hash_map(txp_table->symbol_table);
+    free(txp_table);
 }
 
 /* If key not found: this returns NULL

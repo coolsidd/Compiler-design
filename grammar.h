@@ -32,5 +32,6 @@ typedef struct grammar { // Final data structure for
 void printGrammar(Grammar* g);
 int readGrammar(char *filename, Grammar* g);
 char* replace_char(char* str, char find, char replace);
+void freeGrammar(Grammar *g);
 
 #endif

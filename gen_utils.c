@@ -6,6 +6,7 @@ Group 36
 2017B4A70740P Aditya Tulsyan
 */
 
+#include "linked_list.h"
 #include <stdio.h>
 
 #define KNRM  "\x1B[0m"
@@ -22,6 +23,8 @@ Group 36
 #include "grammar_structs.h"
 #include "parse_tree.h"
 #include <stdlib.h>
+
+linked_list * all_errors = NULL;
 
 void assert(bool condition, char *error_string) {
     if (!condition) {
@@ -69,6 +72,19 @@ char *getStmtType(Parse_tree_node *p) {
     return "UNKNOWN";
 }
 
+void init_errors(){
+    if(all_errors){
+        ll_node* head = all_errors->head;
+        while(head){
+            all_errors->head = all_errors->head->next;
+            free(head);
+            head = all_errors->head;
+        }
+        free(all_errors);
+    }
+    all_errors = create_linked_list();
+}
+
 bool assert_debug(bool condition, char *error_string, Parse_tree_node *p,
                   char *t1, char *t2, char *operator, char *lex1,
                   char *lex2) {
@@ -90,8 +106,20 @@ bool assert_debug(bool condition, char *error_string, Parse_tree_node *p,
         temp1 = temp1->child;
     }
     er->line_num = temp1->tok->line_no;
-    printErrorEntries(er);
+    //printErrorEntries(er);
+    if(!all_errors)
+        init_errors();
+    ll_append(all_errors, er);
     return false;
     }
     return true;
+}
+
+void print_all_errors(){
+    if(!all_errors)
+        return;
+    printErrorsHeader();
+    for(ll_node *head = all_errors->head; head; head=head->next){
+        printErrorEntries((ErrorNode *)head->data);
+    }
 }

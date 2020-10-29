@@ -10,7 +10,8 @@ Group 36
 #define LINKED_LIST_H
 
 #include <stdlib.h>
-#include "gen_utils.h"
+#include "grammar_structs.h"
+
 typedef struct node {
     void *data;
     struct node *next;
@@ -23,9 +24,13 @@ typedef struct ll {
     int num_nodes;
 } linked_list;
 
+void assert(bool condition, char *error_string);
+
 linked_list *create_linked_list();
 
 void ll_add_at(linked_list *ll, void *data, int idx);
+
+void ll_free(linked_list *ll);
 
 void ll_append(linked_list *ll, void *data);
 

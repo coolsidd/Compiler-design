@@ -32,6 +32,7 @@ struct ____TYPE_EXPRESSION_TABLE____{
 };
 
 /* Function Prototypes */
+void free_type_expression_table(type_exp_table* txp_table);
 
 void traverse_and_populate(type_exp_table* txp_table, Parse_tree_node *p);
 

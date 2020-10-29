@@ -10,6 +10,7 @@ Group 36
 #include <stdlib.h>
 #include <string.h>
 #include "grammar.h"
+#include "grammar_structs.h"
 #define MAXLINELEN 2048
 
 char* replace_char(char* str, char find, char replace){
@@ -91,4 +92,17 @@ int readGrammar(char *filename, Grammar* g){
     }
 
     return 1;
+}
+
+void freeGrammar(Grammar *g){
+    for(int i = 0; i<g->num_rules; i++){
+        RuleNode * temp = g->rules[i].rhs;
+        while(temp){
+            g->rules[i].rhs = g->rules[i].rhs->next;
+            free(temp);
+            temp = g->rules[i].rhs;
+        }
+        free(g->rules);
+    }
+    free(g);
 }
