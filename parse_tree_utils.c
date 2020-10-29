@@ -16,9 +16,9 @@ void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
     /*     typ[31] = '\0'; */
     /* } */
     if (t) {
-        printf("|%20s|%20s|%5d|%20s|%5d|%30s|\n", symb, "terminal", depth, name, line, typ);
+        printf("|%20s|%20s|%5d|%20s|"KBLU"%5d"RESET"|"KYEL"%30s"RESET"|\n", symb, "terminal", depth, name, line, typ);
     } else {
-        printf("|%20s|%20s|%5d|%20s|%5d|%30s|\n", symb, "non-terminal", depth, name, line, typ);
+        printf("|%20s|%20s|%5d|%20s|"KBLU"%5d"RESET"|"KYEL"%30s"RESET"|\n", symb, "non-terminal", depth, name, line, typ);
     }
 }
 
