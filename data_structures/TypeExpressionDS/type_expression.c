@@ -7,7 +7,7 @@ Group 36
 */
 
 #include "type_expression.h"
-#define MAX_BUFFER_SIZE 250
+#define MAX_BUFFER_SIZE 400
 
 type_expression *get_integer_type()
 {
