@@ -9,7 +9,7 @@ Group 36
 #include "type_exp_table.h"
 #include "hash_map.h"
 
-#define DEFAULT_TXP_TABLE_SIZE 60
+
 
 type_exp_table* create_type_expression_table(){
     type_exp_table* txp_table = calloc(1, sizeof(type_exp_table));

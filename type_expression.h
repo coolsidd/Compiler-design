@@ -13,6 +13,7 @@ Group 36
 #include "rect_array_type.h"
 #include "jagged_array_type.h"
 #include "hash_map.h"
+#define MAX_BUFFER_SIZE 400
 
 // typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;
 typedef enum {PRIMITIVE_TYPE, RECT_ARRAY, JAGGED_ARRAY} VariableType;

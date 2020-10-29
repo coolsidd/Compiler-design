@@ -7,7 +7,7 @@ Group 36
 */
 
 #include "type_expression.h"
-#define MAX_BUFFER_SIZE 400
+
 
 extern linked_list*  all_errors;
 
@@ -82,8 +82,8 @@ char *str_type(type_expression *txp)
 // get the desired String Representation of TypeExpression
 char* get_string_representation(type_expression* tp){
     union_to_be_named union_ds = tp->union_to_be_named;
-    char res[MAX_BUFFER_SIZE];
-    char* result = res;
+
+    char* result = (char*)calloc(MAX_BUFFER_SIZE, sizeof(char));
 
     switch(tp->variable_type){
         case(PRIMITIVE_TYPE):

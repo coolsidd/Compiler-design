@@ -9,6 +9,12 @@ Group 36
 #include "parse_tree.h"
 
 void printLine(char* symb, bool t, char* typ, char* name, int line, int depth) {
+    /* if(strlen(typ)>30){ */
+    /*     typ[28] = '.'; */
+    /*     typ[29] = '.'; */
+    /*     typ[30] = '.'; */
+    /*     typ[31] = '\0'; */
+    /* } */
     if (t) {
         printf("|%20s|%20s|%5d|%20s|%5d|%30s|\n", symb, "terminal", depth, name, line, typ);
     } else {

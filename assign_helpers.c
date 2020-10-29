@@ -57,7 +57,7 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
                                     "Different Left & Right operand",
                                     p, t1, t2, operator, lexeme1, lexeme2);
                 if (!flag)
-                    return NULL;
+                    return txp;
                 switch(txp_1->variable_type){
                     case(PRIMITIVE_TYPE):
                     {
@@ -147,7 +147,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                 flag &= assert_debug(txp_1->variable_type == txp->variable_type,
                                     "Different Left & Right Operand", p,
                                     t1, t2, "MULT", lexeme1, lexeme2);
-                if(!flag) return NULL;
+                if(!flag) return txp;
                 switch (txp_1->variable_type)
                 {
                     case (PRIMITIVE_TYPE):
@@ -195,7 +195,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                                      "Different Left & Right Operand",
                                      p, t1, t2, "DIV", lexeme1, lexeme2);
                 if (!flag)
-                    return NULL;
+                    return txp;
                 switch (txp_1->variable_type)
                 {
                     case (PRIMITIVE_TYPE):

@@ -13,6 +13,7 @@ Group 36
 #include "gen_utils.h"
 #include "type_expression.h"
 
+#define DEFAULT_TXP_TABLE_SIZE 60
 
 typedef struct ____TYPE_EXPRESSION_TABLE_NODE____ txp_table_node;
 

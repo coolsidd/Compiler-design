@@ -3,14 +3,24 @@ program ( )
 	declare list of variables abcd ghd2_1 ssd_2_3 : array [ 2 .. 5 ] of integer ;
 	declare list of variables q1 q2 q3 :  jagged array [ 4 .. 7 ] [ ] [ ]  of integer ;
 	R1 [ 4 ]  : size 3 : values { 21 641 23 36 125 ; 54 221 43 ; 287 501 453 334 23 }
-	R1 [ 5 ]  : size 2 : values { 12 10 100 ; 76 15 8 54 432 ; 29 09 76 11 ; 67 27 80 }
+	R1 [ 5 ]  : size 4 : values { 12 10 100 ; 76 15 8 54 432 ; 29 09 76 11 ; 67 27 80 }
 	R1 [ 6 ]  : size 3 : values { 17 61 928 785 875 ; ; 32 465 123 }
-	R1 [ 7 ]  : size 4 : values { 210 71 ; 90 47 32 10 93 ; 332 453  12 634 ; ; }
+	R1 [ 7 ]  : size 4 : values { 210 71 ; 90 47 32 10 93 ; 332 453 12 634 }
     declare list of variables q21 q22 q23 :  jagged array [ 4 .. 7 ] [ ]  of integer ;
-	R1 [ 4 ]  : size 3 : values { 21 ; 54 221 43 }
-	R1 [ 5 ]  : size 2 : values { 12 ; 76 ; 29 ; 67 }
-	R1 [ 6 ]  : size 3 : values { 17 ; ; 32 }
+	R1 [ 4 ]  : size 3 : values { 21 ; 54 ; 221 }
+	R1 [ 5 ]  : size 4 : values { 12 ; 76 ; 29 ; 67 }
+	R1 [ 6 ]  : size 3 : values { 17 ; 0 ; 32 }
 	R1 [ 7 ]  : size 4 : values { 210 ; 90 ; 332 ; ; ; ; }
-
+	declare list of variables q31 q32 q33 :  jagged array [ 4 .. 7 ] [ ]  of integer ;
+	R1 [ 4 ]  : size 3 : values { 21 ; 54 ; 221 }
+	R1 [ 5 ]  : size 4 : values { 12 ; 76 ; 29 ; 67 }
+	R1 [ 6 ]  : size 3 : values { 17 ; 22 ; 32 }
+	R1 [ 7 ]  : size 4 : values { 210 ; 90 ; 332 ; 3 }
+	R1 [ 8 ]  : size 4 : values { 210 ; 90 ; 332 ; 9 }
+	declare list of variables x y z :  jagged array [ 4 .. 7 ] [ ]  of integer ;
+	R1 [ 4 ]  : size 3 : values { 21 ; 54 ; 221  }
+	R1 [ 5 ]  : size 4 : values { 12 ; 76 ; 29 ; 67 }
+	declare list of variables x y z :  jagged array [ 4 .. 4 ] [ ]  of integer ;
+	R1 [ 4 ]  : size 3 : values { 21 ; 54 ; 221  }
 	q1 = q2 + q3 ;
 }

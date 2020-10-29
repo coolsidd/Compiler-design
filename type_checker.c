@@ -6,6 +6,7 @@ Group 36
 2017B4A70740P Aditya Tulsyan
 */
 
+#include "grammar_structs.h"
 #include "type_exp_table.h"
 #include "type_checker.h"
 #include "print.h"
@@ -248,11 +249,14 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p){
             { flag &= assert_debug(p->last_child->tok->lexeme.s == b, "Less initalisations than rowNo", p, "***", "***", "***", "***", "***");
                 if (!flag)
                     return false;
-                p = p->last_child;
+
             }
+            p = p->last_child;
             // printf("\n ******* DRIVER:  %d: %d", i, flag);
         }
-        flag &= assert_debug(p->last_child->tok->lexeme.s != b, "More initials than rowNo", p, "***", "***", "***", "***", "***");
+        /* printf("%s\n",toStringSymbol(p->tok->lexeme)); */
+        if(flag)
+            flag &= assert_debug(p->tok->lexeme.s != R1, "More initials than rowNo", p->child, "***", "***", "***", "***", "***");
         return flag;
     }
     else{
@@ -289,16 +293,22 @@ bool jagged_init_checker(type_exp_table * txp_table, Parse_tree_node* p, int idx
 
 bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row_size){
     // 2 semicolons together
-    if(p->child->tok->lexeme.s == SEMICOLON) 
+    if(!assert_debug(p->child->tok->lexeme.s != SEMICOLON, "Empty init \"; ;\"", p, "***", "***", "***", "***", "***"))
         return false;
     if(p->tok->lexeme.s == j2list){
         Parse_tree_node* val_list_node;
         type_expression* txp;
         bool flag = true;
         for(int i=0;i<row_size;i++){
+
             val_list_node = p->child; // value_list
+            /* printf("%s%d\n",toStringSymbol(->tok->lexeme), i+1); */
+            if(!assert_debug(val_list_node->tok->lexeme.s != SEMICOLON, "Empty init \"; ;\"", p, "***", "***", "***", "***", "***")){
+                return false;
+            }
             txp = get_type_of_var(txp_table, val_list_node->child);
-            if(txp){
+            if(assert_debug(txp!=NULL, "Var used before init", p, "***", "***", "***", "***", "***")){
+
                 flag &= assert_debug(txp->variable_type == PRIMITIVE_TYPE, "Values in row not integer", p, "***", "***", "***", "***", "***");
                 if(!flag)
                     return false;
@@ -310,7 +320,7 @@ bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row
                 // undeclared variable as entry in row
                 return false;
             }
-            if(val_list_node->last_child->tok->lexeme.s == value_list){
+            if(!assert_debug(val_list_node->last_child->tok->lexeme.s != value_list, "More than 1 entry 1 dim arry", p, "***", "***", "***", "***", "***")){
                 return false;
             }
             if(i<row_size-1){
@@ -320,6 +330,8 @@ bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row
             }
             p = p->last_child;
         }
+
+
         flag&=assert_debug(p->tok->lexeme.s != j2list, "More values than row size", p, "***", "***", "***", "***", "***");
         // printf("\n LIST_CHECKER: %d %d", row_size, flag);
         return flag;
@@ -332,9 +344,11 @@ bool jagged_list_checker(type_exp_table * txp_table, Parse_tree_node* p, int row
         {
             val_list_node = p->child; // value_list
             do{
+                if(!assert_debug(val_list_node->tok->lexeme.s != SEMICOLON, "Empty init \"; ;\"", p, "***", "***", "***", "***", "***")){
+                    return false;
+                }
                 txp = get_type_of_var(txp_table, val_list_node->child);
-                if (txp)
-                {
+                if(assert_debug(txp!=NULL, "Var used before init", p, "***", "***", "***", "***", "***")){
                     flag &= assert_debug(txp->variable_type == PRIMITIVE_TYPE, "Values in row not integer", p, "***", "***", "***", "***", "***");
                     if (!flag)
                         return false;

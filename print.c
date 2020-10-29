@@ -7,6 +7,7 @@ Group 36
 */
 
 #include "print.h"
+#include "type_expression.h"
 
 char *get_str_decl_type(DeclarationType decl_type)
 {
@@ -65,14 +66,10 @@ void print_type_exp_table(type_exp_table *t)
     VariableType v_temp;
     DeclarationType d_temp;
     type_expression *txp;
-    char var_name_buffer[30];
-    char *var_name = var_name_buffer;
-    char var_type_buffer[20];
-    char *var_type = var_type_buffer;
-    char decl_type_buffer[20];
-    char *decl_name = decl_type_buffer;
-    char txp_buffer[200];
-    char *txp_str = txp_buffer;
+    char *var_name = (char*)calloc(30, sizeof(char));
+    char *var_type = (char*)calloc(20, sizeof(char));
+    char *decl_name = (char*)calloc(20,sizeof(char));
+    char *txp_str = (char*)calloc(MAX_BUFFER_SIZE, sizeof(char));
     for (int i = 0; i < ll->num_nodes; i++)
     {
         txp_table_node *txp_node = (txp_table_node *)ll_get(ll, i);
@@ -80,13 +77,13 @@ void print_type_exp_table(type_exp_table *t)
         var_name = txp_node->variable_name;
 
         v_temp = txp_node->variable_type;
-        strcpy(var_type, get_str_variable_type(v_temp));
+        strncpy(var_type, get_str_variable_type(v_temp),20);
 
         d_temp = txp_node->declaration_type;
-        strcpy(decl_name, get_str_decl_type(d_temp));
+        strncpy(decl_name, get_str_decl_type(d_temp), 20);
 
         txp = get_type_expression(t, var_name);
-        strcpy(txp_str, get_string_representation(txp));
+        strncpy(txp_str, get_string_representation(txp), MAX_BUFFER_SIZE);
 
         printf("%-15s| %-17s| %-15s| %-40s\n",
                var_name,
