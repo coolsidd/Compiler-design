@@ -1,9 +1,20 @@
 #+TITLE: Todo General
 
-* Things left [2/6]
+* Things left [1/6]
 - [X] Change error messages to 30 char
-- [ ] Rect and jagged multiplication and division allowed
-- [ ] declaration of jagged
+- [X] Rect and jagged multiplication and division allowed
+- [X] declaration of jagged
 - [ ] move files from data structure to code
 - [X] error messages in red
-- [ ] ll and hash map (remove unused functions)
+- [X] ll and hash map (remove unused functions)
+
+-> Doubts:
+1) For DIV of 2 arrays, result should be array with same dimension but real primitive type.
+But since arrays were integer only, we didnt keep a primitive type field for arrays. Though can be added
+to rect_array_type and jagged_array_type, but a change at this stage :( ?
+2) For DIV by zero, I just have typ_exp of RHS, I need its <var> node and see if 
+lexeme.s is CONST. If it is, and if atoi(...->token_name) is 0, then only its an error.
+As a follow up, should we consider (x MINUS x) as 0 if x is Real/Integer type? If yes,
+to handle or not to?
+3) Bound checking of dynamic rect arrays: same issue as above, I just have the type expression.
+I dont have the Parse tree node of it, hence no variable name. 

@@ -51,12 +51,6 @@ type_expression *get_type_of_arithm_expr(type_exp_table* txp_table, Parse_tree_n
             }
             default:
             {
-                /*
-                    done: Both should be of same variable type
-                    Array_Types-> check dimensions
-                    done: Boolean-> type-error
-                    done: primitive-> integer, integer or real,real
-                */
                 char *operator= toStringSymbol(getNodeFromIndex(p->child, 1)->tok->lexeme);
                 bool flag = true;
                 flag &= assert_debug(txp_1->variable_type == txp->variable_type,
@@ -175,21 +169,17 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                     }
                     case (RECT_ARRAY):
                     {
-                        /* bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data, */
-                        /*                                 txp_1->union_to_be_named.rect_array_data); */
-                        // TODO: Raise error since division and multiplication of arrays not possible
-                        assert_debug(false, "Rect. Array MULTIPLICATION",
-                                     p, t1, t2, "MULT", lexeme1, lexeme2);
+                        bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data, 
+                                            txp_1->union_to_be_named.rect_array_data, p,
+                                            t1, t2, "MULT", lexeme1, lexeme2); 
                         return txp; // TODO Default type is of LHS
                         break;
                     }
                     case (JAGGED_ARRAY):
                     {
-                        /* bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data, */
-                        /*                                     txp_1->union_to_be_named.jagged_array_data); */
-                        assert_debug(false, "Rect. Array MULTIPLICATION",
-                                     p, t1, t2, "MULT", lexeme1, lexeme2);
-                        // TODO: Raise error since division and multiplication of arrays not possible
+                        bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data,
+                                            txp_1->union_to_be_named.jagged_array_data, p,
+                                            t1, t2, "MULT", lexeme1, lexeme2);
                         return txp; // TODO Default type is of LHS
                         break;
                     }
@@ -206,7 +196,7 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                     case (PRIMITIVE_TYPE):
                     {
                         flag &= assert_debug(txp_1->union_to_be_named.primitive_data ==
-                                                 txp->union_to_be_named.primitive_data,
+                                            txp->union_to_be_named.primitive_data,
                                              "Different Left & Right Operand",
                                              p, t1, t2, "DIV", lexeme1, lexeme2);
                         flag &= assert_debug(txp_1->union_to_be_named.primitive_data != t_BOOLEAN,
@@ -221,21 +211,17 @@ type_expression* get_type_of_term(type_exp_table* txp_table, Parse_tree_node* p)
                     }
                     case (RECT_ARRAY):
                     {
-                        /* bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data, */
-                        /*                                 txp_1->union_to_be_named.rect_array_data); */
-                        // TODO: Raise error since division and multiplication of arrays not possible
-                        assert_debug(false, "Division of RECT ARRAYS",
-                                    p, t1, t2, "DIV", lexeme1, lexeme2);
+                        bool flag = check_rect_dimensions(txp->union_to_be_named.rect_array_data,
+                                            txp_1->union_to_be_named.rect_array_data, p,
+                                            t1, t2, "DIV", lexeme1, lexeme2);
                         return txp; // TODO Default type is of LHS
                         break;
                     }
                     case (JAGGED_ARRAY):
                     {
-                        /* bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data, */
-                        /*                                     txp_1->union_to_be_named.jagged_array_data); */
-                        assert_debug(false, "Division of JAGGED ARRAYS",
-                                     p, t1, t2, "DIV", lexeme1, lexeme2);
-                        // TODO: Raise error since division and multiplication of arrays not possible
+                        bool flag = check_jagged_dimensions(txp->union_to_be_named.jagged_array_data,
+                                            txp_1->union_to_be_named.jagged_array_data, p,
+                                            t1, t2, "DIV", lexeme1, lexeme2);
                         return txp; // TODO Default type is of LHS
                         break;
                     }
@@ -284,9 +270,8 @@ bool check_rect_dimensions(rect_array_type r1, rect_array_type r2, Parse_tree_no
     bool flag = true;
     flag &= assert_debug(r1.dimensions == r2.dimensions, "RectArray Dimensions Mismatch",
                         p, t1, t2, operator, lexeme1, lexeme2);
-    if(!flag){
+    if(!flag) 
         return flag;
-    }
     else{
         ll_node* temp_1 = r2.array_ranges->head;
         for (ll_node *temp = r1.array_ranges->head;temp;temp=temp->next){

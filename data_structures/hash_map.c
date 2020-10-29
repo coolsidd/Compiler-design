@@ -86,39 +86,6 @@ void *fetch_from_hash_map(hash_map *hm, char *string)
     return fetch_from_bucket(hm->buckets[bucket_idx], string);
 }
 
-void *remove_from_bucket(hm_bucket *b, char *string)
-{
-    hm_node *temp = b->first;
-    if (strcmp(temp->string, string) == 0)
-    {
-        b->first = temp->next;
-        b->num_nodes = b->num_nodes - 1;
-        return temp->data;
-    }
-    else
-    {
-        temp = temp->next;
-        hm_node *prev = b->first;
-        while (strcmp(temp->string, string) != 0)
-        {
-            temp = temp->next;
-            prev = prev->next;
-        }
-        prev->next = temp->next;
-        b->num_nodes = b->num_nodes - 1;
-        return temp->data;
-    }
-}
-
-void *remove_from_hash_map(hash_map *hm, char *string)
-{
-    assert(fetch_from_hash_map(hm, string) != NULL, "entry to be deleted exists in hash map");
-
-    int bucket_idx = hash(string) % (hm->num_buckets);
-
-    return remove_from_bucket(hm->buckets[bucket_idx], string);
-}
-
 void destroy_hm_node(hm_node *n)
 {
     if (n->next != NULL)
@@ -145,26 +112,4 @@ void destroy_hash_map(hash_map *hm)
     }
     free(hm->buckets);
     free(hm);
-}
-
-hm_node *get_all_hm_nodes (hash_map *map) {
-	hm_node *tmp = (hm_node *) malloc(sizeof(hm_node));
-	tmp->next = NULL;
-
-	hm_node *curr_last_ptr = tmp;
-	int num_buckets = map->num_buckets;
-	for (int i = 0; i < num_buckets; i++) {
-		hm_node *head = map->buckets[i]->first;
-		if (head != NULL) {
-			curr_last_ptr->next = head;
-
-			while (curr_last_ptr->next != NULL) {
-				curr_last_ptr = curr_last_ptr->next;
-			}
-		}
-	}
-
-	hm_node *ret = tmp->next;
-	free(tmp);
-	return ret;
 }

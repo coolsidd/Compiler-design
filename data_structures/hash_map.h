@@ -37,10 +37,6 @@ void add_to_hash_map(hash_map *hm, char *string, void *data);
 
 void *fetch_from_hash_map(hash_map *hm, char *string);
 
-void *remove_from_hash_map(hash_map *hm, char *string);
-
 void destroy_hash_map(hash_map *hm);
-
-hm_node *get_all_hm_nodes (hash_map *map);
 
 #endif

@@ -52,6 +52,7 @@ void add_entry_to_table(type_exp_table *txp_table, char *variable_name, Variable
 type_expression* type_check_decl_stmt(type_exp_table* txp_table,Parse_tree_node* p);
 
 type_expression* type_check_assign_stmt(type_exp_table* txp_table, Parse_tree_node* p);
+
 bool are_types_equal(type_expression *t1, type_expression *t2, type_exp_table *txp_table,
                      Parse_tree_node *p);
 
@@ -63,14 +64,5 @@ bool jagged_decl_checks(type_exp_table* txp_table, Parse_tree_node* p);
 
 bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_list* ll);
 type_expression* get_type_of_var(type_exp_table* txp_table, Parse_tree_node* p);
-// // remove entry
-//
-// void remove_entry_from_table(type_exp_table* txp_table, char* variable_name);
-
-// // delete txp_table_node corresponding to a variable_name
-// void ll_delete_txp_node(linked_list* root, char* variable_name);
-
-// // get index of a txp_node in linked_list* root corresponding to a variable name
-// int ll_get_index_by_var(linked_list* root, char* variable_name);
 
 #endif
