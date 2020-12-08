@@ -501,13 +501,13 @@ bool do_bound_checking(type_exp_table* txp_table, Parse_tree_node* p, linked_lis
                         }
                         int second = *((int *)ll->head->next->data);
                         linked_list * ll_temp = jagged_bounds.row_sizes;
-                        flag &= assert_debug(second <= ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->num_nodes, "IndexOutOfBounds",p, "***", "***", "***", "***", "***");
+                        flag &= assert_debug(second <= ((r2_dimension*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->sizes->num_nodes, "IndexOutOfBoundsError (dim2)",p, "***", "***", "***", "***", "***");
                         if(!ll->head->next->next->data || !flag){
                             return flag;
                         }
                         int third = *((int *)ll->head->next->next->data);
-                        linked_list * third_dim = ((linked_list*)ll_get(ll_temp,first-jagged_bounds.lower_bound));
-                        flag &= assert_debug(*((int*)ll_get(third_dim,second))<=third, "IndexOutOfBoundsError",p, "***", "***", "***", "***", "***");
+                        linked_list * third_dim = ((r2_dimension*)ll_get(ll_temp,first-jagged_bounds.lower_bound))->sizes;
+                        flag &= assert_debug(third <= *((int*)ll_get(third_dim,second)), "IndexOutOfBoundsError (dim3)",p, "***", "***", "***", "***", "***");
                         return flag;
                     }else{
                         return flag;
