@@ -1,4 +1,4 @@
-# PPL Assignment-1
+# Compiler-design Utilities
 
 ## Group 36
 - 2017B4A70495P Manan Soni
